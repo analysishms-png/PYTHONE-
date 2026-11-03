@@ -1,0 +1,55 @@
+{
+  "schema": "HMS_py migration task queue - one module at a time",
+  "updated": "2026-11-03",
+  "queue": [
+    {
+      "module": "Front Office Remaining (Post Charges, Payment, Amend Stay)",
+      "phase": "Phase 2 / FR-004",
+      "priority": "P1",
+      "status": "PENDING",
+      "options": [
+        {"code": "224", "option": "Bill Reprint", "status": "DONE"},
+        {"code": "225", "option": "Reverse Check Out", "status": "DONE"},
+        {"code": "226", "option": "Merge Room", "status": "DONE"},
+        {"code": "227", "option": "Bill Re-Settlement", "status": "DONE"},
+        {"code": "228", "option": "Reverse Room Merge", "status": "MISSING"},
+        {"code": "229", "option": "Plan Meal Tokens", "status": "MISSING"},
+        {"code": "230", "option": "GRC Printing", "status": "MISSING"},
+        {"code": "231", "option": "Blank GRC", "status": "MISSING"},
+        {"code": "260", "option": "Form C", "status": "MISSING"},
+        {"code": "261", "option": "Tourism Form 1", "status": "MISSING"},
+        {"code": "262", "option": "Tourism Form 2", "status": "MISSING"},
+        {"code": "263", "option": "Tourism Form 5", "status": "MISSING"},
+        {"code": "265", "option": "Tourism Form 6", "status": "MISSING"},
+        {"code": "266", "option": "Tourism Form 4", "status": "MISSING"},
+        {"code": "267", "option": "Luxury Tax Report", "status": "MISSING"},
+        {"code": "268", "option": "Monthly Return", "status": "MISSING"},
+        {"code": "269", "option": "L.T. FORM II", "status": "MISSING"},
+        {"code": "270", "option": "L.T. FORM IV", "status": "MISSING"},
+        {"code": "283", "option": "FOM Tax Detail", "status": "MISSING"},
+        {"code": "284", "option": "Tax Wise Charge Detail", "status": "MISSING"},
+        {"code": "233-258", "option": "Front Office Reports (17 items)", "status": "REPORT"},
+        {"code": "272-291", "option": "Front Office M.I.S. (20 items)", "status": "REPORT"}
+      ],
+      "blocked_tbl": [],
+      "notes": "Post Charges (fdPostChrg.frm) and Payment/Charge (fdPaymentCharge.frm) are PARTIAL in FORM_MIGRATION_LEDGER.md - core logic inline in UI, needs extraction to folio.py (BUG-028, BUG-029). Amend Stay (fdAmendEntry.frm) is TODO."
+    },
+    {
+      "module": "Night Audit + Finance (GST Critical)",
+      "phase": "Phase 3 / FR-001",
+      "priority": "P0",
+      "status": "PARTIAL",
+      "options": [
+        {"code": "3", "option": "Voucher Entry", "status": "DONE"},
+        {"code": "14-15", "option": "TDS Category / Challan", "status": "DONE"},
+        {"code": "18-38", "option": "FA Reports (14 items)", "status": "REPORT - 3 gap keys (Trial Balance, Journal Books, Bank Register)"},
+        {"code": "43-49", "option": "General Setup (7 items)", "status": "DONE"},
+        {"code": "136-150", "option": "FA Masters (15 items)", "status": "DONE - Voucher Serialisation MISSING"}
+      ],
+      "blocked_tbl": [],
+      "notes": "core/post_voucher exists; ui/fa_voucher_ui.py wired. Remaining: Voucher Entry UI parity re-compare + ledger entry; 16 report-key gaps across modules."
+    }
+  ],
+  "current_index": 0,
+  "max_debug_attempts_per_issue": 5
+}

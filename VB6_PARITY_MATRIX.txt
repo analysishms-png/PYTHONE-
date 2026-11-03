@@ -1,7 +1,7 @@
 VB6 ↔ PYTHON PARITY MATRIX
 ================================================================================
 
-Generated: 2026-11-03T10:30:01.908352
+Generated: 2026-11-03T12:11:39.344490
 VB6 Forms: 321 | Registry Entries: 324 | Live Tables: 275
 
 SUMMARY

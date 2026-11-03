@@ -1,0 +1,28 @@
+{
+  "schema": "HMS_py migration checkpoint - resume point",
+  "updated": "2026-11-03",
+  "resume_from": "PHASE_E_MODULE_SELECTION",
+  "last_completed_action": "advance_deposit() implemented + 4 unit tests passing (Reservation module, option code 194)",
+  "current_module_lock": null,
+  "next_module_candidate": "Front Office Remaining (Post Charges, Payment, Amend Stay) - FR-004 / Phase 2",
+  "next_option_candidate": "Post Charges (fdPostChrg.frm, code 224, currently PARTIAL) - extract folio logic to folio.py (BUG-028)",
+  "state_files": [
+    "MIGRATION_AUTOMATION_STATE.json",
+    "MIGRATION_TASK_QUEUE.json",
+    "MIGRATION_AGENT_LOG.md",
+    "MIGRATION_LOOP_HISTORY.md",
+    "MIGRATION_CHECKPOINT.json"
+  ],
+  "test_evidence": [
+    "tests/menu_testing/TEST_CASES.json",
+    "TEST_EXECUTION_LOG.csv",
+    "TEST_COVERAGE_REPORT.md",
+    "TEST_BUG_REGISTER.md",
+    "TEST_FINAL_REPORT.md"
+  ],
+  "blockers": [
+    "SITE_CODE='KK' (Analysis.ini) vs live Site_Code='BB' - pre-existing env mismatch",
+    "16 report options lack menu_caption_map key",
+    "No git commits (unstaged changes present; commit-per-module deferred pending user approval)"
+  ]
+}

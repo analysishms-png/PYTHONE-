@@ -1,0 +1,376 @@
+test_id,menu_code,module,subsection,option,flag,param,vb6_form,status,python_target
+MENU-0001,3,Finance,Transaction,Voucher Entry,E,AEDP,FaVrEnt.frm,DONE,Voucher Entry
+MENU-0002,11111200,Finance,Transaction,Expense Voucher,E,AEDP,FaTaxVoucher.frm,DONE,Expense Voucher
+MENU-0003,18,Finance,Reports,Trial Balance,R,***P,—,REPORT,Trial Balance
+MENU-0004,20,Finance,Reports,Ledger,R,***P,—,REPORT,—
+MENU-0005,22,Finance,Reports,Cash Book,R,***P,—,REPORT,—
+MENU-0006,23,Finance,Reports,Bank Book,R,***P,—,REPORT,—
+MENU-0007,24,Finance,Reports,Journal Books,R,***P,—,REPORT,Journal Books
+MENU-0008,25,Finance,Reports,Annexure,R,***P,—,REPORT,—
+MENU-0009,26,Finance,Reports,Bank Register,R,***P,—,REPORT,Bank Register
+MENU-0010,27,Finance,Reports,Ageing Analysis for Debtors,R,***P,—,REPORT,—
+MENU-0011,28,Finance,Reports,Ageing Analysis for Creditors,R,***P,—,REPORT,—
+MENU-0012,31,Finance,Reports,Outstanding Report For Debtors,R,***P,—,REPORT,—
+MENU-0013,32,Finance,Reports,Outstanding Report For Creditors,R,***P,—,REPORT,—
+MENU-0014,36,Finance,Reports,Detailed Trial Ledger,R,***P,—,REPORT,—
+MENU-0015,38,Finance,Reports,Bill Wise Outstanding Report For Debtors,R,***P,—,REPORT,—
+MENU-0016,11133200,Finance,Reports,Journal Books Log,R,***P,—,REPORT,Journal Books
+MENU-0017,43,Main Setup,General Setup,Tax Master,E,AEDP,FrmTaxMast.frm,DONE,Tax Master
+MENU-0018,44,Main Setup,General Setup,Tax Structure,E,AEDP,—,DONE,Tax Structure
+MENU-0019,45,Main Setup,General Setup,Payment Type,E,AEDP,—,DONE,Payment Type
+MENU-0020,46,Main Setup,General Setup,Parameter,E,AEDP,—,DONE,Parameter
+MENU-0021,48,Main Setup,General Setup,Printing Parameters,E,AEDP,frmPrintModule.frm,DONE,Printing Parameters
+MENU-0022,49,Main Setup,General Setup,Printing Setup,E,AEDP,frmMod_Print.frm,DONE,Printing Setup
+MENU-0023,55,Main Setup,Front Office,Market Segment,E,AEDP,—,DONE,Market Segment
+MENU-0024,56,Main Setup,Front Office,Business Source,E,AEDP,—,DONE,Business Source
+MENU-0025,57,Main Setup,Front Office,Guest Status,E,AEDP,—,DONE,Guest Status
+MENU-0026,58,Main Setup,Front Office,Charge Master,E,AEDP,FrmChargeMast.frm,DONE,Charge Master
+MENU-0027,59,Main Setup,Front Office,Fixed Charge,E,AEDP,—,DONE,Fixed Charge
+MENU-0028,61,Main Setup,Front Office,Plan Master,E,AEDP,—,DONE,Plan Master
+MENU-0029,63,Main Setup,Front Office,Room Features,E,AEDP,—,DONE,Room Features
+MENU-0030,64,Main Setup,Front Office,Room Category,E,AEDP,—,DONE,Room Category
+MENU-0031,65,Main Setup,Front Office,Room Master,E,AEDP,FrmRoomMast.frm,DONE,Room Master
+MENU-0032,66,Main Setup,Front Office,Company Master,E,AEDP,CompMast.frm,DONE,Company Master
+MENU-0033,68,Main Setup,Front Office,Guest History,E,AEDP,—,DONE,Guest History
+MENU-0034,70,Main Setup,Front Office,Room Display,E,AEDP,—,DONE,Room Display
+MENU-0035,72,Main Setup,Point of Sale,Setup Outlet,E,AEDP,—,DONE,Setup Outlet
+MENU-0036,73,Main Setup,Point of Sale,Outlet Bill Sundry Setting,E,AEDP,DepartSundry.frm,DONE,Outlet Bill Sundry Setting
+MENU-0037,74,Main Setup,Point of Sale,Server Master,E,AEDP,FrmWaiterMast.frm,DONE,Server Master
+MENU-0038,75,Main Setup,Point of Sale,Table Master,E,AEDP,RsTableMast.frm,DONE,Table Master
+MENU-0039,76,Main Setup,Point of Sale,Item List,E,AEDP,—,DONE,Item List
+MENU-0040,77,Main Setup,Point of Sale,Menu Group,E,AEDP,—,DONE,Menu Group
+MENU-0041,78,Main Setup,Point of Sale,Menu Category,E,AEDP,—,DONE,Menu Category
+MENU-0042,79,Main Setup,Point of Sale,Menu Item,E,AEDP,—,DONE,Menu Item
+MENU-0043,80,Main Setup,Point of Sale,Menu Item Rate,E,AEDP,—,DONE,Menu Item Rate
+MENU-0044,82,Main Setup,Point of Sale,Session Master,E,AEDP,frmSessionMast.frm,DONE,Session Master
+MENU-0045,83,Main Setup,Point of Sale,Open Item Consumption,E,AEDP,—,MISSING,—
+MENU-0046,84,Main Setup,Point of Sale,Scheme Master,E,AEDP,SchemeMast.frm,DONE,Scheme Master
+MENU-0047,86,Main Setup,Point of Sale,Happy Hours [ Free Items ],E,AEDP,NewHappyHours.frm,DONE,Happy Hours [ Free Items ]
+MENU-0048,88,Main Setup,Point of Sale,NC Type,E,AEDP,FrmNCType.frm,DONE,NC Type
+MENU-0049,89,Main Setup,Point of Sale,Customer History,E,AEDP,—,DONE,Customer History
+MENU-0050,103,Main Setup,Banquet,Events,E,AEDP,—,DONE,Events
+MENU-0051,104,Main Setup,Banquet,Venue Features,E,AEDP,—,DONE,Venue Features
+MENU-0052,105,Main Setup,Banquet,Venue Master,E,AEDP,FrmVenueMast.frm,DONE,Venue Master
+MENU-0053,106,Main Setup,Banquet,Menu Category,E,AEDP,—,DONE,Menu Category
+MENU-0054,107,Main Setup,Banquet,Item Group,E,AEDP,FrmItemGroupMastRaw.frm,DONE,Item Group
+MENU-0055,108,Main Setup,Banquet,Menu Item,E,AEDP,—,DONE,Menu Item
+MENU-0056,109,Main Setup,Banquet,Catalog Master,E,AEDP,—,DONE,Catalog Master
+MENU-0057,110,Main Setup,Banquet,Banquet Bill Sundry Setting,E,AEDP,—,DONE,Banquet Bill Sundry Setting
+MENU-0058,112,Main Setup,Inventory,Party Master,E,AEDP,—,MISSING,—
+MENU-0059,113,Main Setup,Inventory,Department,E,AEDP,—,DONE,Department
+MENU-0060,114,Main Setup,Inventory,Item Group,E,AEDP,FrmItemGroupMastRaw.frm,DONE,Item Group
+MENU-0061,115,Main Setup,Inventory,Item Category,E,AEDP,—,DONE,Item Category
+MENU-0062,116,Main Setup,Inventory,Item Entry,E,AEDP,FrmItemMast.frm,DONE,Item Entry
+MENU-0063,118,Main Setup,Inventory,Purchase Sundry Setting,E,AEDP,—,MISSING,—
+MENU-0064,120,Main Setup,Inventory,Opening Stock,E,AEDP,—,DONE,Opening Stock
+MENU-0065,121,Main Setup,Inventory,Item  List,E,AEDP,—,DONE,Item List
+MENU-0066,123,Main Setup,Inventory,Enviro Inventry,E,AEDP,—,MISSING,—
+MENU-0067,136,Main Setup,Finance,Group Accounts,E,AEDP,—,DONE,Group Accounts
+MENU-0068,137,Main Setup,Finance,Ledger Accounts,E,AEDP,—,DONE,Ledger Accounts
+MENU-0069,138,Main Setup,Finance,Narration Master,E,AEDP,FaNarrMast.frm,DONE,Narration Master
+MENU-0070,139,Main Setup,Finance,T.D.S. Category,E,AEDP,—,DONE,T.D.S. Category
+MENU-0071,140,Main Setup,Finance,FA Environment,E,AEDP,—,DONE,FA Environment
+MENU-0072,141,Main Setup,Finance,Voucher Environment,E,AEDP,—,DONE,Voucher Environment
+MENU-0073,143,Main Setup,Finance,Year End Updation,E,AEDP,frmYearEnd.frm,DONE,Year End Updation
+MENU-0074,144,Main Setup,Finance,Current Balance Updation,E,AEDP,FaCurrBalUpdate.frm,DONE,Current Balance Updation
+MENU-0075,149,Main Setup,Finance,Account Merging,E,AEDP,AccountMerg.frm,DONE,Account Merging
+MENU-0076,150,Main Setup,Finance,Voucher Serialisation,E,AEDP,FrmSerialiseVr.frm,MISSING,—
+MENU-0077,152,Main Setup,Utility,User Master,E,AEDP,UserMast.frm,DONE,User Master
+MENU-0078,153,Main Setup,Utility,Permissions,E,AEDP,—,DONE,Permissions
+MENU-0079,155,Main Setup,Utility,Backup Data,E,AEDP,—,DONE,Backup Data
+MENU-0080,158,Main Setup,Utility,Sundry Master,E,AEDP,SundryMast.frm,DONE,Sundry Master
+MENU-0081,162,Main Setup,Utility,Inconsistency Check,E,AEDP,FrmInc.frm,MISSING,—
+MENU-0082,163,Main Setup,Utility,Year End Updation,E,AEDP,frmYearEnd.frm,DONE,Year End Updation
+MENU-0083,166,Main Setup,Utility,Menu Item Copy,E,AEDP,frmMenuItemCopy.frm,MISSING,—
+MENU-0084,168,Main Setup,Utility,Guest LookUp,E,AEDP,—,DONE,Guest LookUp
+MENU-0085,169,Main Setup,Utility,Country Master,E,AEDP,FaCountryMast.frm,DONE,Country Master
+MENU-0086,170,Main Setup,Utility,State Master,E,AEDP,FaStateMast.frm,DONE,State Master
+MENU-0087,171,Main Setup,Utility,City Master,E,AEDP,FaCityMast.frm,DONE,City Master
+MENU-0088,172,Main Setup,Utility,Company Master,E,AEDP,CompMast.frm,DONE,Company Master
+MENU-0089,173,Main Setup,Utility,Department,E,AEDP,—,DONE,Department
+MENU-0090,174,Main Setup,Utility,Ledger Accounts,E,AEDP,—,DONE,Ledger Accounts
+MENU-0091,179,Main Setup,Utility,Unit Master,E,AEDP,frmUnitMast.frm,DONE,Unit Master
+MENU-0092,180,Main Setup,Utility,Task Scheduler,E,AEDP,FrmJobScheduler.frm,MISSING,—
+MENU-0093,12001100,Main Setup,Special,Member Select Category,E,AEDP,—,DONE,Member Select Category
+MENU-0094,189,Reservation,Operations,Reservation/Cancellation,E,AEDP,RrRoomReservation.frm,DONE,Reservation/Cancellation
+MENU-0095,191,Reservation,Operations,Look Up Room types,E,AEDP,—,DONE,Look Up Room types
+MENU-0096,192,Reservation,Operations,Look Up Rooms,E,AEDP,—,DONE,Look Up Rooms
+MENU-0097,193,Reservation,Operations,Reservation With History,E,AEDP,—,MISSING,—
+MENU-0098,194,Reservation,Operations,Advance Deposit,E,AEDP,frmAdvanceDepDialog.frm,MISSING,—
+MENU-0099,195,Reservation,Operations,Confirmation Letters,E,AEDP,—,MISSING,—
+MENU-0100,196,Reservation,Operations,Cancellation Letters,E,AEDP,—,MISSING,—
+MENU-0101,197,Reservation,Operations,Registration Card,E,AEDP,—,MISSING,—
+MENU-0102,198,Reservation,Operations,Reservation Status Screen,E,AEDP,—,MISSING,—
+MENU-0103,200,Reservation,Reservation Status Report,Reservation Status,R,***P,FrmReservationStatus.frm,REPORT,Reservation Status
+MENU-0104,201,Reservation,Reservation Status Report,Reservation Status Arrival,R,***P,—,REPORT,Reservation Status Arrival
+MENU-0105,205,Reservation,Reservation Status Report,Arrival List,R,***P,—,REPORT,—
+MENU-0106,207,Reservation,Advance Recd. Report,Advance Recd.,R,***P,—,REPORT,—
+MENU-0107,208,Reservation,Advance Recd. Report,Advance Recd. Arrival,R,***P,—,REPORT,—
+MENU-0108,211,Reservation,M.I.S.,7-730 Days Forecast,E,AEDP,—,MISSING,—
+MENU-0109,212,Reservation,M.I.S.,23 Day Room Availability Forecast,E,AEDP,—,MISSING,—
+MENU-0110,213,Reservation,M.I.S.,23 Day Room Type Availability Forecast,E,AEDP,—,MISSING,—
+MENU-0111,214,Reservation,M.I.S.,Package Forecast,E,AEDP,—,MISSING,—
+MENU-0112,217,Front Office,Operations,WalkIn CheckIn,E,AEDP,—,DONE,WalkIn CheckIn
+MENU-0113,218,Front Office,Operations,Room Status,E,AEDP,—,DONE,Room Status
+MENU-0114,219,Front Office,Operations,Expense Entry,E,AEDP,—,DONE,Expense Entry
+MENU-0115,221,Front Office,Operations,Display Rack,E,AEDP,FdLookUpRoomNo.frm,DONE,Display Rack
+MENU-0116,224,Front Office,Operations,Bill Reprint,E,AEDP,—,DONE,Bill Reprint
+MENU-0117,225,Front Office,Operations,Reverse Check Out,E,AEDP,—,DONE,Reverse Check Out
+MENU-0118,226,Front Office,Operations,Merge Room,E,AEDP,—,DONE,Merge Room
+MENU-0119,227,Front Office,Operations,Bill Re-Settlement,E,AEDP,—,DONE,Bill Re-Settlement
+MENU-0120,228,Front Office,Operations,Reverse Room Merge,E,AEDP,—,MISSING,—
+MENU-0121,229,Front Office,Operations,Plan Meal Tokens,E,AEDP,—,MISSING,—
+MENU-0122,230,Front Office,Operations,GRC Printing,E,AEDP,—,MISSING,—
+MENU-0123,231,Front Office,Operations,Blank GRC,E,AEDP,—,MISSING,—
+MENU-0124,233,Front Office,Reports,Instant House Count,R,***P,—,REPORT,—
+MENU-0125,234,Front Office,Reports,Room Inventory,R,***P,—,REPORT,—
+MENU-0126,238,Front Office,Reports,Charge Payment Detail,R,***P,—,REPORT,—
+MENU-0127,239,Front Office,Reports,Payments By Cashier,R,***P,—,REPORT,—
+MENU-0128,240,Front Office,Reports,Cashier Report,R,***P,—,REPORT,—
+MENU-0129,241,Front Office,Reports,Settlement Report,R,***P,—,REPORT,—
+MENU-0130,242,Front Office,Reports,Cancel Bill Details,R,***P,—,REPORT,—
+MENU-0131,243,Front Office,Reports,Room Change History,R,***P,—,REPORT,—
+MENU-0132,245,Front Office,Reports,FOM Sales Register,R,***P,—,REPORT,Sales Register
+MENU-0133,246,Front Office,Reports,Room Wise Plan Detail,R,***P,—,REPORT,—
+MENU-0134,248,Front Office,Reports,Occupancy Report,R,***P,—,REPORT,—
+MENU-0135,249,Front Office,Reports,Bill Change Report,R,***P,—,REPORT,—
+MENU-0136,250,Front Office,Reports,Check Out Register,R,***P,—,REPORT,—
+MENU-0137,251,Front Office,Reports,Check In Register,R,***P,—,REPORT,—
+MENU-0138,252,Front Office,Reports,Expected Check Out,R,***P,—,REPORT,—
+MENU-0139,254,Front Office,Reports,Guest Extra Charges,R,***P,—,REPORT,—
+MENU-0140,255,Front Office,Reports,Checked In Guest Detail,R,***P,—,REPORT,—
+MENU-0141,256,Front Office,Reports,Room Rent Audit Report,R,***P,—,REPORT,—
+MENU-0142,257,Front Office,Reports,Sales Report,R,***P,—,REPORT,—
+MENU-0143,258,Front Office,Reports,Guest Payments,R,***P,—,REPORT,—
+MENU-0144,260,Front Office,Tourism Forms,Form  C,E,AEDP,—,MISSING,—
+MENU-0145,261,Front Office,Tourism Forms,Tourism Form 1,E,AEDP,—,MISSING,—
+MENU-0146,262,Front Office,Tourism Forms,Tourism Form 2,E,AEDP,—,MISSING,—
+MENU-0147,263,Front Office,Tourism Forms,Tourism Form 5,E,AEDP,—,MISSING,—
+MENU-0148,265,Front Office,Tourism Forms,Tourism Form 6,E,AEDP,—,MISSING,—
+MENU-0149,266,Front Office,Tourism Forms,Tourism Form 4,E,AEDP,—,MISSING,—
+MENU-0150,267,Front Office,Tourism Forms,Luxury Tax Report,E,AEDP,—,MISSING,—
+MENU-0151,268,Front Office,Tourism Forms,Monthly Return,E,AEDP,—,MISSING,—
+MENU-0152,269,Front Office,Tourism Forms,L.T. FORM II,E,AEDP,—,MISSING,—
+MENU-0153,270,Front Office,Tourism Forms,L.T. FORM IV,E,AEDP,—,MISSING,—
+MENU-0154,272,Front Office,M.I.S.,Occupancy Display,R,***P,—,REPORT,—
+MENU-0155,273,Front Office,M.I.S.,Guest wise Analysis,R,***P,—,REPORT,—
+MENU-0156,274,Front Office,M.I.S.,Company wise Analysis,R,***P,—,REPORT,—
+MENU-0157,275,Front Office,M.I.S.,Guestwise Charges Detail,R,***P,—,REPORT,—
+MENU-0158,276,Front Office,M.I.S.,Room Occupancy,R,***P,—,REPORT,—
+MENU-0159,277,Front Office,M.I.S.,Room Type Occupancy,R,***P,—,REPORT,—
+MENU-0160,278,Front Office,M.I.S.,Room Wise Room Revenue,R,***P,—,REPORT,—
+MENU-0161,279,Front Office,M.I.S.,Occupancy Analysis,R,***P,—,REPORT,Occupancy Analysis
+MENU-0162,280,Front Office,M.I.S.,Company wise Nights,R,***P,—,REPORT,—
+MENU-0163,281,Front Office,M.I.S.,Revenue During the stay,R,***P,—,REPORT,—
+MENU-0164,14142100,Front Office,M.I.S.,Room Type Occupancy Analysis,R,***P,—,REPORT,—
+MENU-0165,14142200,Front Office,M.I.S.,Plan Report,R,***P,—,REPORT,—
+MENU-0166,14142300,Front Office,M.I.S.,Business Source Occupancy Report,R,***P,—,REPORT,—
+MENU-0167,283,Front Office,Tax Reports,FOM Tax Detail,E,AEDP,—,MISSING,—
+MENU-0168,284,Front Office,Tax Reports,Tax Wise Charge Detail,E,AEDP,—,MISSING,—
+MENU-0169,289,House Keeping,Operations,Complaint Master,E,AEDP,—,DONE,Complaint Master
+MENU-0170,290,House Keeping,Operations,Complaint Clearance,E,AEDP,FrmComplaintClearing.frm,DONE,Complaint Clearance
+MENU-0171,291,House Keeping,Operations,Lost / Found Entry,E,AEDP,—,DONE,Lost / Found Entry
+MENU-0172,292,House Keeping,Operations,Claim Entry,E,AEDP,FrmClaimEntry.frm,DONE,Claim Entry
+MENU-0173,295,House Keeping,Operations,House Keeping Screen,E,AEDP,HHouseKeeping.frm,DONE,House Keeping Screen
+MENU-0174,305,House Keeping,Reports,House Keeping Report,R,***P,—,REPORT,—
+MENU-0175,15141100,House Keeping,LAUNDRY,LOT Entry,V,,—,DONE?,KOT Entry
+MENU-0176,15141200,House Keeping,LAUNDRY,LOT Transfer,V,,—,DONE?,KOT Transfer
+MENU-0177,15141300,House Keeping,LAUNDRY,Laundry Memo,E,AEDP,—,MISSING,—
+MENU-0178,15141400,House Keeping,LAUNDRY,Memo Reprint,E,AEDP,—,MISSING,—
+MENU-0179,310,Inventory,Operations,Indent,E,AEDP,PIndent.frm,DONE,Indent
+MENU-0180,311,Inventory,Operations,Purchase Order,E,AEDP,pPOrder.frm,DONE,Purchase Order
+MENU-0181,312,Inventory,Operations,M.R. Entry,E,AEDP,—,DONE,M.R. Entry
+MENU-0182,313,Inventory,Operations,Purchase Bill,E,AEDP,—,DONE,Purchase Bill
+MENU-0183,314,Inventory,Operations,Requisition Slip,E,AEDP,—,DONE,Requisition Slip
+MENU-0184,315,Inventory,Operations,Stock Issue on Requisition,E,AEDP,—,DONE,Stock Issue on Requisition
+MENU-0185,316,Inventory,Operations,Kitchen Closing Stock,E,AEDP,—,DONE,Kitchen Closing Stock
+MENU-0186,317,Inventory,Operations,Stock Transfer,E,AEDP,FrmStockTransfer.frm,DONE,Stock Transfer
+MENU-0187,321,Inventory,Look Ups,Pending Indent,E,AEDP,—,DONE,Pending Indent
+MENU-0188,322,Inventory,Look Ups,Pending M.R.,E,AEDP,—,DONE,Pending M.R.
+MENU-0189,323,Inventory,Look Ups,Pending Purchase Order,E,AEDP,—,MISSING,—
+MENU-0190,325,Inventory,Reports,Purchase Register,R,***P,—,REPORT,Purchase Register
+MENU-0191,326,Inventory,Reports,Purchase Summary,R,***P,—,REPORT,—
+MENU-0192,327,Inventory,Reports,Cash/Credit Purchase,R,***P,—,REPORT,—
+MENU-0193,328,Inventory,Reports,Stock Register,R,***P,—,REPORT,Stock Register
+MENU-0194,329,Inventory,Reports,Stock Summary,R,***P,—,REPORT,Stock Summary
+MENU-0195,330,Inventory,Reports,Stock In Hand,R,***P,—,REPORT,—
+MENU-0196,331,Inventory,Reports,Kitchen Stock Report I/R Basis,R,***P,—,REPORT,—
+MENU-0197,332,Inventory,Reports,Excess Consumption Report,R,***P,—,REPORT,—
+MENU-0198,337,Inventory,Reports,Purchase Ledger,R,***P,—,REPORT,—
+MENU-0199,338,Inventory,Reports,Issue CheckList,R,***P,—,REPORT,—
+MENU-0200,339,Inventory,Reports,Stock Summary P/S Basis,R,***P,—,REPORT,—
+MENU-0201,340,Inventory,Reports,ABC Analysis,R,***P,—,REPORT,—
+MENU-0202,16132700,Inventory,Reports,Store Issue Report,R,***P,—,REPORT,—
+MENU-0203,16132800,Inventory,Reports,Liquor Sale Report,R,***P,—,REPORT,—
+MENU-0204,343,Inventory,Tax Reports,VAT Register,E,AEDP,—,MISSING,—
+MENU-0205,344,Inventory,Tax Reports,VAT Register II,E,AEDP,—,MISSING,—
+MENU-0206,345,Inventory,Tax Reports,VAT Register III,E,AEDP,—,MISSING,—
+MENU-0207,346,Inventory,Tax Reports,Form24 Annexure-A,E,AEDP,—,MISSING,—
+MENU-0208,347,Inventory,Tax Reports,Form III,E,AEDP,—,MISSING,—
+MENU-0209,348,Inventory,Tax Reports,UPVAT XXIV,E,AEDP,—,MISSING,—
+MENU-0210,370,Point Of Sale,POS Reports,Sales Register,R,***P,—,REPORT,Sales Register
+MENU-0211,371,Point Of Sale,POS Reports,Stewardwise Sale,R,***P,—,REPORT,—
+MENU-0212,372,Point Of Sale,POS Reports,Table wise Sale,R,***P,—,REPORT,—
+MENU-0213,373,Point Of Sale,POS Reports,Settlement Summary,R,***P,—,REPORT,—
+MENU-0214,374,Point Of Sale,POS Reports,KOT Wise Details,R,***P,—,REPORT,—
+MENU-0215,376,Point Of Sale,POS Reports,Cover Analysis,R,***P,—,REPORT,—
+MENU-0216,377,Point Of Sale,POS Reports,Pending KOT,R,***P,—,REPORT,—
+MENU-0217,378,Point Of Sale,POS Reports,Item wise Sale,R,***P,—,REPORT,Item wise Sale
+MENU-0218,379,Point Of Sale,POS Reports,Deleted Unsettled Bill,R,***P,—,REPORT,—
+MENU-0219,380,Point Of Sale,POS Reports,NC KOT Detail,R,***P,—,REPORT,—
+MENU-0220,383,Point Of Sale,POS Reports,NC KOT Summary,R,***P,—,REPORT,—
+MENU-0221,387,Point Of Sale,POS Reports,Group Wise Sale,R,***P,—,REPORT,—
+MENU-0222,388,Point Of Sale,POS Reports,Customer Detail,R,***P,—,REPORT,—
+MENU-0223,17173000,Point Of Sale,POS Reports,Payment Receive Entry (POS),E,AEDP,RsPaymentReceice.frm,DONE?,Payment Receive Entry
+MENU-0224,17173100,Point Of Sale,POS Reports,Bill Wise Adjustment Report,R,***P,—,REPORT,—
+MENU-0225,392,Point Of Sale,POS M.I.S.,Collection Summary,R,***P,—,REPORT,—
+MENU-0226,393,Point Of Sale,POS M.I.S.,Open Item Sales,R,***P,—,REPORT,—
+MENU-0227,394,Point Of Sale,POS M.I.S.,Void Bills,R,***P,—,REPORT,—
+MENU-0228,395,Point Of Sale,POS M.I.S.,KOT Change Report,R,***P,—,REPORT,—
+MENU-0229,396,Point Of Sale,POS M.I.S.,Discount Summary,R,***P,—,REPORT,—
+MENU-0230,397,Point Of Sale,POS M.I.S.,Monthwise Sales,R,***P,—,REPORT,—
+MENU-0231,398,Point Of Sale,POS M.I.S.,ABC  Analysis,R,***P,—,REPORT,—
+MENU-0232,399,Point Of Sale,POS M.I.S.,Sale Summary,R,***P,—,REPORT,—
+MENU-0233,401,Point Of Sale,POS M.I.S.,Edited Bills,R,***P,—,REPORT,—
+MENU-0234,403,Point Of Sale,Tax Reports,Tax Report,R,***P,—,REPORT,—
+MENU-0235,404,Point Of Sale,Tax Reports,Tax Register,R,***P,—,REPORT,—
+MENU-0236,405,Point Of Sale,Tax Reports,Taxwise Details,R,***P,—,REPORT,—
+MENU-0237,406,Point Of Sale,Tax Reports,Tax Summary,R,***P,—,REPORT,—
+MENU-0238,619,Point Of Sale,ROOM SERVICE,KOT Entry,E,AEDP,RsTouchScreenKOTEntry.frm,DONE,KOT Entry
+MENU-0239,621,Point Of Sale,ROOM SERVICE,Sale Bill Entry,E,AEDP,RSSaleBill.frm,MISSING,—
+MENU-0240,623,Point Of Sale,ROOM SERVICE,POS Bill Reprint,E,AEDP,POSBillReprint.frm,DONE,POS Bill Reprint
+MENU-0241,625,Point Of Sale,ROOM SERVICE,Display Table,E,AEDP,RsPOSDisplay.frm,MISSING,—
+MENU-0242,629,Point Of Sale,ROOM SERVICE,KOT Transfer,E,AEDP,RsKOTTransfer.frm,DONE,KOT Transfer
+MENU-0243,17202200,Point Of Sale,ROOM SERVICE,Payment Receive,E,AEDP,—,MISSING,—
+MENU-0244,17001100,Point Of Sale,Special,Payment Receive,E,AEDP,—,MISSING,—
+MENU-0245,17211100,Point Of Sale,GREEN VIEW RESTAURANT,KOT Entry,E,AEDP,RsTouchScreenKOTEntry.frm,DONE,KOT Entry
+MENU-0246,17211200,Point Of Sale,GREEN VIEW RESTAURANT,Table Change Entry,E,AEDP,—,DONE,Table Change Entry
+MENU-0247,17211300,Point Of Sale,GREEN VIEW RESTAURANT,KOT Transfer,E,AEDP,RsKOTTransfer.frm,DONE,KOT Transfer
+MENU-0248,17211400,Point Of Sale,GREEN VIEW RESTAURANT,Token Entry,V,,RsTokenEntry.frm,DONE,Token Entry
+MENU-0249,17211500,Point Of Sale,GREEN VIEW RESTAURANT,Sale Bill Entry,E,AEDP,RSSaleBill.frm,MISSING,—
+MENU-0250,17211600,Point Of Sale,GREEN VIEW RESTAURANT,Settlement Entry,E,AEDP,rsTouchScreenAdvanceDepDialog.frm,MISSING,—
+MENU-0251,17211700,Point Of Sale,GREEN VIEW RESTAURANT,POS Bill Reprint,E,AEDP,POSBillReprint.frm,DONE,POS Bill Reprint
+MENU-0252,17211800,Point Of Sale,GREEN VIEW RESTAURANT,Split Sale Bill,E,AEDP,RsSaleBillSplit.frm,DONE,Split Sale Bill
+MENU-0253,17211900,Point Of Sale,GREEN VIEW RESTAURANT,Display Table,E,AEDP,RsPOSDisplay.frm,MISSING,—
+MENU-0254,17212000,Point Of Sale,GREEN VIEW RESTAURANT,Order Booking,V,,—,MISSING,—
+MENU-0255,17212100,Point Of Sale,GREEN VIEW RESTAURANT,Order Booking Advance,V,,POSAdvanceDepDialog.frm,MISSING,—
+MENU-0256,17212200,Point Of Sale,GREEN VIEW RESTAURANT,Bill Lookup,E,AEDP,RSSaleBillDisplay.frm,MISSING,—
+MENU-0257,17212300,Point Of Sale,GREEN VIEW RESTAURANT,Payment Receive,E,AEDP,—,MISSING,—
+MENU-0258,17221100,Point Of Sale,SOFT BAR,KOT Entry,E,AEDP,RsTouchScreenKOTEntry.frm,DONE,KOT Entry
+MENU-0259,17221200,Point Of Sale,SOFT BAR,Table Change Entry,E,AEDP,—,DONE,Table Change Entry
+MENU-0260,17221300,Point Of Sale,SOFT BAR,KOT Transfer,E,AEDP,RsKOTTransfer.frm,DONE,KOT Transfer
+MENU-0261,17221400,Point Of Sale,SOFT BAR,Token Entry,V,,RsTokenEntry.frm,DONE,Token Entry
+MENU-0262,17221500,Point Of Sale,SOFT BAR,Sale Bill Entry,E,AEDP,RSSaleBill.frm,MISSING,—
+MENU-0263,17221600,Point Of Sale,SOFT BAR,Settlement Entry,E,AEDP,rsTouchScreenAdvanceDepDialog.frm,MISSING,—
+MENU-0264,17221700,Point Of Sale,SOFT BAR,POS Bill Reprint,E,AEDP,POSBillReprint.frm,DONE,POS Bill Reprint
+MENU-0265,17221800,Point Of Sale,SOFT BAR,Split Sale Bill,E,AEDP,RsSaleBillSplit.frm,DONE,Split Sale Bill
+MENU-0266,17221900,Point Of Sale,SOFT BAR,Display Table,E,AEDP,RsPOSDisplay.frm,MISSING,—
+MENU-0267,17222000,Point Of Sale,SOFT BAR,Order Booking,V,,—,MISSING,—
+MENU-0268,17222100,Point Of Sale,SOFT BAR,Order Booking Advance,V,,POSAdvanceDepDialog.frm,MISSING,—
+MENU-0269,17222200,Point Of Sale,SOFT BAR,Bill Lookup,E,AEDP,RSSaleBillDisplay.frm,MISSING,—
+MENU-0270,17222300,Point Of Sale,SOFT BAR,Payment Receive,E,AEDP,—,MISSING,—
+MENU-0271,17231100,Point Of Sale,SOFT BAR & LOUNGE,KOT Entry,E,AEDP,RsTouchScreenKOTEntry.frm,DONE,KOT Entry
+MENU-0272,17231200,Point Of Sale,SOFT BAR & LOUNGE,Table Change Entry,E,AEDP,—,DONE,Table Change Entry
+MENU-0273,17231300,Point Of Sale,SOFT BAR & LOUNGE,KOT Transfer,E,AEDP,RsKOTTransfer.frm,DONE,KOT Transfer
+MENU-0274,17231400,Point Of Sale,SOFT BAR & LOUNGE,Token Entry,V,,RsTokenEntry.frm,DONE,Token Entry
+MENU-0275,17231500,Point Of Sale,SOFT BAR & LOUNGE,Sale Bill Entry,E,AEDP,RSSaleBill.frm,MISSING,—
+MENU-0276,17231600,Point Of Sale,SOFT BAR & LOUNGE,Settlement Entry,E,AEDP,rsTouchScreenAdvanceDepDialog.frm,MISSING,—
+MENU-0277,17231700,Point Of Sale,SOFT BAR & LOUNGE,POS Bill Reprint,E,AEDP,POSBillReprint.frm,DONE,POS Bill Reprint
+MENU-0278,17231800,Point Of Sale,SOFT BAR & LOUNGE,Split Sale Bill,E,AEDP,RsSaleBillSplit.frm,DONE,Split Sale Bill
+MENU-0279,17231900,Point Of Sale,SOFT BAR & LOUNGE,Display Table,E,AEDP,RsPOSDisplay.frm,MISSING,—
+MENU-0280,17232000,Point Of Sale,SOFT BAR & LOUNGE,Order Booking,V,,—,MISSING,—
+MENU-0281,17232100,Point Of Sale,SOFT BAR & LOUNGE,Order Booking Advance,V,,POSAdvanceDepDialog.frm,MISSING,—
+MENU-0282,17232200,Point Of Sale,SOFT BAR & LOUNGE,Bill Lookup,E,AEDP,RSSaleBillDisplay.frm,MISSING,—
+MENU-0283,17232300,Point Of Sale,SOFT BAR & LOUNGE,Payment Receive,E,AEDP,—,MISSING,—
+MENU-0284,17241100,Point Of Sale,SOFT RESTAURANT,KOT Entry,E,AEDP,RsTouchScreenKOTEntry.frm,DONE,KOT Entry
+MENU-0285,17241200,Point Of Sale,SOFT RESTAURANT,Table Change Entry,E,AEDP,—,DONE,Table Change Entry
+MENU-0286,17241300,Point Of Sale,SOFT RESTAURANT,KOT Transfer,E,AEDP,RsKOTTransfer.frm,DONE,KOT Transfer
+MENU-0287,17241400,Point Of Sale,SOFT RESTAURANT,Token Entry,V,,RsTokenEntry.frm,DONE,Token Entry
+MENU-0288,17241500,Point Of Sale,SOFT RESTAURANT,Sale Bill Entry,E,AEDP,RSSaleBill.frm,MISSING,—
+MENU-0289,17241600,Point Of Sale,SOFT RESTAURANT,Settlement Entry,E,AEDP,rsTouchScreenAdvanceDepDialog.frm,MISSING,—
+MENU-0290,17241700,Point Of Sale,SOFT RESTAURANT,POS Bill Reprint,E,AEDP,POSBillReprint.frm,DONE,POS Bill Reprint
+MENU-0291,17241800,Point Of Sale,SOFT RESTAURANT,Split Sale Bill,E,AEDP,RsSaleBillSplit.frm,DONE,Split Sale Bill
+MENU-0292,17241900,Point Of Sale,SOFT RESTAURANT,Display Table,E,AEDP,RsPOSDisplay.frm,MISSING,—
+MENU-0293,17242000,Point Of Sale,SOFT RESTAURANT,Order Booking,V,,—,MISSING,—
+MENU-0294,17242100,Point Of Sale,SOFT RESTAURANT,Order Booking Advance,V,,POSAdvanceDepDialog.frm,MISSING,—
+MENU-0295,17242200,Point Of Sale,SOFT RESTAURANT,Bill Lookup,E,AEDP,RSSaleBillDisplay.frm,MISSING,—
+MENU-0296,17242300,Point Of Sale,SOFT RESTAURANT,Payment Receive,E,AEDP,—,MISSING,—
+MENU-0297,418,Banquet,Operation,Booking Inquiry,E,AEDP,FrmBookingInquiry.frm,DONE,Booking Inquiry
+MENU-0298,419,Banquet,Operation,Banquet Booking,E,AEDP,HallBooking.frm,DONE,Banquet Booking
+MENU-0299,420,Banquet,Operation,Catalog Selection,E,AEDP,CateringBooking.frm,DONE,Catalog Selection
+MENU-0300,421,Banquet,Operation,Chef Pre-Costing,E,AEDP,HallChefPreCosting.frm,DONE,Chef Pre-Costing
+MENU-0301,422,Banquet,Operation,Banquet Billing,E,AEDP,—,DONE,Banquet Billing
+MENU-0302,424,Banquet,Operation,Venue Availability,E,AEDP,BanqAvailability.frm,DONE,Venue Availability
+MENU-0303,425,Banquet,Operation,Guest Comments,E,AEDP,frmGuestComments.frm,DONE,Guest Comments
+MENU-0304,426,Banquet,Operation,Banquet Estimate Billing,E,AEDP,—,DONE,Banquet Estimate Billing
+MENU-0305,427,Banquet,Operation,Banquet Booking Advance,E,AEDP,—,DONE,Banquet Booking Advance
+MENU-0306,429,Banquet,Reports,Sales Register,R,***P,—,REPORT,Sales Register
+MENU-0307,430,Banquet,Reports,OutStanding Report,R,***P,—,REPORT,—
+MENU-0308,431,Banquet,Reports,Party wise OutStanding,R,***P,—,REPORT,—
+MENU-0309,432,Banquet,Reports,Cashier  Report,R,***P,—,REPORT,—
+MENU-0310,433,Banquet,Reports,Booking Inquiry Detail,R,***P,—,REPORT,Booking Inquiry Detail
+MENU-0311,434,Banquet,Reports,Settlement  Report,R,***P,—,REPORT,—
+MENU-0312,435,Banquet,Reports,Daily Function Sheet,R,***P,—,REPORT,—
+MENU-0313,436,Banquet,Reports,Item Wise Sales Report,R,***P,—,REPORT,—
+MENU-0314,437,Banquet,Reports,Company Wise Sale Report,R,***P,—,REPORT,—
+MENU-0315,438,Banquet,Reports,Function Wise Item Detail,R,***P,—,REPORT,—
+MENU-0316,440,Banquet,MIS,Cover Analysis,R,***P,—,REPORT,—
+MENU-0317,441,Banquet,MIS,Collection Summary,R,***P,—,REPORT,—
+MENU-0318,443,Banquet,Tax Report,Tax Report,R,***P,—,REPORT,—
+MENU-0319,444,Banquet,Tax Report,Tax Summary,R,***P,—,REPORT,—
+MENU-0320,445,Banquet,Tax Report,Banquet Taxwise Details,E,AEDP,—,MISSING,—
+MENU-0321,448,Night Audit,Operation,Guest Audit Ledger,E,AEDP,—,DONE,Guest Audit Ledger
+MENU-0322,449,Night Audit,Operation,Charges Posting,E,AEDP,—,DONE,Charges Posting
+MENU-0323,450,Night Audit,Operation,Night Audit Process,E,AEDP,fdAcPostChrg.frm,DONE,Night Audit Process
+MENU-0324,451,Night Audit,Operation,Account Posting,E,AEDP,—,DONE,Account Posting
+MENU-0325,453,Night Audit,Operation,Reverse Night Audit,E,AEDP,frmReNightAudit.frm,DONE,Reverse Night Audit
+MENU-0326,455,Night Audit,Reports,Daily Report,E,AEDP,—,DONE,Daily Report
+MENU-0327,458,Night Audit,Reports,Guest Trail,E,AEDP,—,MISSING,—
+MENU-0328,459,Night Audit,Reports,Checkout Analysis,E,AEDP,—,MISSING,—
+MENU-0329,460,Night Audit,Reports,Occupancy Analysis,R,***P,—,REPORT,Occupancy Analysis
+MENU-0330,461,Night Audit,Reports,Market Segment Analysis,E,AEDP,—,MISSING,—
+MENU-0331,462,Night Audit,Reports,Business Source Analysis,E,AEDP,—,MISSING,—
+MENU-0332,463,Night Audit,Reports,Company Analysis,E,AEDP,—,MISSING,—
+MENU-0333,465,Night Audit,Reports,FOCC Report,E,AEDP,—,MISSING,—
+MENU-0334,466,Night Audit,Reports,Food Costing Report,E,AEDP,—,MISSING,—
+MENU-0335,467,Night Audit,Reports,FB Cost Statement,E,AEDP,—,MISSING,—
+MENU-0336,19122700,Night Audit,Reports,Credit Report,R,***P,—,REPORT,—
+MENU-0337,472,Night Audit,Log,Night Audit Log,E,AEDP,—,DONE,Night Audit Log
+MENU-0338,473,Night Audit,Log,Charges Remove Log,E,AEDP,—,MISSING,—
+MENU-0339,19141100,Night Audit,GST Reports,GSTR-1,R,***P,—,REPORT,—
+MENU-0340,19141200,Night Audit,GST Reports,GSTR-2(3),R,***P,—,REPORT,—
+MENU-0341,19141300,Night Audit,GST Reports,GSTR-2(4A),R,***P,—,REPORT,—
+MENU-0342,19141400,Night Audit,GST Reports,GSTR-2(4B),R,***P,—,REPORT,—
+MENU-0343,19141500,Night Audit,GST Reports,Reconciliation (GSTR-2A),R,***P,—,REPORT,—
+MENU-0344,19141600,Night Audit,GST Reports,Upload Process,E,AEDP,FrmUploadProcess.frm,MISSING,—
+MENU-0345,19151100,Night Audit,Tally Reports,Tally POS Report,R,***P,—,REPORT,—
+MENU-0346,542,Outdoor Banquet,Setup,Venue Features,E,AEDP,—,DONE,Venue Features
+MENU-0347,543,Outdoor Banquet,Setup,Venue Master,E,AEDP,FrmVenueMast.frm,DONE,Venue Master
+MENU-0348,544,Outdoor Banquet,Setup,Menu Category,E,AEDP,—,DONE,Menu Category
+MENU-0349,545,Outdoor Banquet,Setup,Item Group,E,AEDP,FrmItemGroupMastRaw.frm,DONE,Item Group
+MENU-0350,546,Outdoor Banquet,Setup,Menu Item,E,AEDP,—,DONE,Menu Item
+MENU-0351,548,Outdoor Banquet,Setup,Banquet Bill Sundry Setting,E,AEDP,—,DONE,Banquet Bill Sundry Setting
+MENU-0352,550,Outdoor Banquet,Operation,Booking Inquiry,E,AEDP,FrmBookingInquiry.frm,DONE,Booking Inquiry
+MENU-0353,551,Outdoor Banquet,Operation,Banquet Booking,E,AEDP,HallBooking.frm,DONE,Banquet Booking
+MENU-0354,552,Outdoor Banquet,Operation,Catalog Selection,E,AEDP,CateringBooking.frm,DONE,Catalog Selection
+MENU-0355,553,Outdoor Banquet,Operation,Chef Pre-Costing,E,AEDP,HallChefPreCosting.frm,DONE,Chef Pre-Costing
+MENU-0356,554,Outdoor Banquet,Operation,Banquet Billing,E,AEDP,—,DONE,Banquet Billing
+MENU-0357,555,Outdoor Banquet,Operation,Banquet Settlement,E,AEDP,—,DONE,Banquet Settlement
+MENU-0358,556,Outdoor Banquet,Operation,Venue Availability,E,AEDP,BanqAvailability.frm,DONE,Venue Availability
+MENU-0359,557,Outdoor Banquet,Operation,Guest Comments,E,AEDP,frmGuestComments.frm,DONE,Guest Comments
+MENU-0360,558,Outdoor Banquet,Operation,Banquet Estimate Billing,E,AEDP,—,DONE,Banquet Estimate Billing
+MENU-0361,559,Outdoor Banquet,Operation,Banquet Booking Advance,E,AEDP,—,DONE,Banquet Booking Advance
+MENU-0362,561,Outdoor Banquet,Reports,Sales Register,R,***P,—,REPORT,Sales Register
+MENU-0363,562,Outdoor Banquet,Reports,OutStanding Report,R,***P,—,REPORT,—
+MENU-0364,563,Outdoor Banquet,Reports,Party wise OutStanding,R,***P,—,REPORT,—
+MENU-0365,564,Outdoor Banquet,Reports,Cashier Collection Summary,R,***P,—,REPORT,—
+MENU-0366,565,Outdoor Banquet,Reports,Booking Inquiry Detail,R,***P,—,REPORT,Booking Inquiry Detail
+MENU-0367,566,Outdoor Banquet,Reports,Settlement  Report,R,***P,—,REPORT,—
+MENU-0368,567,Outdoor Banquet,Reports,Daily Function Sheet,R,***P,—,REPORT,—
+MENU-0369,568,Outdoor Banquet,Reports,Function Wise Item Detail,R,***P,—,REPORT,—
+MENU-0370,570,Outdoor Banquet,MIS,Cover Analysis Report,E,AEDP,—,MISSING,—
+MENU-0371,571,Outdoor Banquet,MIS,Cashier Collection Summary,R,***P,—,REPORT,—
+MENU-0372,573,Outdoor Banquet,Tax Report,Tax Report,R,***P,—,REPORT,—
+MENU-0373,574,Outdoor Banquet,Tax Report,Tax Summary,R,***P,—,REPORT,—
+MENU-0374,575,Outdoor Banquet,Tax Report,Banquet Taxwise Details,E,AEDP,—,MISSING,—
+MENU-0375,23001100,Other,Special,Auto Settle Card Balance,E,AEDP,MemAutoSettleCardBalance.frm,DONE,Auto Settle Card Balance

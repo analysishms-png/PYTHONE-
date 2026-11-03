@@ -1,0 +1,41 @@
+{
+  "project": "HMS_py VB6 + Laravel -> Python migration",
+  "root": "C:\\Analysis\\HMS_py",
+  "package": "C:\\Analysis\\HMS_py\\HMS_py",
+  "logic_sources": {
+    "vb6": "C:\\Analysis\\HMS_py\\LOGIC\\VISUALBASIC",
+    "laravel": "C:\\Analysis\\HMS_py\\LOGIC\\analysishms-master"
+  },
+  "constitution": [
+    "VB6 Behavioral Fidelity",
+    "Extend Existing App (no parallel app)",
+    "Zero DB Schema Changes",
+    "Evidence-Based Only",
+    "No Fake Completion",
+    "Single DB Connection (core/db.py)",
+    "Commit Per Module",
+    "Dual Logic Source (VB6 behavior + Laravel rules)"
+  ],
+  "state": {
+    "current_phase": "Phase 2 - Front Office Remaining (Post Charges, Payment, Amend Stay)",
+    "current_module": "Front Office Remaining (Post Charges, Payment, Amend Stay)",
+    "current_option": "Post Charges (fdPostChrg.frm, code 224)",
+    "workflow_step": "PHASE_F_MODULE_LOCKED",
+    "total_options": 375,
+    "completed_options": 0,
+    "completed_modules": [],
+    "active_module_locked": true,
+    "blockers": [
+      "SITE_CODE='KK' (Analysis.ini key 7) vs live data Site_Code='BB' - pre-existing env mismatch, affects all modules equally",
+      "16 report options lack menu_caption_map key (genuine gaps needing review)",
+      "No git commits possible yet (unstaged changes present; commit-per-module deferred pending user approval)"
+    ]
+  },
+  "test_baseline": {
+    "pytest_full": "656 passed, 25 failed, 4 errors (pre-existing env mismatches)",
+    "menu_testing": "1180 passed, 16 failed (report-key gaps), 1056 skipped, 375/375 options exercised",
+    "advance_deposit": "4/4 passing (newly implemented)"
+  },
+  "last_checkpoint": null,
+  "updated": "2026-11-03"
+}
