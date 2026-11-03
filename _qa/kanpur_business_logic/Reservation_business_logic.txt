@@ -1,0 +1,56 @@
+RESERVATION MODULE - BUSINESS LOGIC
+===================================
+
+VB6 Source Files:
+  Booking.frm - New Booking/Reservation
+  Reservation.frm - Reservation Management
+  fdWalkInEntry.frm - Walk-in Guest Entry
+  CsehDemoForm.frm - Demonstration Form
+  FrmBookingInquiry.frm - Booking Inquiry
+  FrmAdvanceDepDialog.frm - Advance Deposit Dialog
+
+Business Rules:
+  1. Room availability checked against overlapping dates in RoomOcc
+  2. Departure date must be after arrival date
+  3. Guest must exist in GuestProf table (or create new walk-in)
+  4. Booking_NO auto-generated from sequence
+  5. Status: New / Confirmed / Cancelled
+  6. Advance deposit required based on rate plan
+  7. Confirmation locks the room (RoomOcc created)
+  8. Cancellation releases the room (RoomOcc status changed)
+  9. Duplicate check: same room + overlapping dates = conflict error
+  10. Room rates auto-calculated from RoomCategory
+  11. Room features displayed in Display Rack
+  12. Plan Meal Tokens: token-based meal system
+  13. Registration Card: guest ID card generated on booking
+  14. Confirmation Letters: auto-generated on confirmation
+  15. Cancellation Letters: auto-generated on cancellation
+  16. Reservation Status Screen: shows all reservations with status
+  17. Room Availability Forecast: 7-730 days forecast available
+  18. Package Forecast: package-based rate forecasting
+  19. Look Up Room types: filter rooms by type
+  20. Look Up Rooms: filter rooms by features
+
+Database Tables:
+  Booking, GuestProf, RoomOcc, GuestStatus, Reservation, RoomMast,
+  RoomCategory, GuestHistory, PlanMaster, PackageMaster, RatePlan
+
+SQL Operations:
+  CREATE_BOOKING: INSERT INTO Booking (BOOKING_NO, GUEST_CODE, ARRIVAL, DEPARTURE, ROOM_NO) VALUES (?, ?, ?, ?, ?)
+  CHECK_AVAILABILITY: SELECT * FROM RoomOcc WHERE ROOM_NO = ? AND ARRIVAL <= ? AND DEPARTURE >= ? AND STATUS = 'Occupied'
+  CREATE_RESERVATION: INSERT INTO Reservation VALUES (?, ?, ?, ?, ?)
+  CONFIRM_BOOKING: UPDATE Booking SET STATUS = 'Confirmed' WHERE BOOKING_NO = ?
+  CANCEL_BOOKING: UPDATE Booking SET STATUS = 'Cancelled' WHERE BOOKING_NO = ?
+  ROOM_OCC_UPON_CHECKIN: INSERT INTO RoomOcc (ROOM_NO, GUEST_CODE, ARRIVAL, STATUS) VALUES (?, ?, ?, 'Occupied')
+  ROOM_RELEASE_ON_CHECKOUT: UPDATE RoomOcc SET STATUS = 'Dirty' WHERE ROOM_NO = ? AND STATUS = 'Occupied'
+
+Workflow:
+  Guest lookup → Room availability check → Enter dates →
+  Calculate rate → Create booking → Confirm/Cancel →
+  On confirmation: create RoomOcc → On cancellation: release room
+
+Key Forms:
+  fdWalkInEntry.frm: For walk-in guests without prior reservation
+  FrmAdvanceDepDialog.frm: Deposit collection before booking
+  Booking.frm: Main booking form with all fields
+  Reservation.frm: Reservation management and modification

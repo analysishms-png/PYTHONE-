@@ -1,0 +1,73 @@
+UTILITY MODULE - BUSINESS LOGIC
+==============================
+
+VB6 Source Files:
+  UserMast.frm - User Master
+  UserPermission.frm - User Permissions
+  User_Module.frm - User Module Access
+  CompanyMast.frm - Company Master
+  CompanyProfile.frm - Company Profile
+  SysConfig.frm - System Configuration
+  UTL.frm - Utility
+  Util.frm - Utility
+  BackupData.frm - Backup Data
+  InconsistencyCheck.frm - Inconsistency Check
+  YearEndUpdation.frm - Year End Updation
+  MenuItemCopy.frm - Menu Item Copy
+  GuestLookUp.frm - Guest Look Up
+  CountryMaster.frm - Country Master
+  StateMaster.frm - State Master
+  CityMaster.frm - City Master
+  Department.frm - Department
+  LedgerAccounts.frm - Ledger Accounts
+  UnitMaster.frm - Unit Master
+  TaskScheduler.frm - Task Scheduler
+  SundryMaster.frm - Sundry Master
+
+Business Rules:
+  USER MANAGEMENT:
+    1. User Master: USER_NAME, PASSWD (encrypted), LABEL, ShortName, ActiveYN
+    2. User Permissions: ADD, EDIT, DELETE, PRINT rights per module
+    3. User Module Access: module-level permissions
+    4. SA default password: '\' (from VB6 frmCompany.frm)
+    5. Authentication: VB6-compatible reversible encryption (shift=27)
+    6. Brute-force protection: max 5 attempts per 15 min
+
+  COMPANY MANAGEMENT:
+    7. Company Master: company details
+    8. Company Profile: company profile information
+    9. Company code: used for multi-company support
+
+  SYSTEM CONFIGURATION:
+    10. System Configuration: Analysis.ini settings
+    11. Server, Database, Reports, Temp paths configured
+    12. Company and Site settings
+
+  BACKUP & RESTORE:
+    13. Backup Data: SQL Server database backup
+    14. Inconsistency Check: data integrity verification
+    15. Year End Updation: annual data migration
+
+  UTILITY:
+    16. Guest Look Up: search guest by name/code
+    17. Country/State/City Master: address hierarchy
+    18. Department: organizational departments
+    19. Ledger Accounts: chart of accounts
+    20. Unit Master: measurement units
+    21. Task Scheduler: scheduled tasks
+    22. Sundry Master: debtor/creditor master
+    23. Menu Item Copy: copy menu configurations
+    24. Menu Module: module access management
+    25. Task Scheduler: automated task scheduling
+
+Database Tables:
+  UserMast, User1, User_Module, CompanyMast, CompanyProfile,
+  SysConfig, AnalysisIni, BackupLog, MaintenanceLog, AuditLog,
+  Country, State, City, Department, LedgerAccounts, Unit,
+  SundryMaster, TaskScheduler, MenuItemCopy
+
+SQL Operations:
+  LOGIN: SELECT * FROM UserMast WHERE USER_NAME = ? AND PASSWD = ?
+  CHECK_PERMISSION: SELECT * FROM User1 WHERE USER_NAME = ? AND MODULE = ?
+  CREATE_BACKUP: BACKUP DATABASE MOONData2627 TO DISK = ?
+  INCONSISTENCY_CHECK: DBCC CHECKDB (MOONData2627)

@@ -1,0 +1,127 @@
+POINT OF SALE MODULE - BUSINESS LOGIC
+======================================
+
+VB6 Source Files:
+  RSSaleBill.frm - POS Sale Bill (main POS form)
+  RsKOTEntry.frm - KOT Entry (Kitchen Order Ticket)
+  RsTouchScreenSaleBill.frm - Touch Screen Sale Bill
+  RsTouchScreenKOTEntry.frm - Touch Screen KOT Entry
+  RsTouchScreenBookingEntry.frm - Touch Screen Booking
+  RsTouchScreenAdvanceDepDialog.frm - Touch Screen Advance Deposit
+  RsTouchScreenKeyBoard.frm - Touch Screen Keyboard
+  RsTouchScreenFAFind.frm - Touch Screen FA Find
+  RsTouchScreenBookingEntry.frm - Touch Screen Booking Entry
+  RsTouchOrderPersonDetails.frm - Touch Screen Order Person Details
+  RsTouchDisplayTB.frm - Touch Screen Display Table
+  RsTouchScreenSteward.frm - Touch Screen Steward
+  RsPOSDisplayNew.frm - POS Display New
+  RsPOSCustInfo.frm - POS Customer Info
+  RsPaymentReceice.frm - POS Payment Receipt
+  RsMenuItemEntry.frm - Menu Item Entry
+  RsKOTTransfer.frm - KOT Transfer
+  RsKitchenStk.frm - Kitchen Stock
+  RsKitchenMaterial.frm - Kitchen Material
+  RsGravyItemEntry.frm - Gravy Item Entry
+  RsStoreRecEntry.frm - Store Receive Entry
+  RsStatusScreen.frm - Status Screen
+  RsSpecItemEntry.frm - Special Item Entry
+  RsSaleBillSplit.frm - Sale Bill Split
+  RSSaleBillDisplay.frm - Sale Bill Display
+  RSSaleBill1.frm - Sale Bill 1
+  RsPOSDisplay.frm - POS Display
+  RsTokenEntry.frm - Token Entry
+  RsTbChange.frm - Table Change
+  RsTableMast.frm - Table Master
+  RsSpecItemEntry.frm - Special Item Entry
+  RsPOSDisplay.frm - POS Display
+  RsPOSCustInfo.frm - POS Customer Info
+  RsPaymentReceice.frm - POS Payment Receipt
+  RsPOSCustInfo.frm - POS Customer Info
+  RsPaymentReceice.frm - POS Payment Receipt
+  RsMenuItemEntry.frm - Menu Item Entry
+  RsKOTTransfer.frm - KOT Transfer
+  RsKitchenStk.frm - Kitchen Stock
+  RsKitchenMaterial.frm - Kitchen Material
+  RsGravyItemEntry.frm - Gravy Item Entry
+  RsStoreRecEntry.frm - Store Receive Entry
+  RsStatusScreen.frm - Status Screen
+  RsSpecItemEntry.frm - Special Item Entry
+  RsSaleBillSplit.frm - Sale Bill Split
+  RSSaleBillDisplay.frm - Sale Bill Display
+  RSSaleBill1.frm - Sale Bill 1
+  RsPOSDisplay.frm - POS Display
+  RsTokenEntry.frm - Token Entry
+  RsTbChange.frm - Table Change
+  RsTableMast.frm - Table Master
+
+Business Rules:
+  KOT FLOW:
+    1. Order → KOT → Kitchen → Bill
+    2. KOT (Kitchen Order Ticket) created for each order
+    3. KOT transferred to kitchen for preparation
+    4. KOT transfer tracks kitchen workflow
+    5. Multiple KOTs can be generated per table
+    6. KOT items include: menu item, quantity, special instructions
+    7. KOT status: Pending / Preparing / Ready / Served
+    8. KOT transfer: move KOT between kitchen stations
+    9. Kitchen stock updated on KOT completion
+    10. Kitchen material consumption tracked
+
+  TABLE MANAGEMENT:
+    11. Table Master: table configuration (capacity, location)
+    12. Table status: Available / Occupied / Reserved / Cleaning
+    13. Table change: move guest to different table
+    14. Table display: visual layout of all tables
+    15. Display Table: shows table status in visual format
+
+  PAYMENT:
+    16. Multiple payment modes accepted (Cash, Card, Credit)
+    17. Payment receipt generated
+    18. Payment splitting allowed (bill split)
+    19. Advance deposit accepted
+    20. Payment reconciliation at end of day
+    21. Payment receive entry (POSEnt module)
+
+  SALE BILL:
+    22. Sale bill auto-calculated with items, tax, discount
+    23. Bill splitting supported (split bill among multiple guests)
+    24. Bill display: shows items, quantities, prices
+    25. Bill reprint: POS bill reprint option
+    26. Bill lookup: search for past bills
+    27. Bill modification: modify bill before settlement
+
+  INVENTORY INTEGRATION:
+    28. Kitchen stock updated on item consumption
+    29. Stock register tracks all kitchen items
+    30. Material consumption reported
+    31. Excess consumption flagged
+    32. Purchase register tracks all purchases
+
+  REPORTS:
+    33. Sales Register: all sales for the period
+    34. KOT Wise Details: KOT analysis
+    35. Settlement Summary: payment summary
+    36. Cover Analysis: customer count analysis
+    37. Pending KOT: KOTs not yet served
+    38. Item wise Sale: sales by item
+    39. Deleted Unsettled Bill: bills deleted without settlement
+    40. NC KOT Detail: Non-Activity KOT details
+    41. Group Wise Sale: sales by customer group
+    42. Customer Detail: customer purchase history
+    43. Bill Wise Adjustment Report: adjustments by bill
+    44. Order Detail Report: order analysis
+    45. Tally POS Report: integration with Tally
+
+Database Tables:
+  POSSale, POSKOT, POSItem, POSTable, POSMaster, POSDelivery,
+  POSPacking, POSNA, KOTEntry, KitchenClearStk, POSHall, POSHappy,
+  POSDirectSale, POSDirectItem, Stock, Purchase, PurchaseReturn,
+  Issue, StockAdjust, Unit, Supplier, Item, ItemGroup
+
+SQL Operations:
+  CREATE_KOT: INSERT INTO POSKOT (TABLE_NO, ITEMS, STATUS) VALUES (?, ?, 'Pending')
+  CREATE_SALE: INSERT INTO POSSale (TABLE_NO, ITEMS, AMOUNT, PAYMENT_MODE) VALUES (?, ?, ?, ?)
+  UPDATE_STOCK: UPDATE Stock SET QUANTITY = QUANTITY - ? WHERE ITEM_CODE = ?
+  TRANSFER_KOT: UPDATE POSKOT SET STATION = ? WHERE KOT_NO = ?
+  SETTLEMENT: UPDATE POSSale SET PAID = ?, PAYMENT_MODE = ? WHERE SALE_NO = ?
+  BILL_SPLIT: INSERT INTO POSSaleSplit (SALE_NO, AMOUNT, GUEST) VALUES (?, ?, ?)

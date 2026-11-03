@@ -1,0 +1,47 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::connection('tenant')->create('plan1', function (Blueprint $table) {
+            $table->integer('id')->unique('id');
+            $table->integer('propertyid');
+            $table->integer('pcode');
+            $table->string('rev_code', 50)->nullable();
+            $table->integer('sno');
+            $table->string('tax_inc', 50)->nullable();
+            $table->string('tax_stru', 50)->nullable();
+            $table->integer('adult')->nullable();
+            $table->integer('child')->nullable();
+            $table->string('plan_per', 50)->nullable();
+            $table->decimal('net_amount', 10)->nullable();
+            $table->string('fix_rate', 50)->nullable();
+            $table->string('u_name', 25);
+            $table->dateTime('created_at');
+            $table->dateTime('updated_at')->nullable();
+            $table->string('u_ae', 1)->nullable()->default('a');
+            $table->string('sysYN', 1)->nullable();
+
+            $table->primary(['propertyid', 'pcode', 'sno']);
+        });
+
+        DB::connection('tenant')->statement('ALTER TABLE `plan1` MODIFY `id` INT NOT NULL AUTO_INCREMENT');
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::connection('tenant')->dropIfExists('plan1');
+    }
+};

@@ -1,0 +1,243 @@
+.custom-index #hero {
+    height: auto;
+    padding: 10px 0 10px 0;
+    width: auto;
+}
+
+.custom-index .hero-section {
+    height: auto;
+    padding: 10px 0 10px 0;
+    width: auto;
+    background: linear-gradient(135deg, rgba(13, 109, 253, 0.281), rgba(25, 135, 84, 0.9)),
+        url('https://images.unsplash.com/photo-1495302676229-d8229d284792?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') no-repeat center center/cover;
+    background-size: cover;
+    background-position: center;
+    padding: 150px 0;
+    position: relative;
+    color: white;
+}
+
+.custom-index .hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+/* Feature Cards */
+.custom-index .feature-card {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #e9ecef;
+}
+
+.custom-index .feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.custom-index .feature-card i {
+    color: #007bff;
+    margin-bottom: 15px;
+    transition: color 0.3s ease;
+}
+
+.custom-index .feature-card:hover i {
+    color: #0056b3;
+}
+
+/* Why Choose Us Section */
+.custom-index .choose-card {
+    background-color: white;
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #e9ecef;
+}
+
+.custom-index .choose-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.custom-index .choose-card i {
+    color: #28a745;
+    margin-bottom: 15px;
+    transition: color 0.3s ease;
+}
+
+.choose-card:hover i {
+    color: #218838;
+}
+
+/* Testimonials Section */
+.custom-index .testimonial-card {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.custom-index .testimonial-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Demo Request Section */
+.custom-index #demo-request form input,
+.custom-index #demo-request form textarea {
+    transition: all 0.3s ease;
+}
+
+.custom-index #demo-request form input:focus,
+.custom-index #demo-request form textarea:focus {
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+    border-color: #007bff;
+}
+
+.custom-index #demo-request .contact-info i {
+    color: #007bff;
+    margin-right: 10px;
+}
+
+/* Button Styles */
+.custom-index .btn-primary {
+    transition: all 0.3s ease;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.custom-index .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+    transform: translateY(-3px);
+    box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .custom-index .hero-section {
+        padding: 100px 0;
+    }
+
+    .custom-index .feature-card,
+    .choose-card {
+        margin-bottom: 20px;
+    }
+}
+
+/* AOS Animation Enhancements */
+[data-aos] {
+    transition-duration: 1s;
+}
+
+.about-hero {
+    background: url('https://images.pexels.com/photos/1643280/pexels-photo-1643280.jpeg?_gl=1*1owp6wy*_ga*MTYwOTI3MDMyMi4xNzU4NTI1Mzk0*_ga_8JE65Q40S6*czE3NTg1MjUzOTMkbzEkZzEkdDE3NTg1MjU0NzkkajM1JGwwJGgw') center/cover no-repeat;
+    padding: 160px 0;
+    color: #fff;
+    text-align: center;
+}
+
+.service-hero {
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    min-height: 400px;
+}
+
+.service-hero .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.45);
+}
+/* Sidebar base */
+.nk-sidebar {
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background: #111;
+    color: #fff;
+    overflow-y: auto;
+    transition: all 0.3s ease;
+    z-index: 999;
+}
+
+/* Scroll fix */
+.nk-nav-scroll {
+    padding: 15px 0;
+}
+
+/* Links */
+.nk-sidebar a {
+    color: #ccc;
+    padding: 12px 20px;
+    display: block;
+    text-decoration: none;
+}
+
+.nk-sidebar a:hover {
+    background: #222;
+    color: #fff;
+}
+
+/* Mobile sidebar hidden */
+@media (max-width: 768px) {
+    .nk-sidebar {
+        left: -260px;
+    }
+
+    .nk-sidebar.active {
+        left: 0;
+    }
+}
+
+/* Toggle button */
+.sidebar-toggle {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1000;
+    background: #111;
+    color: white;
+    border: none;
+    padding: 10px 14px;
+    font-size: 18px;
+    border-radius: 5px;
+}
+#footer {
+    font-size: 14px;
+}
+
+#footer .footer-top {
+    padding: 60px 0 30px;
+}
+
+#footer ul {
+    list-style: none;
+    padding: 0;
+}
+
+#footer ul li {
+    margin-bottom: 8px;
+}
+
+@media (max-width: 768px) {
+    #footer {
+        text-align: center;
+    }
+
+    #footer .footer-top {
+        padding: 40px 20px;
+    }
+
+    #footer img {
+        margin: auto;
+    }
+}

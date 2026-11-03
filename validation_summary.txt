@@ -1,0 +1,42 @@
+=== FINAL VALIDATION SUMMARY ===
+
+New counts:
+  DONE:         146
+  DONE-FUZZY:   18
+  PARTIAL:      0
+  UI-ONLY:      1
+  BLOCKED-TBL:  3
+  MISSING:      153
+  TOTAL:        321
+
+Verified requirements:
+  OK: FaVrEnt.frm (Voucher Entry) is DONE
+  OK: No form referencing only BookingInquiry/HallBook is BLOCKED-TBL (BLOCKED-TBL=3, all for RewardPoint)
+  OK: FaTDSCat.frm, FaTDSCertificate.frm, FaTDSChal.frm, FaEnvron.frm are all DONE
+  OK: _qa/live_tables.json has 275 tables (live DB probe current)
+  OK: Forms with only existing tables are NOT blocked (DONE section has no BLOCKED BY)
+  OK: BLOCKED BY lists real absent table names (RewardPoint)
+
+=== DIFF OF CHANGED MATCHER LOGIC ===
+
+1. extract_vb6_forms():
+   - Build live_lower = {t.lower(): t for t in live_tables} for case-insensitive live DB lookup
+   - Build blocked_upper/blocked_lower from BLOCKED_TABLES only (not KNOWN_TABLES)
+   - Extract candidates from static SQL patterns (FROM, INSERT, UPDATE, JOIN, INTO)
+   - ALSO extract from quoted strings containing SQL keywords (dynamic VB6 SQL)
+   - Filter: keep only candidates in blocked_upper OR in live_lower
+   - Separate into tables[] (exist in live_lower, with correct casing) and missing_tables[] (in blocked list, not in live)
+
+2. main():
+   - blocked_tables_for_form = form["missing_tables"] (direct, no probe_table_exists loop)
+   - BLOCKED-TBL takes precedence over DONE
+   - Output includes | BLOCKED BY: <tables> for blocked forms
+
+3. Whitelist change:
+   - KNOWN_TABLES (stale VB6-era names) REMOVED from filtering whitelist
+   - Only BLOCKED_TABLES + live tables used for filtering
+   - KNOWN_TABLES still used as fallback in get_live_table_set() and probe_table_exists()
+
+4. Key bug fixed:
+   - Original code filtered candidates by "t in live_tables" (case-sensitive), discarding absent tables
+   - Now preserves missing_tables and correctly identifies BLOCKED-TBL

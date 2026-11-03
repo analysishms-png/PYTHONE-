@@ -1,0 +1,188 @@
+{
+    "RoomStays": [
+        {
+            "RoomTypes": [
+                {
+                    "RoomDescription": {
+                        "Name": "DELUXE"
+                    },
+                    "NumberOfUnits": 1,
+                    "RoomTypeCode": "1103"
+                }
+            ],
+            "RatePlans": [
+                {
+                    "RatePlanCode": "7103",
+                    "RatePlanName": "AP (DLX)"
+                }
+            ],
+            "GuestCounts": [
+                {
+                    "AgeQualifyingCode": "10",
+                    "Count": 1
+                },
+                {
+                    "AgeQualifyingCode": "8",
+                    "Count": 0
+                }
+            ],
+            "TimeSpan": {
+                "Start": "2024-11-08",
+                "End": "2024-11-09"
+            },
+            "RoomRates": [
+                {
+                    "Base": {
+                        "AmountBeforeTax": "4500.00",
+                        "AmountAfterTax": 0
+                    },
+                    "EffectiveDate": "2024-11-08"
+                }
+            ],
+            "Total": {
+                "AmountBeforeTax": 0,
+                "AmountAfterTax": 0
+            }
+        },
+        {
+            "RoomTypes": [
+                {
+                    "RoomDescription": {
+                        "Name": "DELUXE"
+                    },
+                    "NumberOfUnits": 1,
+                    "RoomTypeCode": "1103"
+                }
+            ],
+            "RatePlans": [
+                {
+                    "RatePlanCode": "1103",
+                    "RatePlanName": "CP (DLX)"
+                }
+            ],
+            "GuestCounts": [
+                {
+                    "AgeQualifyingCode": "10",
+                    "Count": 2
+                },
+                {
+                    "AgeQualifyingCode": "8",
+                    "Count": 0
+                }
+            ],
+            "TimeSpan": {
+                "Start": "2024-11-08",
+                "End": "2024-11-09"
+            },
+            "RoomRates": [
+                {
+                    "Base": {
+                        "AmountBeforeTax": "4500.00",
+                        "AmountAfterTax": 0
+                    },
+                    "EffectiveDate": "2024-11-08"
+                }
+            ],
+            "Total": {
+                "AmountBeforeTax": 0,
+                "AmountAfterTax": 0
+            }
+        }
+    ],
+    "ResGuests": [
+        {
+            "Customer": {
+                "PersonName": {
+                    "NamePrefix": "Mr.",
+                    "GivenName": "User",
+                    "Surname": "P"
+                },
+                "Telephone": {
+                    "PhoneNumber": "9999999999"
+                },
+                "Email": "user@gmail.com",
+                "Address": {
+                    "AddressLine": [
+                        "",
+                        ""
+                    ],
+                    "CityName": "",
+                    "PostalCode": "",
+                    "StateProv": "",
+                    "CountryName": ""
+                }
+            },
+            "PrimaryIndicator": "1"
+        }
+    ],
+    "ResGlobalInfo": {
+        "UniqueID": {
+            "ID": ""
+        },
+        "BasicPropertyInfo": {
+            "HotelCode": "",
+            "HotelName": ""
+        },
+        "Source": {
+            "RequestorID": {
+                "ID": "EXT_PMS_CODE",
+                "Type": "ChannelManager"
+            },
+            "BookingChannel": {
+                "Type": "OTA",
+                "CompanyName": "EXT PMS NAME",
+                "CompanyCode": ""
+            }
+        },
+        "CreateDateTime": "2024-07-20T16:06:33",
+        "ResStatus": "Commit",
+        "TimeSpan": {
+            "Start": "2024-04-01",
+            "End": "2025-03-31"
+        },
+        "GuestCounts": [
+            {
+                "AgeQualifyingCode": "10",
+                "Count": 1
+            },
+            {
+                "AgeQualifyingCode": "8",
+                "Count": 0
+            }
+        ],
+        "Total": {
+            "OtherCharges": [
+                {
+                    "ChargeDesc": "Airport Pickup",
+                    "AmountBeforeTax": 0,
+                    "AmountAfterTax": 0
+                },
+                {
+                    "ChargeDesc": "Airport Drop",
+                    "AmountBeforeTax": 0,
+                    "AmountAfterTax": 0
+                }
+            ],
+            "Taxes": {
+                "Tax": {
+                    "Amount": 600
+                }
+            },
+            "AmountBeforeTax": 5000,
+            "AmountAfterTax": 5600,
+            "CurrencyCode": "INR",
+            "PaymentType": "PrePaidPartially",
+            "PartialPaymentInfo": {
+                "PartialAmount": 2000,
+                "BalanceAmount": 3600
+            }
+        },
+        "PaymentTypeInfo": {
+            "PaymentType": "PayAtHotel",
+            "PartialPaymentAmount": 0
+        },
+        "SpecialRequests": [
+            ""
+        ]
+    }
+}

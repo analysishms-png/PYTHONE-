@@ -1,0 +1,426 @@
+# live tables: 271
+
+## candidate / previously-blocked
+NO   CateringBook
+NO   EventMast
+NO   HallBill
+NO   BanquetSundry
+NO   SmartCard
+NO   RewardPoint
+NO   TelCall
+NO   DoorLock
+NO   EInvoice
+YES  BookingInquiry
+YES  HallBook
+NO   RoomInclusive
+NO   RoomInclusiveLog
+NO   DailyReportSnapshot
+YES  NightAuditLog
+NO   MallReceipt
+NO   MallShopMast
+NO   MallLeaseHdr
+NO   MallNoteHdr
+NO   MallDailyPowerEntry
+NO   MallMeterReading
+NO   Voucher
+YES  VenueMast
+YES  VenueOcc
+YES  FacilityBill1
+YES  FacilityBill2
+YES  SuntranFacility
+NO   Remarks
+NO   BookingFollowUp
+NO   GatePassIn
+NO   GatePassOut
+NO   EsslAttendanceLogs
+NO   ChequeDesign
+NO   RvRateRule
+NO   BookingSource
+NO   TravelAgent
+NO   MemberCategory
+NO   MemberFacilityMast
+YES  MemberFamily
+NO   MemberMast
+NO   HkRoomAssign
+NO   HkCleaningHdr
+NO   HkCleaningFtr
+NO   HkInspectionHdr
+NO   HkInspectionDtl
+NO   LostFound
+NO   ServiceRequestHdr
+NO   ServiceRequestHdrDtl
+NO   ShiftMaster
+NO   Printers
+NO   PrinterSetup
+NO   NotificationMaster
+NO   NotificationDelivery
+NO   WhatsappLog
+NO   ActivityLog
+NO   UpdateLog
+NO   CompanyLog
+NO   LedgerLog
+
+## key table columns
+
+### Ledger (29 cols)
+DocId:varchar, V_SNo:smallint, V_Type:varchar, V_No:int, v_Prefix:varchar, Site_Code:varchar, V_Date:datetime, SubCode:varchar, AmtCr:float, AmtDr:float, ContraSub:varchar, Chq_No:varchar, Chq_Date:datetime, Clg_Date:datetime, Narration:varchar, U_Name:varchar, U_EntDt:datetime, U_AE:varchar, SQty:float, Pqty:float, AgRefNo:varchar, VTime:datetime, Mth_Year:varchar, emp_code:varchar, GroupCode:varchar, GroupNature:varchar, LogSite_Code:varchar, TImp_Dt:datetime, SeqNo:smallint
+
+### Voucher_Type (36 cols)
+Category:varchar, NCat:varchar, V_Type:varchar, Contratype:varchar, Description:varchar, Description_Help:varchar, Description_BiLang:varchar, Short_Name:varchar, Short_Name_BiLang:varchar, Report_Index:varchar, Number_Method:varchar, Start_No:int, Last_Ent_Date:datetime, Form_Name:varchar, Separate_Narr:varchar, Common_Narr:varchar, Narration:varchar, Print_VNo:varchar, Header_Desc:varchar, Terms_Desc:varchar, Footer_Desc:varchar, Exclude_Ac_Grp:varchar, SerialNo_From_Table:varchar, U_NAME:varchar, U_EntDt:datetime, U_AE:varchar, ChqNo:varchar, ChqDt:varchar, ClgDt:varchar, SortNo:int, RestCode:varchar, Site_Code:varchar, DefaultCrAc:varchar, DefaultDrAc:varchar, FirstDrCr:varchar, LogSite_Code:varchar
+
+### Voucher_Prefix (10 cols)
+V_Type:varchar, Date_From:datetime, Date_To:datetime, Prefix:varchar, Start_Srl_No:int, Site_Code:varchar, U_EntDt:datetime, LogSite_Code:varchar, U_Name:varchar, U_AE:varchar
+
+### LastVoucher (10 cols)
+user_name:varchar, V_Type:varchar, Last_Ent_Date:datetime, DocId:varchar, U_Name:varchar, U_EntDt:datetime, U_AE:varchar, v_Prefix:varchar, Site_Code:varchar, LogSite_Code:varchar
+
+### TDSCat (9 cols)
+Code:varchar, Name:varchar, TDSLimit:float, TDSPercentage:float, U_Name:varchar, U_EntDt:datetime, U_AE:varchar, Site_Code:varchar, LogSite_Code:varchar
+
+### LedgerTDS (18 cols)
+DocId:varchar, V_SNo:smallint, Site_Code:varchar, v_Prefix:varchar, V_DATE:datetime, TDSCode:varchar, TDSDrCode:varchar, TDSYN:varchar, ONAMT:float, TDS:float, TDSAMT:float, TDSPOST:varchar, TDSDocId:varchar, TDSV_SNo:smallint, U_Name:varchar, U_EntDt:datetime, U_AE:varchar, LogSite_Code:varchar
+
+### ledgerAdj (13 cols)
+DocId1:varchar, V_SNo1:int, DocId2:varchar, V_SNo2:int, Cr:float, SubCode:varchar, Name:varchar, AgRefNo:varchar, U_Name:varchar, U_EntDt:datetime, U_AE:varchar, Site_Code:varchar, LogSite_Code:varchar
+
+### ledgerRef (15 cols)
+Id:int, DocId:varchar, V_SNo:int, Dr:float, Cr:float, SubCode:varchar, U_Name:varchar, U_EntDt:datetime, U_AE:varchar, DueDate:datetime, AgRefNo:varchar, AgRefType:varchar, V_Date:datetime, Site_Code:varchar, LogSite_Code:varchar
+
+### ACGROUP (20 cols)
+ID:int, Site_Code:varchar, GroupCode:varchar, GroupName:varchar, GroupNameBiLang:varchar, GroupNature:varchar, Nature:varchar, MainGrCode:varchar, CurrentBalance:float, SubLedYN:varchar, BlOrd:int, AliasYN:varchar, SysGroup:varchar, GroupHelp:varchar, U_Name:varchar, U_EntDt:datetime, U_AE:varchar, TradingYN:varchar, MainGrLen:int, LogSite_Code:varchar
+
+### SubGroup (79 cols)
+SubCode:varchar, Site_Code:varchar, Name:varchar, ShortName:varchar, NameHelp:varchar, GroupCode:varchar, GroupNature:varchar, Nature:varchar, Category:varchar, ConPrefix:varchar, ConPerson:varchar, ConSuffix:varchar, Add1:varchar, Add2:varchar, Add3:varchar, CityCode:varchar, PIN:varchar, Phone:varchar, Mobile:varchar, FAX:varchar, EMail:varchar, CSTNo:varchar, LSTNo:varchar, PANNo:varchar, ITWARD_NO:varchar, TDS_Catg:varchar, ActiveYN:smallint, CreditLimit:int, CreditDays:int, Religion:smallint, AreaCode:varchar, Remark:varchar, FName:varchar, CompanyType:varchar, AllowCredit:varchar, DiscountType:varchar, Discount:float, Commission:float, Remarks:varchar, BlackListed:varchar, ReasonBlackList:varchar, BlackListedBy:varchar, Interest:float, U_Name:varchar, U_EntDt:datetime, U_AE:varchar, FGLNO:varchar, DLNO:varchar, CostCenterAppl:varchar, PhoneO:varchar, Transport:varchar, TINNo:varchar, LogSite_Code:varchar, ValidateUpto:datetime, CardIssDate:datetime, AppNo:varchar, CardNo:varchar, SubCorresYN:varchar, AddName:varchar, ValidFrom:datetime, WebPassword:varchar, BloodGroup:varchar, MeshAc:varchar, ConPersonMName:varchar, ConPersonLName:varchar, ChequeType:varchar, Mobile1:varchar, ApplDate:datetime, SeqNo:smallint, FatherName:varchar, MotherName:varchar, IdProof:varchar, IdProofNo:varchar, CINNo:varchar, GSTIN:varchar, MapCode:varchar, DealerType:varchar, LegalName:varchar, TradeName:varchar
+
+### SubGroupCurrBal (6 cols)
+LogSite_Code:varchar, SubCode:varchar, V_Date:datetime, GroupCode:varchar, Curr_Bal:float, Site_Code:varchar
+
+### AcGroupCurrBal (5 cols)
+LogSite_Code:varchar, GroupCode:varchar, V_Date:datetime, Curr_Bal:float, Site_Code:varchar
+
+### Enviro (221 cols)
+Cash_Ac:varchar, DiscountAc:varchar, RoundOffAc:varchar, CommAC:varchar, Editopen:varchar, PF_LIMIT:int, PF_EMPLOYEE:float, PF_EMPLOYER:float, ESI_LIMIT:float, esi_employee:float, SALARY_AC:varchar, AttendType:smallint, Loan_AC:varchar, AdvanceAc:varchar, RoundOff:bit, Checkout:varchar, PurchaseAdd1:varchar, PurchaseDed1:varchar, PurchaseAdd2:varchar, PurchaseDed2:varchar, Variation:varchar, CheckoutVar:varchar, HotelLogo:image, RoomChrgDueAc:varchar, RoomTaxDueAc:varchar, ReservationPrinting:varchar, ArrDateTimeEdit:varchar, DefCompGroup:varchar, Rate1:varchar, Rate2:varchar, Rate3:varchar, Rate4:varchar, Rate5:varchar, LessFreightAc:varchar, WagesAc:varchar, CashPayType:varchar, OutletDiscAc:varchar, OutletRoundAc:varchar, CommissionAc:varchar, RoomPayType:varchar, calcMethod:varchar, NCUR:datetime, SiteCode:varchar, Bill_Footer:varchar, Bill_Header:varchar, CancellationAC:varchar, HallRoundOff:varchar, HallDiscAC:varchar, CashPurchAc:varchar, Postingtype:varchar, OutDoorCatering:varchar, SundryPassword:varchar, CatalogLimit:varchar, OutdoorSaleAC:varchar, IndoorSaleAC:varchar, OutdoorPartyAC:varchar, IndoorPartyAC:varchar, KOTPrinting:varchar, TaxSummary:varchar, TOKENPrint:varchar, DummyTravelAc:varchar, menuX:float, menuY:float, menuDISP:varchar, LogSite_Code:varchar, BookingPartyAc:varchar, RoomChrgPostingType:varchar, PlanMastType:varchar, PostComplimentaryBills:varchar, PostNilLT:varchar, AllowRoomSettlement:varchar, SplitYN:varchar, PlanCalc:varchar, AllowBillOnHoldSettlement:varchar, MultiBillGeneration:varchar, SmartPurchaseOrder:varchar, MemberShipModule:varchar, FomBillCopies:smallint, SMSMessaging:varchar, MobileNo:varchar, SMSOption:varchar, MobileSet:varchar, SMSMessage:varchar, AdvanceRRoomRent:varchar, PrintRcpt:varchar, RcptPrinting:varchar, BillAmendMode:varchar, AmendRevenue:varchar, IncCashPurchInFOCC:varchar, RoomRentBefChkOut:varchar, RoomRentChkOutPost:varchar, POSBillAtNightAudit:varchar, NoShowAtNightAudit:varchar, DisplayPort:varchar, DisplayMode:varchar, FreeItemInKOT:varchar, POSSaleBillModification:varchar, VariationBefore:varchar, BookingSlipFooter1:varchar, BookingSlipFooter2:varchar, CashCardDebitAc:varchar, CashCardCreditAc:varchar, CashCardSecurityAc:varchar, OrderBookingPrintType:varchar, BillPrintingSummerised:varchar, PurchaseGodown:varchar, RptCashierSettlementAllUser:varchar, GRCMandatory:varchar, NCKOTPercentage:smallint, KOTHeader1:varchar, KOTHeader2:varchar, KOTHeader3:varchar, KOTHeader4:varchar, GAppCompYear:smallint, GMonthConsidered:smallint, GWorkingDaysInAMonth:smallint, GDaysSalary:smallint, POSSaleBillEditLog:varchar, ImportOptionInPurchase:varchar, ReqCompWise:varchar, AcFieldAlterable:varchar, CreditCardInfoMandatory:varchar, ExpMfdDateInMR:varchar, ExciseInvoiceTaxStru:varchar, AddModifyEntryInBackDate:varchar, KOTAtNightAudit:varchar, ResInstruction1:varchar, ResInstruction2:varchar, ResInstruction3:varchar, ResInstruction4:varchar, ResInstruction5:varchar, ResInstruction6:varchar, ResInstruction7:varchar, ResInstruction8:varchar, ResInstruction9:varchar, ResInstruction10:varchar, ResInstruction11:varchar, ResInstruction12:varchar, FPInstruction1:varchar, FPInstruction2:varchar, FPInstruction3:varchar, FPInstruction4:varchar, FPInstruction5:varchar, FPInstruction6:varchar, FPInstruction7:varchar, FPInstruction8:varchar, FPInstruction9:varchar, FPInstruction10:varchar, FPInstruction11:varchar, FPInstruction12:varchar, RateEditableInPO:varchar, RateEditableInStockIssue:varchar, RoomRateEditable:varchar, RoomIncTaxEditable:varchar, RoomServiceChargeEditable:varchar, PostRoomDiscSeparately:varchar, BarCodeFeatureInPurchase:varchar, SMSFeatureYN:varchar, ESIBasic:varchar, ESIDA:varchar, ESIHRA:varchar, ESIConvey:varchar, ESIOther:varchar, ESILTA:varchar, KitchenStockReport:varchar, ItemRateInMRBasedOn:varchar, ItemRateInPurchaseBillBasedOn:varchar, PurchaseBillPrinting:varchar, ReprintingOnSaleBillYN:varchar, DTCPETakeEffectHeadToSite:varchar, PostPOSDiscSeparately:varchar, HideSettledBillsOnSaleBillYN:varchar, ResetTokenAtNightAudit:varchar, POSSaleRevenueBifercation:varchar, KOTPrintEdited:varchar, RoomCheckOutClearanceYN:varchar, POSBillCalcType:varchar, PurchaseTaxVAT:varchar, POSPrintingDelay:float, ImprestAmount:float, PlanTariffNarration:varchar, GuestChargesDeleteLog:varchar, SaleTaxVAT:varchar, KOTOutletSelection:varchar, PlanSelectionBasedOn:varchar, SmartCardItem:varchar, HTWCurDateEdit:varchar, MobileInfoMandatory:varchar, CoversMandatory:varchar, MobileNoMandatory:varchar, RRIncTaxDefault:varchar, RRSerChrgDefault:varchar, AutoSplitYN:varchar, ShowTitleBar:varchar, ShowMenuBar:varchar, ShowSubMenuBar:varchar, ShowShortCutsBar:varchar, ServiceTaxOnServiceChargeYN:varchar, SeperateReservationLetterAsPerStatusYN:varchar, NewTarrifForOldGuest:varchar, ReservationExpandOnSaveYN:varchar, BlockInvalidTarrifIncTaxYN:varchar, RoomCheckInClearanceYN:varchar, RoomRateAsPerRoomMaster:varchar, IncReservationInBlankGRC:varchar, StockRecGodown:varchar, AutoPrintKOTYN:varchar, AutoFillItemInKitchenClosingYN:varchar, FOMBillReprintAutoRefresh:varchar, NegativeStockAllowYN:varchar, BanquetKitchen:varchar, ShowAllAcInPurcahseCategoryYN:varchar, CashCardApplYN:varchar, UserWiseShowOutletYN:varchar, PANNOMandatoryYN:varchar, SMARTCARDRECIEPTPrintingDW:varchar, U_AE_FOMBillSetE:varchar, DisplayRackRow:smallint, DisplayRackCol:smallint, DisplayRackFontSize:smallint, PrintSeperateItemInPOSBill:varchar
+
+### TDSChal (16 cols)
+DocId:varchar, ChalType:varchar, ChalNo:varchar, ChalDate:datetime, Site_Code:varchar, v_Prefix:varchar, BankCode:varchar, MonthNo:varchar, TDSAmt:float, Chq_No:varchar, Chq_Date:datetime, U_Name:varchar, U_EntDt:datetime, U_AE:varchar, BankName:varchar, LogSite_Code:varchar
+
+### TDSCerti (13 cols)
+CertiNo:varchar, CertiDate:datetime, Site_Code:varchar, Code:varchar, FromDate:datetime, ToDate:datetime, TDSAmt:float, FullName:varchar, Desig:varchar, U_Name:varchar, U_EntDt:datetime, U_AE:varchar, LogSite_Code:varchar
+
+### HallBook (74 cols)
+DocId:varchar, Vtype:varchar, VNo:int, VTime:varchar, Site_Code:varchar, Vprefix:varchar, Vdate:datetime, PartyName:varchar, Add1:varchar, Add2:varchar, City:varchar, PinCode:varchar, PANNO:varchar, ContactNo_Res:varchar, ContactNo_Off:varchar, MobileNo:varchar, Func_Name:varchar, BookingStatus:varchar, RestCode:varchar, FrBookDate:datetime, FrBookTime:varchar, ToBookDate:datetime, ToBookTime:varchar, HouseKeep:varchar, FrontOff:varchar, Engg:varchar, Security:varchar, Chef:varchar, Board:varchar, MenuSpl1:varchar, MenuSpl2:varchar, MenuSpl3:varchar, MenuSpl4:varchar, MenuSpl5:varchar, MenuSpl6:varchar, MenuSpl7:varchar, Advance:float, RectNo:int, rectDate:datetime, CrCardNo:varchar, CrCardHolder:varchar, Total:float, DiscPer:float, DiscAmt:float, NonTaxable:float, Taxable:float, Tax:float, ServiceCharge:float, AddAmt:float, DedAmt:float, RoundOff:float, ExpAtt:int, GuarAtt:int, CoverRate:float, U_Name:varchar, U_EntDt:datetime, U_AE:varchar, HallRent:float, Remarks:varchar, MenuCatalog:varchar, Amount:float, MarketSeg:varchar, BussSource:varchar, CompanyCode:varchar, TotalCoverRate:float, NetAmount:float, InquiryCode:varchar, ContactNo:varchar, TaxPer:float, ServiceTaxPer:float, OtherChrg:float, LogSite_Code:varchar, Remark:varchar, BookingAgent:varchar
+
+### BookingInquiry (30 cols)
+Code:varchar, CatType:varchar, PartyName:varchar, Add1:varchar, Add2:varchar, City:varchar, PhoneR:varchar, PhoneO:varchar, MobileNo:varchar, FaxNo:varchar, ConPerson:varchar, BookedBy:varchar, FuncType:varchar, FuncDate:datetime, HandledBy:varchar, BussSource:varchar, Status:varchar, MarketSeg:varchar, Pax:int, GurrPax:int, RatePax:float, VenueCode:varchar, Site_Code:varchar, U_Name:varchar, U_EntDt:datetime, U_AE:varchar, Capacity:varchar, CapacityType:varchar, LogSite_Code:varchar, Remark:varchar
+
+### RoomMast (24 cols)
+Type:varchar, Code:varchar, Name:varchar, RoomCat:varchar, Extension:smallint, MultPer:smallint, RevCode:varchar, MaidStation:varchar, InclCount:varchar, ConRoom1:varchar, ConRoom2:varchar, ConRoom3:varchar, ConRoom4:varchar, RestCode:varchar, TaxStru:varchar, RoomStat:varchar, Site_Code:varchar, U_Name:varchar, U_EntDt:datetime, U_AE:varchar, HallRent:float, PicPath:varchar, LogSite_Code:varchar, DoorLockID:varchar
+
+### SunTran (24 cols)
+DocId:varchar, Sno:smallint, Vtype:varchar, VNo:int, Vdate:datetime, PartyCode:varchar, SunCode:varchar, Limit:float, DispName:varchar, ROff:varchar, CalcFormula:varchar, SValue:float, Amount:float, BaseAmount:float, U_Name:varchar, U_EntDt:datetime, U_AE:varchar, SunAppDate:datetime, RevCode:varchar, RestCode:varchar, DelFlag:varchar, SiteCode:varchar, LogSite_Code:varchar, SeqNo:smallint
+
+### SunTranH (23 cols)
+DocId:varchar, Sno:int, Vtype:varchar, VNo:int, Vdate:datetime, PartyCode:varchar, SunCode:varchar, Limit:float, DispName:varchar, ROff:varchar, CalcFormula:varchar, SValue:float, Amount:float, BaseAmount:float, U_Name:varchar, U_EntDt:datetime, U_AE:varchar, SunAppDate:datetime, RevCode:varchar, RestCode:varchar, DelFlag:varchar, SiteCode:varchar, LogSite_Code:varchar
+
+### Sale1 (80 cols)
+DocId:varchar, Vtype:varchar, VNo:int, Vtime:varchar, Site_Code:varchar, Vprefix:varchar, Vdate:datetime, RestCode:varchar, RoomCat:varchar, RoomType:varchar, RoomNo:varchar, FolioNo:int, Party:varchar, Total:float, DiscPer:float, DiscAmt:float, NonTaxable:float, Taxable:float, Tax:float, ServiceCharge:float, AddAmt:float, DedAmt:float, RoundOff:float, NetAmt:float, Remark:varchar, Waiter:varchar, FrBookDate:datetime, FrBookTime:varchar, MenuSpl1:varchar, MenuSpl2:varchar, MenuSpl3:varchar, MenuSpl4:varchar, FuncName:varchar, HouseKeep:varchar, FrontOff:varchar, Engg:varchar, Security:varchar, Chef:varchar, Board:varchar, KOTNo:varchar, TokenNo:int, ExpAtt:smallint, GuarAtt:smallint, CoverRate:float, U_Name:varchar, U_EntDt:datetime, U_AE:varchar, ToBookDate:datetime, ToBookTime:varchar, HallRent:float, TotalPerCover:float, Amount:float, Advance:float, RecNo:int, RecDate:datetime, CrCardNo:varchar, CrCardHolder:varchar, BookDocId:varchar, DelFlag:varchar, PRINTED:varchar, LogSite_Code:varchar, DeliveredYN:varchar, PhoneNo:varchar, CustName:varchar, Addr1:varchar, Addr2:varchar, CashRecd:float, BookNo:int, SeqNo:smallint, CardNo:varchar, ServiceTax:float, FolionoDocid:varchar, AU_Name:varchar, AU_EntDt:datetime, Redemption:float, DiscRemark:varchar, CGST:float, SGST:float, IGST:float, EditRemark:varchar
+
+### Sale2 (19 cols)
+DocId:varchar, Sno:smallint, SNo1:varchar, Vtype:varchar, VNo:int, Site_Code:varchar, Vprefix:varchar, Vdate:datetime, RestCode:varchar, TaxCode:varchar, BaseValue:float, TaxPer:float, TaxAmt:float, U_Name:varchar, U_EntDt:datetime, U_AE:varchar, DelFlag:varchar, LogSite_Code:varchar, SeqNo:smallint
+
+### GuestFolio (43 cols)
+DocId:varchar, FolioNo:int, Vtype:varchar, Vdate:datetime, Site_Code:varchar, Vprefix:varchar, GuestProf:varchar, Name:varchar, Add1:varchar, Add2:varchar, City:varchar, NoDays:smallint, SplitFolio:varchar, Remarks:varchar, Authorisation:varchar, Company:varchar, PurVisit:varchar, Nationality:varchar, ArrFrom:varchar, Destination:varchar, TravelMode:varchar, TclFac:varchar, Remark:varchar, RODisc:float, RSDisc:float, BookingDocId:varchar, U_Name:varchar, U_EntDt:datetime, U_AE:varchar, GroupCode:varchar, BussSource:varchar, MarketSeg:varchar, DepDate:datetime, TravelAgent:varchar, MFolioNo:int, Comp:varchar, MFolioNoDocid:varchar, LogSite_Code:varchar, RefNo:int, BookingSno:smallint, MyRate:float, DoorLock_Card_SN:int, RefBookNo:varchar
+
+### KOT (44 cols)
+DocId:varchar, Sno:smallint, Vtype:varchar, Vtime:varchar, VNo:int, Site_Code:varchar, Vprefix:varchar, Vdate:datetime, RestCode:varchar, RoomCat:varchar, RoomType:varchar, RoomNo:varchar, Item:varchar, Qty:float, Rate:float, Amount:float, VoidYN:varchar, Waiter:varchar, Pending:varchar, KOTType:varchar, U_Name:varchar, U_EntDt:datetime, U_AE:varchar, U_Name1:varchar, U_EntDt1:datetime, U_AE1:varchar, DelFlag:varchar, NCKOT:varchar, ContraDocId:varchar, ContraSNo:int, Reasons:varchar, Remarks:varchar, LogSite_Code:varchar, NCTYPE:varchar, FreeSno:int, Printed:varchar, Description:varchar, SchemeCode:varchar, Party:varchar, ItemRestCode:varchar, SeqNo:smallint, GuarAtt:smallint, TokenNo:int, PrintFlag:varchar
+
+### RoomOcc (42 cols)
+DocId:varchar, SNo:int, FolioNo:int, Vtype:varchar, Site_Code:varchar, Vprefix:varchar, GuestProf:varchar, RoomCat:varchar, RoomType:varchar, RoomNo:varchar, RateCode:varchar, RoomRate:float, ChkInDate:datetime, ChkInTime:varchar, Adult:smallint, Children:smallint, DepDate:datetime, DepTime:varchar, ChkOutDate:datetime, ChkOutTime:varchar, Type:varchar, U_Name:varchar, U_EntDt:datetime, U_AE:varchar, UserchkoutDate:datetime, ChkoutUser:varchar, NewRoomNo:varchar, Reason:varchar, PlanCode:varchar, PlanAmt:float, IncInRate:varchar, LogSite_Code:varchar, PlanDisc:float, PlanDiscAmt:float, PlanDiscAppon:varchar, RRTaxInc:varchar, RRServiceChrg:varchar, ChngDate:datetime, ExtraBed:float, RoomTarrif:float, RoomTaxStru:varchar, RackRate:float
+
+### PlanMast (25 cols)
+Code:varchar, Name:varchar, Total:float, Site_Code:varchar, U_Name:varchar, U_EntDt:datetime, U_AE:varchar, App_Date:datetime, Plan_Package:varchar, PercentApp:varchar, ActiveYN:varchar, LogSite_Code:varchar, RoomPer:numeric, RoomRate:numeric, PackageAmount:numeric, DiscAppYN:char, DiscAppON:char, Nights:smallint, Adults:smallint, Childs:smallint, RRIncTax:char, RoomCat:varchar, Tariff:varchar, RoomTaxStru:varchar, MapCode:varchar
+
+### NightAuditLog (10 cols)
+Id:numeric, DateChngFrom:smalldatetime, DateChngTo:smalldatetime, StartNightAudit:datetime, EndNightAudit:datetime, Site_Code:varchar, U_AE:varchar, U_Name:varchar, U_EntDt:smalldatetime, LogSite_Code:varchar
+
+### menuHelp (19 cols)
+CompCode:nvarchar, UserName:nvarchar, Opt1:int, Opt2:int, Opt3:int, Opt4:int, Code:int, Option:nvarchar, Menu_Index:int, Menu_Visible:nvarchar, Pro_Name:nvarchar, Tag:nvarchar, User_Name:nvarchar, Param_Str:nvarchar, ID:nvarchar, Module_Name:nvarchar, Flag:nvarchar, ShowInList:nvarchar, OutletCode:nvarchar
+
+### UserModule (9 cols)
+Opt1:int, Opt2:int, Opt3:int, Opt4:int, Code:int, Option:nvarchar, Param_Str:nvarchar, Flag:nvarchar, OutletCode:nvarchar
+
+### UserPermission (18 cols)
+CompCode:varchar, UserName:varchar, LogSite_Code:varchar, POSDiscountAllowUpto:float, CancelGuestBill:varchar, ChangeRoomDtl:varchar, DeleteGuestCharges:varchar, Site_Code:varchar, POSSettlementYN:varchar, ChangeGuestCharges:varchar, backcolor:int, ChangeGuestProfile:varchar, FacilityBilling:varchar, EditItemInKOT:varchar, FOMDiscountAllowUpto:float, CancelReservation:varchar, FreeItemAllow:varchar, RefundCashCardAmt:varchar
+
+## ALL TABLES
+ACGROUP
+AcGroupCurrBal
+AreaMast
+AssignDelivery
+Attend
+Attendence
+BlockMast
+BOM
+Booking
+BookingCancelDetails
+BookingDetail
+BookingInquiry
+BookingLog
+BookingMore
+BookingPlanDetails
+Budget
+BudgetDetails
+BussSource
+CatalogMast
+Category
+City
+ComboPackDetail
+ComboPackHead
+Comp_Inclusive
+Comp_PlanDet
+Company
+CompanyProfile
+ComplaintCategory
+ComplaintDetail
+Country
+CreditCardHistory
+DATELOCK
+DBSendSMS
+DeliveryBoy
+DenominationDetail
+DenominationFormat
+Depart
+Depart1
+DepartPay
+DepartRWScheme
+Desig
+DispColor
+eInvoiceBill1
+eInvoiceBill2
+eInvoiceEnviro
+eInvoiceToken
+EmailSMSForward
+EmpCategory
+Employee
+Enviro
+EPABX_Data
+ExpSheet
+FacilityBill
+FacilityBill1
+FacilityBill2
+FacilityMast
+FaEnviro
+FeatureMast
+FixedCharge
+FolioLog
+FOMBillChangeDetails
+FOMBillDetails
+ForEx
+ForExTrans
+FreeItemDetail
+FunctionType
+GIN
+GodownMast
+GroupCatalog
+GroupFolioMore
+GroupProf
+GrpBookingDetails
+GuestComments
+GuestFolio
+GuestFolioAmend
+GuestFolioProfDetail
+GuestMessage
+GuestParam
+GuestProf
+GuestProfFor
+GuestProfVeh
+GuestReward
+GuestStat
+GuestWakeup
+HallBook
+HallBook1
+HallPreCosting
+HallSale1
+HallSale1Est
+HallSale2
+HallStock
+HallStockEst
+HappyHours
+HappyHoursHead
+Help
+Holiday
+Indent
+Indent1
+inout
+Item
+ItemCatMast
+ItemGrp
+ItemMast
+ItemRate
+JobSchedule
+JobScheduledDetail
+KClStk
+KOT
+KOTLog
+LastVou
+LastVoucher
+LeaderRev
+Leave_Ench
+Ledger
+ledgerAdj
+LedgerM
+LedgerMerge
+LedgerMMerge
+ledgerRef
+LedgerTDS
+Loan
+LocationFacility
+LostFoundDetail
+MarketSeg
+mCurStk
+MemAddRWA
+MemberFamily
+MembershipRevMast
+MemBill
+MemBill1
+MemCatChngDetail
+MemCatFacility
+MemCatMast
+MemCatRevWise
+MemEnviro
+MemFacilityBilling
+MemFacilityMast
+MemOutStation
+MemProposedMemInf
+MemRevenueForPeriod
+MemRevWise
+MemTagadaLetter
+MemVisitEntry
+menuHelp
+menuHelp1
+messaging
+NarrMast
+NCTypeMast
+NightAuditLog
+OrderAdvanceDetail
+OrderPersonDetails
+OutletBarCodePartDetail
+OverTime
+PackingOrder
+PackingOrderDetail
+PackingOrderDetail1
+PackingOrderDetail2
+PayCharge
+PayChargeH
+PayChargeLog
+PDALOG
+Plan1
+PlanDetails
+PlanMast
+PlanTokenDetails
+POrder
+POrder1
+POS_SBill
+ProfileImages
+Purch1
+Purch2
+RateList
+RawConsumption
+RevMast
+RoomBlockOut
+RoomCat
+RoomCheckOutStatus
+RoomDet
+RoomDiscount
+RoomFeature
+RoomMast
+RoomMast1
+RoomOcc
+RoomRate
+RoundOffSetting
+RWParameter
+Salary
+SalaryLog
+Sale1
+Sale1Log
+Sale2
+Sale2Log
+SaleMIS
+SchemeItemDetail
+SchemeMast
+SchemeOutletDiscount
+SeasonMast
+SeasonMast1
+SessionMast
+ShiftMast
+Site
+SmartCardLedger
+SmartCardMaster
+SmartCardRegistration
+SmartCardReIssueDetail
+SMSEnviro
+SplitBillDetail
+SplitedSunTran
+SplitSale1
+SplitSale2
+SplitStock
+SplitStock1
+SplitSunTran
+State
+Stock
+Stock1
+StockLog
+SubGroup
+SubGroupCurrBal
+SubGroupLog
+SubGroupRate
+SubGroupType
+SundryMast
+SundryType
+SundryTypeFix
+SunTran
+SunTranEst
+SunTranFacility
+SunTranH
+SunTranHEst
+SunTranLog
+TaxStru
+TDSCat
+TDSCerti
+TDSChal
+TDSChal1
+TelCallCode
+TelCallType
+TelExt
+Temp_Sbill
+TempPosDel
+TOKEN
+TradeInfo_bTwin
+TranLog
+TransDel
+TransIn
+TransOut
+TranSunDetail
+TranTaxDetail
+Travel1
+Travel2
+UnitMast
+User_Module
+User1
+User2
+UserCollection
+UserMast
+UserModule
+UserModule1
+UserPermission
+VenueCapacity
+VenueFeatures
+VenueMast
+VenueMast1
+VenueOCC
+Voucher_Exclude
+Voucher_Include
+Voucher_Prefix
+Voucher_Type
+VoucherCat
+Waiter

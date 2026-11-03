@@ -1,0 +1,92 @@
+HR/PAYROLL MODULE - BUSINESS LOGIC
+===================================
+
+VB6 Source Files:
+  HRMast.frm - HR Master
+  HREmployeeMaster.frm - Employee Master
+  HRPayroll.frm - Payroll
+  HRLeave.frm - Leave Management
+  HRAttendance.frm - Attendance
+  HRLedgerAccounts.frm - Ledger Accounts
+  HRPayrollCategory.frm - Payroll Category
+  HRDesignationMaster.frm - Designation Master
+  HRCategoryMaster.frm - Category Master
+  HRHolidayMaster.frm - Holiday Master
+  HREmployeeMaster.frm - Employee Master
+  HRPayOpr.frm - Payroll Operations
+  HRPayOprLeave.frm - Leave Operations
+  HRPayOprLoan.frm - Loan Operations
+  HRPayOprOverTime.frm - Over Time Operations
+  HRPayOprLeaveEncashment.frm - Leave Encashment
+  HRPayOprSalaryCreation.frm - Salary Creation
+  HRPayRep.frm - Payroll Report
+  HRPayRepPaySlip.frm - Pay Slip
+  HRPayRepPayrollRegister.frm - Payroll Register
+  HRPayRepLoanRegister.frm - Loan Register
+  HRPayRepLoanAdvanceSummary.frm - Loan/Advance Summary
+  HRPayRepLoanAdvanceLedger.frm - Loan/Advance Ledger
+  HRPayRepAttendenceReport.frm - Attendance Report
+  HRPayRepGratuityReport.frm - Gratuity Report
+  HRPayRepPFStatement.frm - PF Statement
+  HRPayRepFormC.frm - Form C
+
+Business Rules:
+  EMPLOYEE MANAGEMENT:
+    1. Employee Master: EMP_CODE, NAME, DEPT, DESIGNATION, SALARY
+    2. Designation Master: designations with pay scales
+    3. Category Master: employee categories
+    4. Holiday Master: company holidays
+    5. Department Master: organizational structure
+
+  PAYROLL:
+    6. Salary = Basic + Allowances - Deductions
+    7. Allowances: DA, HRA, TA, Medical, Conveyance
+    8. Deductions: PF, ESI, TDS, Loan, Advance
+    9. Salary creation: monthly salary generation
+    10. Payroll register: all employees' payroll summary
+    11. Pay slip: individual employee payslip
+    12. Payroll register: department-wise summary
+
+  LEAVE MANAGEMENT:
+    13. Leave balance = Entitled - Used
+    14. Leave types: Casual, Sick, Earned, Maternity
+    15. Leave application and approval workflow
+    16. Leave encashment: convert unused leave to cash
+    17. Leave report: leave summary by employee
+
+  LOAN/ADVANCE:
+    18. Loan registration and tracking
+    19. Loan/Advance summary
+    20. Loan/Advance ledger
+    21. Loan repayment tracking
+
+  ATTENDANCE:
+    22. Daily attendance tracking
+    23. Attendance report: monthly summary
+    24. Over time tracking
+    25. Over time report
+
+  REPORTS:
+    26. Pay Slip: individual payslip
+    27. Payroll Register: all employees
+    28. Loan Register: all loans
+    29. Loan/Advance Summary: summary of all loans
+    30. Loan/Advance Ledger: detailed ledger
+    31. Attendance Report: monthly attendance
+    32. Gratuity Report: gratuity calculation
+    33. PF Statement: provident fund statement
+    34. Form C: statutory form
+    35. Pay Slip: individual payslip
+
+Database Tables:
+  HRMast, HRPayroll, LeaveMaster, LeaveRecord, Attendance,
+  PayrollCategory, MemberModule, MemberBilling, EmployeeMaster,
+  DesignationMaster, CategoryMaster, HolidayMaster, Department,
+  LoanRegister, LoanAdvance, Gratuity, PFStatement
+
+SQL Operations:
+  CREATE_EMPLOYEE: INSERT INTO HRMast (EMP_CODE, NAME, DEPT, DESIGNATION, SALARY) VALUES (?, ?, ?, ?, ?)
+  CREATE_PAYROLL: INSERT INTO HRPayroll (EMP_CODE, BASIC, ALLOWANCES, DEDUCTIONS, NET_SALARY) VALUES (?, ?, ?, ?, ?)
+  CALCULATE_LEAVE: SELECT ENTITLED - USED AS BALANCE FROM LeaveMaster WHERE EMP_CODE = ?
+  CREATE_LEAVE: INSERT INTO LeaveRecord (EMP_CODE, TYPE, FROM_DATE, TO_DATE, STATUS) VALUES (?, ?, ?, ?, 'Pending')
+  CREATE_LOAN: INSERT INTO LoanRegister (EMP_CODE, AMOUNT, INSTALLMENTS, START_DATE) VALUES (?, ?, ?, ?)

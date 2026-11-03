@@ -1,0 +1,64 @@
+NIGHT AUDIT MODULE - BUSINESS LOGIC
+===================================
+
+VB6 Source Files:
+  mdlNightAudit.bas - Main night audit module
+  NightAudit.frm - Night Audit form
+  NightAuditOperation.frm - Night Audit Operations
+  NightAuditLog.frm - Night Audit Log
+  NightAuditReports.frm - Night Audit Reports
+  NightAuditGST.frm - Night Audit GST
+  NightAuditGSTR.frm - Night Audit GSTR
+  NightAuditL.frm - Night Audit Log
+  NightAuditLR.frm - Night Audit Log Report
+
+Business Rules:
+  1. Night audit runs at midnight (automated)
+  2. Auto-post all room charges for the day
+  3. Close all active folios for the day
+  4. Close all rooms (RoomOcc status updated)
+  5. Generate daily report
+  6. Generate occupancy analysis report
+  7. Generate guest trail report
+  8. Generate market segment analysis
+  9. Generate business source analysis
+  10. Generate company analysis
+  11. Generate FOCC report
+  12. Generate food costing report
+  13. Generate FB cost statement
+  14. Reverse night audit available (undo all changes)
+  15. Night audit log records all actions
+  16. Charges posting: all charges posted to folios
+  17. Account posting: all accounts posted to ledger
+  18. Guest audit ledger: guest folio audit trail
+  19. GST reports: GSTR-1, GSTR-2(3), GSTR-2(4A), GSTR-2(4B)
+  20. Credit report: credit analysis
+  21. Reconciliation (GSTR-2A): reconcile with GSTR-2A
+  22. Upload process: upload data to GST portal
+  23. EInvoice report: e-invoice generation
+  24. Tally POS report: integration with Tally
+  25. Night audit must complete before new day starts
+
+Database Tables:
+  NightAudit, FolioLog, RoomOcc, GuestFolio, GuestStatus,
+  NightAuditLog, ChargesPosting, AccountPosting, GuestAuditLedger,
+  GSTR1, GSTR2, CreditReport, Reconciliation, EInvoiceReport,
+  NightAuditRR (Daily Report, Guest Trail, Checkout Analysis, etc.)
+
+SQL Operations:
+  NIGHT_AUDIT: UPDATE RoomOcc SET STATUS = 'Closed' WHERE ARRIVAL < DATEADD(day, -1, GETDATE())
+  POST_ROOM_CHARGES: INSERT INTO FolioLog (FOLIO_NO, TYPE, AMOUNT) SELECT ?, 'Room', RATE FROM RoomMast WHERE ROOM_NO IN (SELECT ROOM_NO FROM RoomOcc WHERE STATUS = 'Occupied')
+  CLOSE_FOLIOS: INSERT INTO FolioLog (FOLIO_NO, TYPE, AMOUNT) SELECT FOLIO_NO, 'Close', CURRENT_BALANCE FROM GuestFolio
+  GENERATE_DAILY_REPORT: SELECT * FROM RoomOcc WHERE ARRIVAL >= DATEADD(day, -1, GETDATE())
+  REVERSE_NIGHT_AUDIT: Reverse all NightAudit entries
+
+Workflow:
+  1. System checks all active rooms at midnight
+  2. Auto-posts room charges to folios
+  3. Closes all active folios
+  4. Updates room statuses
+  5. Generates daily reports
+  6. Creates NightAuditLog entries
+  7. Commits all changes
+  8. If error: rollback all changes
+  9. Reverse audit: undo all NightAudit changes

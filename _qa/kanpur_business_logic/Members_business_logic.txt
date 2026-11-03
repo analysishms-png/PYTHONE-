@@ -1,0 +1,31 @@
+MEMBERS MANAGEMENT MODULE - BUSINESS LOGIC
+===========================================
+
+VB6 Source Files:
+  MemberModule.bas - Member Module
+  members_masters.py - Member Masters
+  member_billing.py - Member Billing
+  MemMas.frm - Member Master
+  MemOpr.frm - Member Operations
+  MemberSelectCategory.frm - Member Select Category
+  CategoryMaster.frm - Category Master
+  EnvironmentSettings.frm - Environment Settings
+
+Business Rules:
+  1. Member Master: member registration and profile management
+  2. Category Master: membership categories
+  3. Member Select Category: choose membership category
+  4. Environment Settings: configuration for member module
+  5. Auto Settle Card Balance: automatic card balance settlement
+  6. Member billing: billing for member services
+  7. Member enrollment: new member registration
+  8. Member renewal: membership renewal process
+  9. Member reports: member analytics and reports
+  10. Member category: different membership tiers
+
+Database Tables:
+  MemberModule, MemberMaster, MemberBilling, CategoryMaster,
+  MemberSelectCategory, EnvironmentSettings, AutoSettle
+
+Note: This module has 0-row tables (no reference data).
+Many operations are BLOCKED pending data availability.

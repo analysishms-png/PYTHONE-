@@ -1,0 +1,578 @@
+@extends('tools.layouts.main')
+@section('main-container')
+    @include('cdns.select')
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    
+    <style>
+        .editable-cell {
+            cursor: pointer;
+            background-color: #ffffff;
+            transition: all 0.3s;
+            padding: 10px !important;
+            border: 1px solid #dee2e6;
+        }
+        .editable-cell:hover {
+            background-color: #f0f8ff;
+            box-shadow: 0 0 5px rgba(0,123,255,0.3);
+        }
+        .editing {
+            background-color: #fff3cd !important;
+            padding: 5px !important;
+        }
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .delete-btn {
+            cursor: pointer;
+            color: #dc3545;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+        .delete-btn:hover {
+            color: #bd2130;
+            transform: scale(1.2);
+        }
+        #data_table thead th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            color: #ffffff !important;
+            font-weight: 600 !important;
+            padding: 12px !important;
+            text-align: center !important;
+            border: none !important;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        #data_table thead tr.filter-row th {
+            background: #f8f9fa !important;
+            padding: 8px !important;
+        }
+        .column-filter {
+            width: 100%;
+            padding: 6px 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+        .column-filter:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102,126,234,0.5);
+            outline: none;
+        }
+        #data_table tbody tr {
+            transition: all 0.3s;
+        }
+        #data_table tbody tr:hover {
+            background-color: #f0f8ff !important;
+            transform: scale(1.01);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        #data_table tbody td {
+            padding: 10px !important;
+            vertical-align: middle !important;
+            border-color: #e9ecef !important;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .card-header {
+            border-radius: 10px 10px 0 0 !important;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            transition: all 0.3s;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+        }
+        .dataTables_wrapper .dataTables_length select,
+        .dataTables_wrapper .dataTables_filter input {
+            border: 1px solid #667eea;
+            border-radius: 4px;
+            padding: 5px 10px;
+        }
+        .page-item.active .page-link {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: #667eea;
+        }
+        .action-cell {
+            text-align: center !important;
+            background-color: #fff5f5 !important;
+        }
+    </style>
+
+    <div class="content-body">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h4 class="card-title mb-0">Table Management System</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="table_select">Select Table:</label>
+                                        <select class="form-control select2" id="table_select">
+                                            <option value="">-- Select Table --</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="property_id">Property ID:</label>
+                                        <input type="text" class="form-control" id="property_id" placeholder="Enter Property ID">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <div class="custom-control custom-checkbox mb-2">
+                                        <input type="checkbox" class="custom-control-input" id="sql_mode">
+                                        <label class="custom-control-label" for="sql_mode">
+                                            <strong>SQL Mode</strong> (Advanced: Use custom SQL WHERE clause)
+                                        </label>
+                                    </div>
+                                    <div id="sql_container" style="display: none;">
+                                        <label for="sql_where">SQL WHERE Clause (without "WHERE"):</label>
+                                        <textarea class="form-control" id="sql_where" rows="3" placeholder="Example: Property_ID = '20' AND item_code = 'ABC'"></textarea>
+                                        <small class="text-muted">Note: Property ID field will be ignored in SQL mode</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <button type="button" class="btn btn-primary" id="fetch_data_btn">
+                                        <i class="fa fa-search"></i> Fetch Data
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" id="refresh_btn">
+                                        <i class="fa fa-refresh"></i> Refresh
+                                    </button>
+                                    <button type="button" class="btn btn-success" id="bulk_update_btn" style="display: none;">
+                                        <i class="fa fa-save"></i> Bulk Update (SQL)
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="table-container">
+                                        <table id="data_table" class="table table-bordered table-striped table-hover" style="width:100%">
+                                            <thead class="thead-dark">
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            let currentTable = null;
+            let currentTableName = '';
+            let currentColumns = [];
+            let primaryKey = 'id';
+
+            // Toastr configuration
+            toastr.options = {
+                "closeButton": true,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "timeOut": "3000"
+            };
+
+            // Fetch all tables on page load
+            fetchTables();
+
+            // SQL Mode Toggle
+            $('#sql_mode').change(function() {
+                if ($(this).is(':checked')) {
+                    $('#sql_container').slideDown();
+                    $('#property_id').prop('disabled', true);
+                    $('#bulk_update_btn').show();
+                } else {
+                    $('#sql_container').slideUp();
+                    $('#property_id').prop('disabled', false);
+                    $('#bulk_update_btn').hide();
+                }
+            });
+
+            function fetchTables() {
+                $.ajax({
+                    url: "{{ route('fetch_tables') }}",
+                    type: 'POST',
+                    data: {
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(response) {
+                        if (response.status) {
+                            let options = '<option value="">-- Select Table --</option>';
+                            response.tables.forEach(function(table) {
+                                options += `<option value="${table}">${table}</option>`;
+                            });
+                            $('#table_select').html(options);
+                            toastr.success('Tables loaded successfully');
+                        } else {
+                            toastr.error(response.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        toastr.error('Error loading tables');
+                    }
+                });
+            }
+
+            // Fetch data button click
+            $('#fetch_data_btn').click(function() {
+                let tableName = $('#table_select').val();
+                let sqlMode = $('#sql_mode').is(':checked');
+                let propertyId = $('#property_id').val();
+                let sqlWhere = $('#sql_where').val();
+
+                if (!tableName) {
+                    toastr.warning('Please select a table');
+                    return;
+                }
+
+                if (sqlMode) {
+                    if (!sqlWhere) {
+                        toastr.warning('Please enter SQL WHERE clause');
+                        return;
+                    }
+                    fetchTableData(tableName, null, sqlWhere);
+                } else {
+                    if (!propertyId) {
+                        toastr.warning('Please enter Property ID');
+                        return;
+                    }
+                    fetchTableData(tableName, propertyId, null);
+                }
+            });
+                        return;
+                    }
+                    fetchTableData(tableName, null, sqlWhere);
+                } else {
+                    if (!propertyId) {
+                        toastr.warning('Please enter Property ID');
+                        return;
+                    }
+                    fetchTableData(tableName, propertyId, null);
+                }();
+                let propertyId = $('#property_id').val();
+
+                if (!tableName) {
+                    toastr.warning('Please select a table');
+                    return;
+                }
+
+                if (!propertyId) {
+                let sqlMode = $('#sql_mode').is(':checked');
+                if (currentTableName) {
+                    if (sqlMode && $('#sql_where').val()) {
+                        fetchTableData(currentTableName, null, $('#sql_where').val());
+                    } else if (!sqlMode && $('#property_id').val()) {
+                        fetchTableData(currentTableName, $('#property_id').val(), null);
+                    } else {
+                        toastr.info('Please provide required filters');
+                    }
+                } else {
+                    toastr.info('Please select a table first');
+                }
+            });
+
+                        property_id: propertyId,
+                        sql_where: sqlWhere
+            $('#bulk_update_btn').click(function() {
+                let tableName = $('#table_select').val();
+                let sqlWhere = $('#sql_where').val();
+
+                if (!tableName || !sqlWhere) {
+                    toastr.warning('Please select table and enter SQL WHERE clause');
+                    return;
+                }
+
+                let updateColumn = prompt('Enter column name to update:');
+                if (!updateColumn) return;
+
+                let updateValue = prompt('Enter new value:');
+                if (updateValue === null) return;
+
+                if (confirm(`Update ${updateColumn} = '${updateValue}' WHERE ${sqlWhere}?\n\nThis will update multiple records!`)) {
+                    bulkUpdateRecords(tableName, sqlWhere, updateColumn, updateValue);
+                }
+            });
+
+            function bulkUpdateRecords(tableName, sqlWhere, columnName, value) {
+                $.ajax({
+                    url: "{{ route('bulk_update_records') }}",
+                    type: 'POST',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        table_name: tableName,
+                        sql_where: sqlWhere,
+                        column_name: columnName,
+                        value: value
+                    },
+                    success: function(response) {
+                        if (response.status) {
+                            toastr.success(response.message + ' (' + response.affected_rows + ' rows)');
+                            $('#fetch_data_btn').click(); // Refresh data
+                        } else {
+                            toastr.error(response.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        toastr.error('Bulk update failed');
+                    }
+                });
+            }
+
+            function fetchTableData(tableName, propertyId, sqlWhere
+            $('#refresh_btn').click(function() {
+                if (currentTableName && $('#property_id').val()) {
+                    fetchTableData(currentTableName, $('#property_id').val());
+                } else {
+                    toastr.info('Please select a table and property ID first');
+                }
+            });
+
+            function fetchTableData(tableName, propertyId) {
+                $.ajax({
+                    url: "{{ route('fetch_table_data') }}",
+                    type: 'POST',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        table_name: tableName,
+                        property_id: propertyId
+                    },
+                    beforeSend: function() {
+                        toastr.info('Loading data...');
+                    },
+                    success: function(response) {
+                        if (response.status) {
+                            currentTableName = tableName;
+                            currentColumns = response.columns;
+                            
+                            // Try to find primary key
+                            primaryKey = 'id';
+                            if (response.columns.includes('id')) {
+                                primaryKey = 'id';
+                            } else if (response.columns[0]) {
+                                primaryKey = response.columns[0];
+                            }
+
+                            renderDataTable(response.columns, response.data);
+                            toastr.success(`Data loaded successfully (${response.data.length} records)`);
+                        } else {
+                            toastr.error(response.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        toastr.error('Error loading data');
+                    }
+                });
+            }
+
+            function renderDataTable(columns, data) {
+                // Destroy existing datatable
+                if (currentTable) {
+                    currentTable.destroy();
+                }
+
+                // Create table headers - Header Row
+                let headers = '<tr class="header-row">';
+                columns.forEach(function(column) {
+                    headers += `<th>${column}</th>`;
+                });
+                headers += '<th>Actions</th>';
+                headers += '</tr>';
+                
+                // Create filter row
+                headers += '<tr class="filter-row">';
+                columns.forEach(function(column, index) {
+                    headers += `<th><input type="text" class="column-filter" placeholder="Filter ${column}" data-column="${index}"></th>`;
+                });
+                headers += '<th></th>'; // Empty cell for actions column
+                headers += '</tr>';
+                
+                $('#data_table thead').html(headers);
+
+                // Create table body
+                let tbody = '';
+                data.forEach(function(row) {
+                    tbody += '<tr>';
+                    columns.forEach(function(column) {
+                        let value = row[column] !== null ? row[column] : '';
+                        tbody += `<td class="editable-cell" data-column="${column}" data-pk="${row[primaryKey]}">${value}</td>`;
+                    });
+                    tbody += `<td class="action-cell"><i class="fa fa-trash delete-btn" data-pk="${row[primaryKey]}" title="Delete Record"></i></td>`;
+                    tbody += '</tr>';
+                });
+                $('#data_table tbody').html(tbody);
+
+                // Initialize DataTable
+                currentTable = $('#data_table').DataTable({
+                    "pageLength": 25,
+                    "ordering": true,
+                    "searching": true,
+                    "responsive": true,
+                    "scrollX": true,
+                    "language": {
+                        "emptyTable": "No data available",
+                        "info": "Showing _START_ to _END_ of _TOTAL_ records",
+                        "infoEmpty": "Showing 0 to 0 of 0 records",
+                        "infoFiltered": "(filtered from _MAX_ total records)",
+                        "lengthMenu": "Show _MENU_ records per page",
+                        "search": "Search:",
+                        "paginate": {
+                            "first": "First",
+                            "last": "Last",
+                            "next": "Next",
+                            "previous": "Previous"
+                        }
+                    }
+                });
+
+                // Attach column filter events
+                $('.column-filter').on('keyup change', function() {
+                    let columnIndex = $(this).data('column');
+                    let searchValue = $(this).val();
+                    currentTable.column(columnIndex).search(searchValue).draw();
+                });
+
+                // Attach click events for inline editing
+                attachEditEvents();
+                attachDeleteEvents();
+            }
+
+            function attachEditEvents() {
+                $('.editable-cell').off('click').on('click', function() {
+                    let cell = $(this);
+                    if (cell.hasClass('editing')) {
+                        return;
+                    }
+
+                    let currentValue = cell.text();
+                    let columnName = cell.data('column');
+                    let pkValue = cell.data('pk');
+
+                    // Create input field
+                    let input = $('<input type="text" class="form-control form-control-sm">');
+                    input.val(currentValue);
+                    
+                    cell.addClass('editing');
+                    cell.html(input);
+                    input.focus();
+
+                    // Handle blur (when user clicks away)
+                    input.on('blur', function() {
+                        let newValue = input.val();
+                        updateCell(cell, columnName, newValue, pkValue, currentValue);
+                    });
+
+                    // Handle Enter key
+                    input.on('keypress', function(e) {
+                        if (e.which === 13) {
+                            let newValue = input.val();
+                            updateCell(cell, columnName, newValue, pkValue, currentValue);
+                        }
+                    });
+                });
+            }
+
+            function updateCell(cell, columnName, newValue, pkValue, oldValue) {
+                if (newValue === oldValue) {
+                    cell.removeClass('editing');
+                    cell.html(oldValue);
+                    return;
+                }
+
+                $.ajax({
+                    url: "{{ route('update_table_cell') }}",
+                    type: 'POST',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        table_name: currentTableName,
+                        column_name: columnName,
+                        value: newValue,
+                        primary_key: primaryKey,
+                        primary_key_value: pkValue
+                    },
+                    success: function(response) {
+                        if (response.status) {
+                            cell.removeClass('editing');
+                            cell.html(newValue);
+                            toastr.success('Updated successfully');
+                        } else {
+                            cell.removeClass('editing');
+                            cell.html(oldValue);
+                            toastr.error(response.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        cell.removeClass('editing');
+                        cell.html(oldValue);
+                        toastr.error('Update failed');
+                    }
+                });
+            }
+
+            function attachDeleteEvents() {
+                $('.delete-btn').off('click').on('click', function() {
+                    if (!confirm('Are you sure you want to delete this record?')) {
+                        return;
+                    }
+
+                    let pkValue = $(this).data('pk');
+                    let row = $(this).closest('tr');
+
+                    $.ajax({
+                        url: "{{ route('delete_table_record') }}",
+                        type: 'POST',
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            table_name: currentTableName,
+                            primary_key: primaryKey,
+                            primary_key_value: pkValue
+                        },
+                        success: function(response) {
+                            if (response.status) {
+                                currentTable.row(row).remove().draw();
+                                toastr.success('Record deleted successfully');
+                            } else {
+                                toastr.error(response.message);
+                            }
+                        },
+                        error: function(xhr) {
+                            toastr.error('Delete failed');
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+@endsection

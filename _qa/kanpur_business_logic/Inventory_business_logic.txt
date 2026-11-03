@@ -1,0 +1,87 @@
+INVENTORY MODULE - BUSINESS LOGIC
+==================================
+
+VB6 Source Files:
+  FrmItemMast.frm - Item Master
+  DepOpStk.frm - Department Opening Stock
+  FrmItemIssuedOnCleaning.frm - Items Issued on Cleaning
+  FrmItemMastRaw.frm - Item Master Raw
+  StockInHand_Query.sql - Stock in Hand Query
+  StockInHand_PurchaseUnit.sql - Stock in Hand Purchase Unit
+  Stock In Hand.txt - Stock in Hand documentation
+
+Business Rules:
+  ITEM MANAGEMENT:
+    1. Item Master: all items with code, name, category, unit, rate
+    2. Item groups for categorization
+    3. Item categories for classification
+    4. Item rates auto-calculated
+    5. Item list view available
+    6. Item lookup/search functionality
+
+  STOCK MANAGEMENT:
+    7. Stock register tracks all stock movements
+    8. Stock levels with MIN/MAX indicators
+    9. Stock summary available
+    10. Stock in hand report
+    11. Stock register (detailed)
+    12. Stock summary (aggregated)
+    13. Kitchen stock report (by I/R basis)
+    14. Excess consumption report
+    15. Purchase ledger
+
+  PURCHASE MANAGEMENT:
+    16. Indent: purchase request
+    17. Purchase Order: formal purchase order
+    18. M.R. Entry: Material Receipt entry
+    19. Purchase Bill: supplier invoice
+    20. Requisition Slip: internal requisition
+    21. Stock Issue on Requisition: issue stock for departments
+    22. Kitchen Closing Stock: end-of-day kitchen stock
+    23. Stock Transfer: transfer stock between locations
+    24. Finish Material Receive Entry: final material receipt
+
+  ISSUE MANAGEMENT:
+    25. Issue reduces stock on hand
+    26. Issue tracked by department
+    27. Issue report available
+    28. Issue check list
+    29. Stock adjustment for physical count corrections
+
+  REPORTS:
+    30. Store Issue Report
+    31. Liquor Sale Report
+    32. Purchase Register
+    33. Purchase Summary
+    34. Cash/Credit Purchase
+    35. Stock Register
+    36. Stock Summary
+    37. Stock In Hand
+    38. Kitchen Stock Report I/R Basis
+    39. Excess Consumption Report
+    40. Purchase Ledger
+    41. Issue CheckList
+    42. ABC Analysis
+    43. VAT Register (VAT Register I, II, III)
+    44. Form24 Annexure-A
+    45. Form III
+    46. UPVAT XXIV
+    47. Tax Reports
+    48. Pending Indent
+    49. Pending M.R.
+    50. Pending Purchase Order
+
+Database Tables:
+  Item, Stock, Purchase, PurchaseReturn, Issue, StockAdjust,
+  StockReceive, StockIssue, Supplier, RequisitionSlip, Consumption,
+  StockRegister, ItemGroup, Unit, GodrejLocks, Department,
+  KitchenStock, Material, VATRegister, TaxRegister
+
+SQL Operations:
+  CREATE_ITEM: INSERT INTO Item (ITEM_CODE, NAME, CATEGORY, UNIT, RATE) VALUES (?, ?, ?, ?, ?)
+  RECEIVE_STOCK: INSERT INTO StockReceive (ITEM_CODE, QUANTITY, PURCHASE_NO) VALUES (?, ?, ?)
+  ISSUE_STOCK: INSERT INTO Issue (ITEM_CODE, QUANTITY, DEPARTMENT, DATE) VALUES (?, ?, ?, ?)
+  UPDATE_STOCK: UPDATE Stock SET QUANTITY = QUANTITY + ? WHERE ITEM_CODE = ?
+  STOCK_ADJUSTMENT: INSERT INTO StockAdjust (ITEM_CODE, ADJUSTMENT, REASON) VALUES (?, ?, ?)
+  PURCHASE_BILL: INSERT INTO Purchase (SUPPLIER, ITEMS, AMOUNT, DATE) VALUES (?, ?, ?, ?)
+  STOCK_IN_HAND: SELECT ITEM_CODE, NAME, QUANTITY FROM Stock WHERE QUANTITY BETWEEN ? AND ?

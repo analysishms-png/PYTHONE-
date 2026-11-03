@@ -1,0 +1,100 @@
+.ajax-autocomplete-wrapper {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+}
+
+.ajax-autocomplete-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1060;
+    display: none;
+    width: max-content;
+    min-width: 100%;
+    max-width: min(650px, calc(100vw - 32px));
+    max-height: 300px;
+    overflow: auto;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: 0 0 5px 5px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: #c5cbd3 #f8f9fa;
+}
+
+.ajax-autocomplete-option {
+    display: block;
+    padding: 10px 12px;
+    color: #212529;
+    font-size: 13px;
+    line-height: 1.6;
+    white-space: nowrap;
+    cursor: pointer;
+    border-bottom: 1px solid #f1f1f1;
+    transition: background-color 0.12s ease;
+}
+
+.ajax-autocomplete-option:last-child {
+    border-bottom: 0;
+}
+
+.ajax-autocomplete-option:hover,
+.ajax-autocomplete-option.active {
+    color: #212529;
+    background-color: #e9f2ff;
+}
+
+.ajax-autocomplete-option:focus-visible {
+    outline: 2px solid #86b7fe;
+    outline-offset: -2px;
+}
+
+.guest-autocomplete-item {
+    display: block;
+    color: inherit;
+    line-height: 1.6;
+}
+
+.ajax-autocomplete-message {
+    padding: 12px;
+    color: #6c757d;
+    font-size: 13px;
+    text-align: center;
+    white-space: normal;
+}
+
+.ajax-autocomplete-dropdown::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.ajax-autocomplete-dropdown::-webkit-scrollbar-thumb {
+    background-color: #c5cbd3;
+    border-radius: 4px;
+}
+
+.ajax-autocomplete-dropdown::-webkit-scrollbar-track {
+    background-color: #f8f9fa;
+}
+
+@media (max-width: 576px) {
+    .ajax-autocomplete-dropdown {
+        width: 100%;
+        min-width: 0;
+        max-width: calc(100vw - 32px);
+        max-height: 260px;
+    }
+
+    .ajax-autocomplete-option {
+        padding: 10px;
+        font-size: 12px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ajax-autocomplete-option {
+        transition: none;
+    }
+}

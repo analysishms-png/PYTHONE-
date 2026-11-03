@@ -1,0 +1,13 @@
+## MenuHelp columns
+CompCode:nvarchar(4), UserName:nvarchar(20), Opt1:int(4), Opt2:int(4), Opt3:int(4), Opt4:int(4), Code:int(4), Option:nvarchar(100), Menu_Index:int(4), Menu_Visible:nvarchar(2), Pro_Name:nvarchar(16), Tag:nvarchar(20), User_Name:nvarchar(20), Param_Str:nvarchar(8), ID:nvarchar(16), Module_Name:nvarchar(60), Flag:nvarchar(2), ShowInList:nvarchar(2), OutletCode:nvarchar(12)
+
+rows: 3172
+
+## sample rows (first 3)
+{"CompCode": "01", "UserName": "admin", "Opt1": "11", "Opt2": "0", "Opt3": "0", "Opt4": "0", "Code": "1", "Option": "Finance", "Menu_Index": "-1", "Menu_Visible": "None", "Pro_Name": "None", "Tag": "None", "User_Name": "None", "Param_Str": "None", "ID": "None", "Module_Name": "FA", "Flag": "N", "ShowInList": "None", "OutletCode": ""}
+{"CompCode": "01", "UserName": "admin", "Opt1": "11", "Opt2": "11", "Opt3": "0", "Opt4": "0", "Code": "2", "Option": "Transaction", "Menu_Index": "-1", "Menu_Visible": "None", "Pro_Name": "None", "Tag": "None", "User_Name": "None", "Param_Str": "***P", "ID": "None", "Module_Name": "FAT", "Flag": "N", "ShowInList": "None", "OutletCode": ""}
+{"CompCode": "01", "UserName": "admin", "Opt1": "11", "Opt2": "11", "Opt3": "11", "Opt4": "0", "Code": "3", "Option": "Voucher Entry", "Menu_Index": "0", "Menu_Visible": "None", "Pro_Name": "None", "Tag": "None", "User_Name": "None", "Param_Str": "AEDP", "ID": "None", "Module_Name": "fate", "Flag": "E", "ShowInList": "None", "OutletCode": ""}
+
+## UserModule columns
+Opt1:int(4), Opt2:int(4), Opt3:int(4), Opt4:int(4), Code:int(4), Option:nvarchar(100), Param_Str:nvarchar(8), Flag:nvarchar(2), OutletCode:nvarchar(12)
+UserModule rows: 431

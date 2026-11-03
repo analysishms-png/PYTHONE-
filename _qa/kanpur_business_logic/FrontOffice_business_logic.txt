@@ -1,0 +1,87 @@
+FRONT OFFICE MODULE - BUSINESS LOGIC
+=====================================
+
+VB6 Source Files:
+  fdCheckIn.frm - Check-In Form
+  FdCheckOut.frm - Check-Out Form
+  FdRevCheckOut.frm - Reverse Check-Out
+  fdDisplayFolio.frm - Display Guest Folio
+  fdDisplayFolioSumm.frm - Display Folio Summary
+  fdPostChrg.frm - Post Charges
+  fdNDAcPostChrg.frm - Night Audit Post Charges
+  fdAcPostChrg.frm - Account Posting
+  fdPaymentCharge.frm - Payment & Charges
+  fdWalkInEntry.frm - Walk-in Entry
+  fdRoomOcc.frm - Room Occupancy
+  fdRoomChange.frm - Room Change
+  fdRoomDisplay.frm - Room Display
+  fdLookUpRoom.frm - Look Up Room
+  FdGrpCheckOut.frm - Group Check-Out
+  FdGrpdetCheckOut.frm - Group Detailed Check-Out
+  FdReSetlement.frm - Re-Settlement
+  fdPrintScreen.frm - Print Screen
+
+Business Rules:
+  CHECK-IN:
+    1. Pre-requisite: Valid Booking_NO or walk-in GuestProf
+    2. Room must be available (RoomStatus = 'Clean', not occupied)
+    3. RoomOcc record created with ARRIVAL date, STATUS='Occupied'
+    4. GuestFolio created with OPENING_BALANCE = deposit amount
+    5. RoomMast.STATUS changes to 'Occupied'
+    6. GuestStatus.STATUS changes to 'Checked-In'
+    7. Auto charges posted to folio on check-in
+    8. PIN (4-digit) required for check-in
+    9. Government ID mandatory
+    10. Deposit amount auto-calculated from rate plan
+
+  CHECK-OUT:
+    11. Folio balance = Opening_Balance + Charges - Payments
+    12. Outstanding balance blocks checkout (configurable)
+    13. RoomStatus changes to 'Dirty' after checkout
+    14. GuestStatus changes to 'Checked-Out'
+    15. Depart record updated with CHECKOUT time
+    16. Folio closed and balance archived
+    17. Reverse check-out available (FdRevCheckOut.frm)
+    18. Room merge/unmerge supported
+    19. Bill re-settlement available
+    20. Merge room: combines two rooms' folios
+
+  FOLIO:
+    21. Balance = Opening_Balance + Charges - Payments - Adjustments
+    22. Charge types: Room, Restaurant, Phone, Other, Laundry, MiniBar
+    23. Charges posted to FolioLog with TYPE and DESCRIPTION
+    24. Payment reduces Current_Balance
+    25. Adjustment allowed with authorization
+    26. Ledger syncs with Folio balance
+
+  ROOM STATUS:
+    27. Clean: available for booking
+    28. Occupied: has active RoomOcc record
+    29. Dirty: checked out, needs cleaning
+    30. Maintenance: out of service
+    31. Under Repair: out of service
+    32. Status transition: Occupied → Dirty → Clean
+
+  WALK-IN:
+    33. Walk-in guest without prior reservation
+    34. Guest profile created on walk-in
+    35. Room assigned based on availability
+    36. No booking reference needed
+
+  ROOM CHANGE:
+    37. Guest can be moved to different room
+    38. RoomOcc updated with new room number
+    39. Folio charges adjusted if rate difference exists
+
+Database Tables:
+  GuestProf, GuestFolio, GuestStatus, RoomOcc, FolioLog, RoomMast,
+  RoomStatus, Depart, GuestServices, PaymentType, GuestHistory,
+  RoomCategory, FixCharge, ExpenseEntry, Sundry, Voucher, Ledger
+
+SQL Operations:
+  CHECK_IN: INSERT INTO RoomOcc (ROOM_NO, GUEST_CODE, ARRIVAL, STATUS) VALUES (?, ?, ?, 'Occupied')
+  CHECK_OUT: UPDATE RoomOcc SET STATUS = 'Dirty', DEPARTURE = GETDATE() WHERE ROOM_NO = ?
+  POST_CHARGE: INSERT INTO FolioLog (FOLIO_NO, TYPE, AMOUNT, DESCRIPTION) VALUES (?, ?, ?, ?)
+  MAKE_PAYMENT: UPDATE GuestFolio SET CURRENT_BALANCE = CURRENT_BALANCE - ? WHERE FOLIO_NO = ?
+  REVERSE_CHECKOUT: UPDATE RoomOcc SET STATUS = 'Occupied' WHERE ROOM_NO = ? AND STATUS = 'Dirty'
+  REVERSE_NIGHT_AUDIT: Reverse all NightAudit changes

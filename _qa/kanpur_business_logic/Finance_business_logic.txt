@@ -1,0 +1,70 @@
+FINANCE MODULE - BUSINESS LOGIC
+================================
+
+VB6 Source Files:
+  FaVrEnt.frm - Voucher Entry (main finance form)
+  FaVtype.frm - Voucher Type Master
+  FaTDSCertificate.frm - TDS Certificate Entry
+  FaTDSCat.frm - TDS Category Master
+  FaTaxVoucher.frm - Tax Voucher
+  FaRepView.frm - Report Viewer
+  FaCurrBalUpdate.frm - Current Balance Update
+  FaTDSChal.frm - TDS Challan Entry
+  FaAdjust.frm - Adjustment Entry
+  FaAdjustDel.frm - Adjustment Delete
+  FacilitySundry.frm - Facility Sundry
+  FaVrEnt.frm - Voucher Entry
+  FaCountryMast.frm - Country Master
+  FaCityMast.frm - City Master
+
+Business Rules:
+  1. Double-entry bookkeeping: every voucher has debit and credit
+  2. Voucher types: Journal, Cash, Bank, Contra, Payment, Receipt
+  3. TDS calculated as Amount * Rate / 100
+  4. TDS Certificates issued quarterly (TDS_Certificate table)
+  5. TDS Challan entry for tax payment (FaTDSChal.frm)
+  6. Bank Reconciliation matches bank statement with ledger
+  7. Trial Balance: total debits must equal total credits
+  8. Profit & Loss = Revenue - Expenses
+  9. Balance Sheet: Assets = Liabilities + Equity
+  10. FolioLog tracks all financial transactions
+  11. Ledger maintains running balance per account
+  12. Cash Book records all cash transactions
+  13. Journal Books record journal entries
+  14. Ageing Analysis: outstanding amounts by aging period (30/60/90 days)
+  15. Control Ledger: verifies ledger consistency
+  16. Daily Transaction Summary: summary of all transactions for the day
+  17. Fund Flow: tracks sources and uses of funds
+  18. Cash Flow: tracks cash inflows and outflows
+
+Database Tables:
+  Ledger, Voucher, VoucherType, FolioLog, TDS_Certificate, TDS_Category,
+  TDS_Certi, ForexMaster, CashBook, BankBook, Journal, TrialBalance,
+  ProfitLoss, BalanceSheet, DayBook, TaxStru, TaxMaster, TaxGroup,
+  LedgerGroup, Budget, RevenueBudget, LedgerRef, NCat, Scheme,
+  SchemeTDS, AccountMerge, ControlLedger, ChequeRegister
+
+SQL Operations:
+  CREATE_VOUCHER: INSERT INTO Voucher (VOUCHER_NO, DATE, AMOUNT, TYPE, LEDGER_NO) VALUES (?, ?, ?, ?, ?)
+  POST_TO_LEDGER: UPDATE Ledger SET BALANCE = BALANCE + ? WHERE LEDGER_NO = ?
+  CALCULATE_TDS: SELECT AMOUNT * RATE / 100 FROM TDS_Category WHERE CATEGORY = ?
+  TRIAL_BALANCE: SELECT SUM(DEBIT), SUM(CREDIT) FROM Ledger GROUP BY LEDGER_NO HAVING SUM(DEBIT) != SUM(CREDIT)
+  BANK_RECONCILIATION: SELECT * FROM BankBook WHERE CHEQUE_NO IN (SELECT CHEQUE_NO FROM ChequeRegister WHERE CLEARED = 0)
+  AGEING_ANALYSIS: SELECT LEDGER_NO, SUM(AMOUNT) FROM Ledger WHERE DATEDIFF(day, DATE, GETDATE()) > ? GROUP BY LEDGER_NO
+  TDS_CERTIFICATE: INSERT INTO TDS_Certificate (PARTY, AMOUNT, TDS_AMOUNT, QUARTER) VALUES (?, ?, ?, ?)
+  TDS_CHALLAN: INSERT INTO TDS_Challan (CHALLAN_NO, AMOUNT, DATE, BANK) VALUES (?, ?, ?, ?)
+
+Workflow:
+  User opens FaVrEnt.frm → Selects Voucher Type → Enters details →
+  System validates → Posts to Ledger → Updates FolioLog →
+  Generates Voucher number → Commits transaction → Shows confirmation
+
+Authentication:
+  Encrypt: Process_153_30_EEFAD0 - Password encrypted with Rnd-based cipher
+  Decrypt: Process_153_31_EFEE54 - Reverse cipher for verification
+  Login: UCase(Trim(typed)) = UCase(Trim(stored_decrypted))
+
+Menu System:
+  User_Module table: flag='9' for sidebar roots
+  Analysis.ini key 9: module ordering
+  User1 table: user rights (empty = full access for SA)

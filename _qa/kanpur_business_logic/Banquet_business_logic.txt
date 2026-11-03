@@ -1,0 +1,50 @@
+BANQUET MODULE - BUSINESS LOGIC
+==============================
+
+VB6 Source Files:
+  Banquet.frm - Banquet Master
+  HallM.frm - Hall Master
+  HallMIS.frm - Hall MIS
+  HallReport.frm - Hall Report
+  HallTax.frm - Hall Tax
+  HallTaxP.frm - Hall Tax Report
+  Hallop.frm - Hall Operations
+  BanqAvailability.frm - Banquet Availability
+  CateringBooking.frm - Catering Booking
+  BanqModule.bas - Banquet Module
+
+Business Rules:
+  1. Hall Master: hall configuration (capacity, venue, features)
+  2. Venue Master: venue details (location, capacity, amenities)
+  3. Venue Features: features available at venue
+  4. Menu Category: menu categories (Appetizer, Main Course, Dessert)
+  5. Menu Item: individual menu items with prices
+  6. Catalog Master: catalog of available items
+  7. Events: hall booking events
+  8. Venue Availability: check venue availability for dates
+  9. Guest Comments: guest feedback and comments
+  10. Banquet Estimate Billing: cost estimation before booking
+  11. Banquet Booking: formal booking process
+  12. Banquet Booking Advance: advance payment for booking
+  13. Banquet Billing: final billing after event
+  14. Chef Pre-Costing: cost estimation by chef
+  15. Catalog Selection: select items from catalog
+  16. Menu Item Rate: pricing for menu items
+  17. Banquet Bill Sundry Setting: sundry charges configuration
+
+Business Workflow:
+  1. Guest inquiry → Venue availability check → Catalog selection →
+  2. Chef pre-costing → Estimate billing → Guest confirmation →
+  3. Banquet booking → Advance payment → Event execution →
+  4. Final billing → Guest feedback → Report generation
+
+Database Tables:
+  BanquetMast, HallBooking, VenueMaster, MenuCategory, MenuItem,
+  CatalogMaster, Events, GuestComments, BanquetEstimate,
+  BanquetBilling, BanquetBooking, ChefPreCosting, HallMIS, HallReport
+
+SQL Operations:
+  CHECK_VENUE_AVAILABILITY: SELECT * FROM VenueMaster WHERE VENUE_ID IN (SELECT VENUE_ID FROM HallBooking WHERE DATE = ? AND STATUS = 'Booked')
+  CREATE_BOOKING: INSERT INTO HallBooking (VENUE_ID, EVENT_DATE, GUEST_CODE, AMOUNT) VALUES (?, ?, ?, ?)
+  CREATE_ESTIMATE: INSERT INTO BanquetEstimate (BOOKING_NO, ITEMS, COST) VALUES (?, ?, ?)
+  CREATE_BILLING: INSERT INTO BanquetBilling (BOOKING_NO, FINAL_AMOUNT, PAYMENT_MODE) VALUES (?, ?, ?)

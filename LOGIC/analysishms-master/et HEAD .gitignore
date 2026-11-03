@@ -1,0 +1,358 @@
+[1mdiff --git a/.gitignore b/.gitignore[m
+[1mold mode 100644[m
+[1mnew mode 100755[m
+[1mindex 7fe978f..fe9777a[m
+[1m--- a/.gitignore[m
+[1m+++ b/.gitignore[m
+[36m@@ -6,6 +6,7 @@[m
+ /storage/*.key[m
+ /vendor[m
+ .env[m
+[32m+[m[32m.zip[m
+ .env.backup[m
+ .env.production[m
+ .phpunit.result.cache[m
+[1mdiff --git a/Index.html b/Index.html[m
+[1mold mode 100644[m
+[1mnew mode 100755[m
+[1mdiff --git a/app/Http/Controllers/CompanyController.php b/app/Http/Controllers/CompanyController.php[m
+[1mindex 132f793..3b8a93a 100644[m
+[1m--- a/app/Http/Controllers/CompanyController.php[m
+[1m+++ b/app/Http/Controllers/CompanyController.php[m
+[36m@@ -8033,11 +8033,11 @@[m [mpublic function posdiplayhandle(Request $request)[m
+     public function fetchitemnames(Request $request)[m
+     {[m
+         $grpid = $request->input('grpid');[m
+[31m-[m
+[32m+[m[41m        [m
+         $nameinput = $request->input('name');[m
+         $barcodeinput = $request->input('barcodeinput');[m
+         $dcode = $request->input('dcode');[m
+[31m-        $query = ItemMast::select('itemmast.*', 'itemrate.Rate')[m
+[32m+[m[32m        $query = ItemMast::select('itemmast.*', 'itemrate.Rate as rateofitem')[m
+             ->leftJoin('itemrate', 'itemrate.ItemCode', '=', 'itemmast.Code')[m
+             ->where('itemmast.Property_ID', $this->propertyid)->where('itemmast.RestCode', $dcode)->orderBy('itemmast.Name', 'ASC');[m
+         if ($grpid != 'favourite' && !empty($grpid)) {[m
+[1mdiff --git a/app/Http/Controllers/Pointofsale.php b/app/Http/Controllers/Pointofsale.php[m
+[1mindex ce36a1c..46990fe 100644[m
+[1m--- a/app/Http/Controllers/Pointofsale.php[m
+[1m+++ b/app/Http/Controllers/Pointofsale.php[m
+[36m@@ -629,7 +629,7 @@[m [mpublic function salebillsubmit(Request $request)[m
+ [m
+         $printdata = [[m
+             'roomno' => $sale1print->roomno,[m
+[31m-            'vdate' => date('d-m-Y', strtotime($sale1print->vdate)),[m
+[32m+[m[32m            'vdate' => $sale1print->vdate,[m
+             'vtype' => $sale1print->vtype,[m
+             'waiter' => $sale1print->waitername,[m
+             'billno' => $sale1print->vno,[m
+[36m@@ -638,6 +638,19 @@[m [mpublic function salebillsubmit(Request $request)[m
+             'outletcode' => $sale1print->restcode,[m
+         ];[m
+ [m
+[32m+[m[32m        $billprinty = $request->input('billprinty');[m
+[32m+[m
+[32m+[m[32m        if ($billprinty == 'Y' && empty($posroomno)) {[m
+[32m+[m[32m            $page = 'salebillentry';[m
+[32m+[m[32m            return view('property.layouts.prints', [[m
+[32m+[m[32m                'printdata' => $printdata, 'page' => $page[m
+[32m+[m[32m            ]);[m
+[32m+[m[32m        } else {[m
+[32m+[m[32m            $page = 'displaytable';[m
+[32m+[m[32m            return view('property.layouts.prints', [[m
+[32m+[m[32m                'printdata' => $printdata, 'page' => $page[m
+[32m+[m[32m            ]);[m
+[32m+[m[32m        }[m
+ [m
+         if (!empty($posroomno)) {[m
+             return redirect('displaytable?dcode=' . $request->input('fixrestcode'))->with('infosale', [[m
+[1mdiff --git a/app/Http/Controllers/Pos.php b/app/Http/Controllers/Pos.php[m
+[1mindex bc23d8e..923f135 100644[m
+[1m--- a/app/Http/Controllers/Pos.php[m
+[1m+++ b/app/Http/Controllers/Pos.php[m
+[36m@@ -27,6 +27,7 @@[m
+ use App\Models\RoomMast;[m
+ use App\Models\RoomOcc;[m
+ use App\Models\SubGroup;[m
+[32m+[m[32muse App\Models\Sundrytype;[m
+ use Illuminate\Support\Facades\Auth;[m
+ use Exception;[m
+ use Illuminate\Support\Facades\Storage;[m
+[36m@@ -162,12 +163,12 @@[m [mpublic function displaytable(Request $request)[m
+             ->where('dcode', $dcode)[m
+             ->first();[m
+         $propertyid = $this->propertyid;[m
+[31m-        if($departdata->nature == 'Room Service') {[m
+[32m+[m[32m        if ($departdata->nature == 'Room Service') {[m
+             $label = 'Room No';[m
+         } else {[m
+             $label = 'Tabel No';[m
+         }[m
+[31m-        [m
+[32m+[m
+         if ($departdata->nature == 'Room Service') {[m
+             $roomocc = RoomOcc::select([m
+                 'roomocc.roomno as roomno',[m
+[36m@@ -560,6 +561,7 @@[m [mpublic function submitmenuitem(Request $request)[m
+             'fromdcode' => 'required',[m
+             'todcode' => 'required'[m
+         ]);[m
+[32m+[m
+         $fromdcode = $request->input('fromdcode');[m
+         $todcode = $request->input('todcode');[m
+ [m
+[36m@@ -568,7 +570,30 @@[m [mpublic function submitmenuitem(Request $request)[m
+             ->first();[m
+ [m
+         $totalitems = $request->input('totalitems');[m
+[31m-[m
+[32m+[m[32m        $departsr = Depart::where('dcode', $todcode)->where('propertyid', $this->propertyid)->first();[m
+[32m+[m[32m        $oldsundrytypedata = Sundrytype::where('propertyid', $this->propertyid)->where('vtype', $fromdcode)->get();[m
+[32m+[m[32m        foreach ($oldsundrytypedata as $item) {[m
+[32m+[m[32m            $insundata = [[m
+[32m+[m[32m                'propertyid' => $this->propertyid,[m
+[32m+[m[32m                'vtype' => $todcode,[m
+[32m+[m[32m                'sundry_code' => $item->sundry_code,[m
+[32m+[m[32m                'sno' => $item->sno,[m
+[32m+[m[32m                'appdate' => $request->input('applicablefrom'),[m
+[32m+[m[32m                'disp_name' => $item->disp_name,[m
+[32m+[m[32m                'calcformula' => $item->calcformula,[m
+[32m+[m[32m                'peroramt' => $item->peroramt,[m
+[32m+[m[32m                'svalue' => $item->svalue,[m
+[32m+[m[32m                'revcode' => $item->revcode,[m
+[32m+[m[32m                'nature' => $departsr->nature,[m
+[32m+[m[32m                'calcsign' => $item->calcsign,[m
+[32m+[m[32m                'bold' => $item->bold,[m
+[32m+[m[32m                'automanual' => $item->automanual,[m
+[32m+[m[32m                'u_name' => $this->username,[m
+[32m+[m[32m                'created_at' => $this->currenttime,[m
+[32m+[m[32m                'postyn' => $item->postyn[m
+[32m+[m[32m            ];[m
+[32m+[m[32m            Sundrytype::insert($insundata);[m
+[32m+[m[32m        }[m
+ [m
+         $uniqueCodes = [];[m
+         $uniqueitemgrp = [];[m
+[36m@@ -578,6 +603,8 @@[m [mpublic function submitmenuitem(Request $request)[m
+             if ($itemcode) {[m
+                 $itemmast = ItemMast::where('Property_ID', $this->propertyid)->where('Code', $itemcode)->where('RestCode', $fromdcode)[m
+                     ->first();[m
+[32m+[m[32m                $itemrate = ItemRate::where('Property_ID', $this->propertyid)->where('ItemCode', $itemcode)->where('RestCode', $fromdcode)[m
+[32m+[m[32m                    ->first();[m
+                 $itemgrps = ItemGrp::where('property_id', $this->propertyid)->where('restcode', $fromdcode)[m
+                     ->where('code', $itemmast->ItemGroup)->first();[m
+ [m
+[36m@@ -653,7 +680,7 @@[m [mpublic function submitmenuitem(Request $request)[m
+                 ];[m
+                 ItemMast::insert($insertdata);[m
+ [m
+[31m-                $itemrate = ItemRate::where('Property_ID', $this->propertyid)->where('RestCode', $fromdcode)->first();[m
+[32m+[m[32m                // $itemrate = ItemRate::where('Property_ID', $this->propertyid)->where('RestCode', $fromdcode)->first();[m
+                 $itemratedata = [[m
+                     'Property_ID' => $this->propertyid,[m
+                     'ItemCode' => $code,[m
+[36m@@ -693,7 +720,6 @@[m [mpublic function submitmenuitem(Request $request)[m
+                         ];[m
+                         $revmastoldcat = Revmast::where('propertyid', $this->propertyid)->where('rev_code', $itemcatmast->Code)[m
+                             ->where('Desk_code', $fromdcode)->first();[m
+[31m-                        $departsr = Depart::where('dcode', $todcode)->where('propertyid', $this->propertyid)->first();[m
+                         $revinsert = [[m
+                             'rev_code' => $itemcatmast->Code,[m
+                             'name' => $departsr->short_name . ' - ' . $itemcatmast->Name,[m
+[1mdiff --git a/resources/views/property/a.sql b/resources/views/property/a.sql[m
+[1mindex 1956f8d..e69de29 100644[m
+[1m--- a/resources/views/property/a.sql[m
+[1m+++ b/resources/views/property/a.sql[m
+[36m@@ -1,20 +0,0 @@[m
+[31m-CREATE TABLE userpermission ([m
+[31m-  sn int(100) NOT NULL UNIQUE AUTO_INCREMENT,[m
+[31m-  propertyid int(15) NOT NULL,[m
+[31m-  username VARCHAR(100) NOT NULL,[m
+[31m-  posdiscountallowupto DECIMAL(10, 2) NOT NULL DEFAULT '0.00',[m
+[31m-  possettlementyn VARCHAR(1) NOT NULL DEFAULT 'Y',[m
+[31m-  editelementinkot VARCHAR(1) NOT NULL DEFAULT 'Y',[m
+[31m-  freeitemallow VARCHAR(1) NOT NULL DEFAULT 'N',[m
+[31m-  fomdiscuntallowupto DECIMAL(10, 2) NOT NULL DEFAULT '0.00',[m
+[31m-  cancelguestbill VARCHAR(1) NOT NULL DEFAULT 'Y',[m
+[31m-  changeroomdetail VARCHAR(1) NOT NULL DEFAULT 'Y',[m
+[31m-  deleteguestcharges VARCHAR(1) NOT NULL DEFAULT 'Y',[m
+[31m-  changeguestcharges VARCHAR(1) NOT NULL DEFAULT 'Y',[m
+[31m-  changeguestprofile VARCHAR(1) NOT NULL DEFAULT 'Y',[m
+[31m-  cancelreservation VARCHAR(1) NOT NULL DEFAULT 'Y',[m
+[31m-  u_name varchar(15) NOT NULL,[m
+[31m-  created_at datetime NOT NULL,[m
+[31m-  updated_at datetime DEFAULT NULL,[m
+[31m-  u_ae varchar(1) NOT NULL,[m
+[31m-) ENGINE=EnnoDB DEFAULT CHARSET=utf8 Collate=utf8_general_ci[m
+\ No newline at end of file[m
+[1mdiff --git a/resources/views/property/kotentry.blade.php b/resources/views/property/kotentry.blade.php[m
+[1mindex 74b01f4..c9ca679 100644[m
+[1m--- a/resources/views/property/kotentry.blade.php[m
+[1m+++ b/resources/views/property/kotentry.blade.php[m
+[36m@@ -758,7 +758,7 @@[m [mfunction fetchItemNames(data) {[m
+                                 itemdir = `<img src="storage/property/itempicture/${item.iempic}" alt="${itemname}" style="width: 100%; height: 100%;" onerror="this.style.display='none';">`;[m
+                             }[m
+                             let bordercolor = (item.dishtype == 1) ? 'green' : (item.dishtype == 2) ? 'red' : (item.dishtype == 3) ? 'yellow' : 'green';[m
+[31m-                            row.append(`<td style="position: relative; border-left: 3px solid ${bordercolor};" data-id="${item.Rate}" class="tditemname" data-value="${itemcde}">[m
+[32m+[m[32m                            row.append(`<td style="position: relative; border-left: 3px solid ${bordercolor};" data-id="${item.rateofitem}" class="tditemname" data-value="${itemcde}">[m
+                        ${itemdir}[m
+                        <span class="itemnamespan">${itemname}</span>[m
+                     </td>`);[m
+[36m@@ -868,6 +868,7 @@[m [mfunction fetchItemNames(data) {[m
+                             results = JSON.parse(results);[m
+                             let newRow = itemsdata.find('tr:last');[m
+                             newRow.find('.rateclass').val(results.Rate);[m
+[32m+[m[32m                            console.log(results);[m
+                             newRow.find('.rate-display').text(results.Rate);[m
+                             updateTotal();[m
+                         }[m
+[1mdiff --git a/resources/views/property/layouts/prints.blade.php b/resources/views/property/layouts/prints.blade.php[m
+[1mnew file mode 100644[m
+[1mindex 0000000..23fdef9[m
+[1m--- /dev/null[m
+[1m+++ b/resources/views/property/layouts/prints.blade.php[m
+[36m@@ -0,0 +1,38 @@[m
+[32m+[m[32m<input type="hidden" value="{{ $printdata['billno'] }}" name="vnoup" id="vnoup">[m
+[32m+[m[32m<input type="hidden" value="{{ $printdata['vdate'] }}" name="vdatesale1" id="vdatesale1">[m
+[32m+[m[32m<input type="hidden" value="{{ $printdata['vtype'] }}" name="vtype" id="vtype">[m
+[32m+[m[32m<input type="hidden" value="{{ $printdata['waiter'] }}" name="waiter" id="waiter">[m
+[32m+[m[32m<input type="hidden" value="{{ $printdata['departname'] }}" name="departname" id="departname">[m
+[32m+[m[32m<input type="hidden" value="{{ $printdata['kotno'] }}" name="kotno" id="kotno">[m
+[32m+[m[32m<input type="hidden" value="{{ $printdata['outletcode'] }}" name="outletcode" id="outletcode">[m
+[32m+[m[32m<input type="hidden" value="{{ $page }}" name="page" id="page">[m
+[32m+[m
+[32m+[m[32m<script src="https://code.jquery.com/jquery-3.5.1.js"></script>[m
+[32m+[m[32m<script>[m
+[32m+[m[32m    $(document).ready(function() {[m
+[32m+[m[32m        let vnoup = $('#vnoup').val();[m
+[32m+[m[32m        let vdatesale1 = $('#vdatesale1').val();[m
+[32m+[m[32m        let vtype = $('#vtype').val();[m
+[32m+[m[32m        let departname = $('#departname').val();[m
+[32m+[m[32m        let filetoopen = 'salebillprint';[m
+[32m+[m[32m        let kotno = $('#kotno').val();[m
+[32m+[m[32m        let waiter = $('#waiter').val();[m
+[32m+[m[32m        let outletcode = $('#outletcode').val();[m
+[32m+[m
+[32m+[m[32m        let openfile = window.open(filetoopen, '_blank');[m
+[32m+[m[32m        openfile.onload = function() {[m
+[32m+[m[32m            $(openfile.document).ready(function() {[m
+[32m+[m[32m                $('#billno', openfile.document).text(vnoup);[m
+[32m+[m[32m                $('#vdate', openfile.document).text(vdatesale1);[m
+[32m+[m[32m                $('#vtype', openfile.document).text(vtype);[m
+[32m+[m[32m                $('#departname', openfile.document).text(departname);[m
+[32m+[m[32m                $('#kotno', openfile.document).text(kotno);[m
+[32m+[m[32m                $('#waiter', openfile.document).text(waiter);[m
+[32m+[m[32m                $('#outletcode', openfile.document).text(outletcode);[m
+[32m+[m[32m            });[m
+[32m+[m[32m        };[m
+[32m+[m[32m        setTimeout(() => {[m
+[32m+[m[32m            window.location.href = `${$('#page').val()}?dcode=${outletcode}`;[m
+[32m+[m[32m        }, 2000);[m
+[32m+[m[32m    });[m
+[32m+[m[32m</script>[m
+[1mdiff --git a/resources/views/property/salebillentry.blade.php b/resources/views/property/salebillentry.blade.php[m
+[1mindex 7b7d783..dee17df 100644[m
+[1m--- a/resources/views/property/salebillentry.blade.php[m
+[1m+++ b/resources/views/property/salebillentry.blade.php[m
+[36m@@ -54,6 +54,7 @@[m
+                                 value="">[m
+                             <input type="hidden" class="form-control" name="olddocidpendingkot" id="olddocidpendingkot"[m
+                                 value="">[m
+[32m+[m[32m                            <input type="hidden" value="" name="billprinty" id="billprinty">[m
+                             <input type="hidden" class="form-control" name="totalamt" id="totalamt" value="">[m
+                             <input type="hidden" class="form-control" name="taxableamt" id="taxableamt" value="">[m
+                             <input type="hidden" class="form-control" name="cgstamt" id="cgstamt" value="">[m
+[36m@@ -597,7 +598,7 @@[m [mfunction fetchItemNames(data) {[m
+                                 itemdir = `<img src="storage/property/itempicture/${item.iempic}" alt="${itemname}" style="width: 100%; height: 100%;" onerror="this.style.display='none';">`;[m
+                             }[m
+                             let bordercolor = (item.dishtype == 1) ? 'green' : (item.dishtype == 2) ? 'red' : (item.dishtype == 3) ? 'yellow' : 'green';[m
+[31m-                            row.append(`<td style="position: relative; border-left: 3px solid ${bordercolor};" class="tditemname" data-value="${itemcde}">[m
+[32m+[m[32m                            row.append(`<td style="position: relative; border-left: 3px solid ${bordercolor};" data-id="${item.rateofitem}" class="tditemname" data-value="${itemcde}">[m
+                                 ${itemdir}[m
+                                 <span class="itemnamespan">${itemname}</span>[m
+                             </td>`);[m
+[36m@@ -1346,38 +1347,40 @@[m [mfunction updateTime() {[m
+         }, 1000);[m
+ [m
+         $('#billprint').click(function() {[m
+[31m-            let tbody = $('#itemsdata tbody');[m
+[31m-            let rowcount = tbody.find('tr').length;[m
+[31m-            let roomno = $('#roomno').val();[m
+[31m-            if (roomno === '' || roomno === null) {[m
+[31m-                pushNotify('error', 'Salebill Entry', 'Please Select Room No.!');[m
+[31m-                return;[m
+[31m-            }[m
+[31m-            if (rowcount === 0) {[m
+[31m-                pushNotify('error', 'Salebill Entry', 'Please Add Some Item First!');[m
+[31m-                return;[m
+[31m-            }[m
+[31m-[m
+[31m-            let vnoup = $('#vnoup').val();[m
+[31m-            let vdatesale1 = $('#vdatesale1').val();[m
+[31m-            let vtype = $('#vtype').val();[m
+[31m-            let departname = $('#departname').val();[m
+[31m-            let filetoopen = 'salebillprint';[m
+[31m-            let kotno = $('#kotno').val();[m
+[31m-            let waitersname = $('#waitersname').val();[m
+[31m-            let outletcode = $('#fixrestcode').val();[m
+[31m-[m
+[31m-            let openfile = window.open(filetoopen, '_blank');[m
+[31m-            openfile.onload = function() {[m
+[31m-                $('#roomno', openfile.document).text(roomno);[m
+[31m-                $('#vdate', openfile.document).text(vdatesale1);[m
+[31m-                $('#billno', openfile.document).text(vnoup);[m
+[31m-                $('#vtype', openfile.document).text(vtype);[m
+[31m-                $('#departname', openfile.document).text(departname);[m
+[31m-                $('#kotno', openfile.document).text(kotno);[m
+[31m-                $('#waiter', openfile.document).text(waitersname);[m
+[31m-                $('#outletcode', openfile.document).text(outletcode)[m
+[31m-            }[m
+[32m+[m[32m            $('#billprinty').val('Y');[m
+[32m+[m[32m            $('#submitBtn').click();[m
+[32m+[m[32m            // let tbody = $('#itemsdata tbody');[m
+[32m+[m[32m            // let rowcount = tbody.find('tr').length;[m
+[32m+[m[32m            // let roomno = $('#roomno').val();[m
+[32m+[m[32m            // if (roomno === '' || roomno === null) {[m
+[32m+[m[32m            //     pushNotify('error', 'Salebill Entry', 'Please Select Room No.!');[m
+[32m+[m[32m            //     return;[m
+[32m+[m[32m            // }[m
+[32m+[m[32m            // if (rowcount === 0) {[m
+[32m+[m[32m            //     pushNotify('error', 'Salebill Entry', 'Please Add Some Item First!');[m
+[32m+[m[32m            //     return;[m
+[32m+[m[32m            // }[m
+[32m+[m
+[32m+[m[32m            // let vnoup = $('#vnoup').val();[m
+[32m+[m[32m            // let vdatesale1 = $('#vdatesale1').val();[m
+[32m+[m[32m            // let vtype = $('#vtype').val();[m
+[32m+[m[32m            // let departname = $('#departname').val();[m
+[32m+[m[32m            // let filetoopen = 'salebillprint';[m
+[32m+[m[32m            // let kotno = $('#kotno').val();[m
+[32m+[m[32m            // let waitersname = $('#waitersname').val();[m
+[32m+[m[32m            // let outletcode = $('#fixrestcode').val();[m
+[32m+[m
+[32m+[m[32m            // let openfile = window.open(filetoopen, '_blank');[m
+[32m+[m[32m            // openfile.onload = function() {[m
+[32m+[m[32m            //     $('#roomno', openfile.document).text(roomno);[m
+[32m+[m[32m            //     $('#vdate', openfile.document).text(vdatesale1);[m
+[32m+[m[32m            //     $('#billno', openfile.document).text(vnoup);[m
+[32m+[m[32m            //     $('#vtype', openfile.document).text(vtype);[m
+[32m+[m[32m            //     $('#departname', openfile.document).text(departname);[m
+[32m+[m[32m            //     $('#kotno', openfile.document).text(kotno);[m
+[32m+[m[32m            //     $('#waiter', openfile.document).text(waitersname);[m
+[32m+[m[32m            //     $('#outletcode', openfile.document).text(outletcode)[m
+[32m+[m[32m            // }[m
+         });[m
+     </script>[m
+ @endsection[m
+[1mdiff --git a/resources/views/property/salebillprint.blade.php b/resources/views/property/salebillprint.blade.php[m
+[1mindex d1a13b7..9a4793f 100644[m
+[1m--- a/resources/views/property/salebillprint.blade.php[m
+[1m+++ b/resources/views/property/salebillprint.blade.php[m
+[36m@@ -291,6 +291,7 @@[m
+             let billno = $('#billno').text();[m
+             let vtype = $('#vtype').text();[m
+             let vdate = new Date($('#vdate').text());[m
+[32m+[m[32m            // console.log(vdate);[m
+             $('#fixvdate').text(dmy($('#vdate').text()));[m
+             let getvyear = vdate.getFullYear().toString();[m
+             getvyear = getvyear.substr(2, 2);[m

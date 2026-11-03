@@ -1,0 +1,126 @@
+{
+    "RoomStays": [
+        {
+            "RoomTypes": [
+                {
+                    "RoomDescription": {
+                        "Name": "Standard Room"
+                    },
+                    "NumberOfUnits": 1,
+                    "RoomTypeCode": "16290"
+                }
+            ],
+            "RatePlans": [
+                {
+                    "RatePlanCode": "1378",
+                    "RatePlanName": "EP"
+                }
+            ],
+            "GuestCounts": [
+                {
+                    "AgeQualifyingCode": "10",
+                    "Count": 1
+                },
+                {
+                    "AgeQualifyingCode": "8",
+                    "Count": 0
+                }
+            ],
+            "TimeSpan": {
+                "Start": "2024-12-14",
+                "End": "2024-12-15"
+            },
+            "RoomRates": [
+                {
+                    "Base": {
+                        "AmountBeforeTax": 5000,
+                        "AmountAfterTax": 5600
+                    },
+                    "EffectiveDate": "2024-12-14"
+                }
+            ],
+            "Total": {
+                "AmountBeforeTax": 5000,
+                "AmountAfterTax": 5600
+            }
+        }
+    ],
+    "ResGuests": [
+        {
+            "Customer": {
+                "PersonName": {
+                    "NamePrefix": "Mr.",
+                    "GivenName": "Sagar",
+                    "Surname": "Rajput"
+                },
+                "Telephone": {
+                    "PhoneNumber": "+9109876543210"
+                },
+                "Email": "test1@test.com",
+                "Address": {
+                    "AddressLine": [],
+                    "CityName": "City",
+                    "PostalCode": null,
+                    "StateProv": null,
+                    "CountryName": "IN"
+                }
+            },
+            "PrimaryIndicator": "1"
+        }
+    ],
+    "ResGlobalInfo": {
+        "UniqueID": {
+            "ID": "EGS-C42NLD031823"
+        },
+        "BasicPropertyInfo": {
+            "HotelCode": "15157",
+            "HotelName": "Hotel Name"
+        },
+        "Source": {
+            "RequestorID": {
+                "ID": "EGLOBE",
+                "Type": "ChannelManager"
+            },
+            "BookingChannel": {
+                "Type": "OTA",
+                "CompanyName": "Master Channel",
+                "CompanyCode": "1024"
+            }
+        },
+        "CreateDateTime": "2024-12-11T23:18:05",
+        "ResStatus": "Commit",
+        "TimeSpan": {
+            "Start": "2024-12-14",
+            "End": "2024-12-15"
+        },
+        "GuestCounts": [
+            {
+                "AgeQualifyingCode": "10",
+                "Count": 1
+            },
+            {
+                "AgeQualifyingCode": "8",
+                "Count": 0
+            }
+        ],
+        "Total": {
+            "AmountBeforeTax": 5000,
+            "AmountAfterTax": 5600,
+            "CurrencyCode": "INR",
+            "Taxes": {
+                "Tax": {
+                    "Amount": 600
+                }
+            },
+            "OtherCharges": [],
+            "PaymentType": "PrePaidPartially",
+            "PartialPaymentInfo": {
+                "PartialAmount": 2000,
+                "BalanceAmount": 3600
+            }
+        },
+        "SpecialRequests": [
+            "Partial payment test"
+        ]
+    }
+}
