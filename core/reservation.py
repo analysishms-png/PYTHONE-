@@ -402,8 +402,8 @@ def advance_deposit(
     try:
         # --- 1. Booking validation (VB6: Proc_6_108 GuestFolio/BookingDocId) ---
         gf = db.query(
-            "SELECT TOP 1 FolioNo, GuestProf, RoomNo, RoomCat, RoomType "
-            "FROM GuestFolio WHERE BookingDocId = ? AND Site_Code = ?",
+            "SELECT TOP 1 FolioNo, GuestProf FROM GuestFolio "
+            "WHERE BookingDocId = ? AND Site_Code = ?",
             (docid, site), cn=cn)
         if not gf:
             bk = db.query(
@@ -414,9 +414,14 @@ def advance_deposit(
         gf = gf[0]
         folio = int(gf.FolioNo or 0)
         guestprof = (gf.GuestProf or "").strip() or guestprof
-        roomno = (gf.RoomNo or "").strip() or roomno
-        roomcat = (gf.RoomCat or "").strip() or roomcat
-        roomtype = (gf.RoomType or "").strip() or roomtype
+        # room info from RoomOcc (optional, re_settlement pattern)
+        rc = db.query(
+            "SELECT TOP 1 RoomNo, RoomCat, RoomType FROM RoomOcc WHERE DocId = ?",
+            (docid,), cn=cn)
+        if rc:
+            roomno = (rc[0].RoomNo or "").strip() or roomno
+            roomcat = (rc[0].RoomCat or "").strip() or roomcat
+            roomtype = (rc[0].RoomType or "").strip() or roomtype
 
         # --- 2. Voucher prefix (date-window eligibility, VB6 + Laravel) ---
         vp = db.query(
