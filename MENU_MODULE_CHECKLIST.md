@@ -13,17 +13,17 @@ Generated from the live `MenuHelp` table (user `SA`), cross-referenced with
 | Module | Options | DONE | DONE? | REPORT | MISSING |
 |---|---:|---:|---:|---:|---:|
 | Finance | 16 | 2 | 0 | 14 | 0 |
-| Main Setup | 77 | 69 | 0 | 0 | 8 |
-| Reservation | 18 | 3 | 0 | 5 | 10 |
-| Front Office | 57 | 8 | 0 | 33 | 16 |
+| Main Setup | 77 | 71 | 0 | 0 | 6 |
+| Reservation | 18 | 9 | 1 | 5 | 3 |
+| Front Office | 57 | 23 | 0 | 33 | 1 |
 | House Keeping | 10 | 5 | 2 | 1 | 2 |
-| Inventory | 31 | 10 | 0 | 14 | 7 |
+| Inventory | 31 | 16 | 0 | 14 | 1 |
 | Point Of Sale | 87 | 27 | 1 | 27 | 32 |
 | Banquet | 24 | 9 | 0 | 14 | 1 |
-| Night Audit | 25 | 7 | 0 | 8 | 10 |
-| Outdoor Banquet | 29 | 16 | 0 | 11 | 2 |
+| Night Audit | 25 | 16 | 0 | 8 | 1 |
+| Outdoor Banquet | 29 | 17 | 0 | 11 | 1 |
 | Other | 1 | 1 | 0 | 0 | 0 |
-| **TOTAL** | **375** | **157** | **3** | **127** | **88** |
+| **TOTAL** | **375** | **196** | **4** | **127** | **48** |
 
 ## Finance  (16 options · 0 missing)
 
@@ -39,21 +39,21 @@ Generated from the live `MenuHelp` table (user `SA`), cross-referenced with
 | Code | Flag | Option | Module | Param | VB6 form | Status | Python target |
 |---:|:--:|---|---|---|---|---|---|
 | 18 | R | Trial Balance | FAREPORT | ***P | — | REPORT | Trial Balance |
-| 20 | R | Ledger | FAREPORT | ***P | — | REPORT | — |
-| 22 | R | Cash Book | FAREPORT | ***P | — | REPORT | — |
-| 23 | R | Bank Book | FAREPORT | ***P | — | REPORT | — |
+| 20 | R | Ledger | FAREPORT | ***P | — | REPORT | Ledger |
+| 22 | R | Cash Book | FAREPORT | ***P | — | REPORT | Cash Book |
+| 23 | R | Bank Book | FAREPORT | ***P | — | REPORT | Bank Book |
 | 24 | R | Journal Books | FAREPORT | ***P | — | REPORT | Journal Books |
-| 25 | R | Annexure | FAREPORT | ***P | — | REPORT | — |
+| 25 | R | Annexure | FAREPORT | ***P | — | REPORT | Annexure |
 | 26 | R | Bank Register | FAREPORT | ***P | — | REPORT | Bank Register |
-| 27 | R | Ageing Analysis for Debtors | FAREPORT | ***P | — | REPORT | — |
-| 28 | R | Ageing Analysis for Creditors | FAREPORT | ***P | — | REPORT | — |
-| 31 | R | Outstanding Report For Debtors | FAREPORT | ***P | — | REPORT | — |
-| 32 | R | Outstanding Report For Creditors | FAREPORT | ***P | — | REPORT | — |
-| 36 | R | Detailed Trial Ledger | FAREPORT | ***P | — | REPORT | — |
-| 38 | R | Bill Wise Outstanding Report For Debtors | FAREPORT | ***P | — | REPORT | — |
-| 11133200 | R | Journal Books Log | FAREPORT | ***P | — | REPORT | Journal Books |
+| 27 | R | Ageing Analysis for Debtors | FAREPORT | ***P | — | REPORT | Ageing Analysis for Debtors |
+| 28 | R | Ageing Analysis for Creditors | FAREPORT | ***P | — | REPORT | Ageing Analysis for Creditors |
+| 31 | R | Outstanding Report For Debtors | FAREPORT | ***P | — | REPORT | Outstanding Report For Debtors |
+| 32 | R | Outstanding Report For Creditors | FAREPORT | ***P | — | REPORT | Outstanding Report For Creditors |
+| 36 | R | Detailed Trial Ledger | FAREPORT | ***P | — | REPORT | Detailed Trial Ledger |
+| 38 | R | Bill Wise Outstanding Report For Debtors | FAREPORT | ***P | — | REPORT | Bill Wise Outstanding Report For Debtors |
+| 11133200 | R | Journal Books Log | FAREPORT | ***P | — | REPORT | Journal Books Log |
 
-## Main Setup  (77 options · 8 missing)
+## Main Setup  (77 options · 6 missing)
 
 ### Main Setup → General Setup
 
@@ -143,7 +143,7 @@ Generated from the live `MenuHelp` table (user `SA`), cross-referenced with
 | 143 | E | Year End Updation | fame | AEDP | frmYearEnd.frm | DONE | Year End Updation |
 | 144 | E | Current Balance Updation | fame | AEDP | FaCurrBalUpdate.frm | DONE | Current Balance Updation |
 | 149 | E | Account Merging | fame | AEDP | AccountMerg.frm | DONE | Account Merging |
-| 150 | E | Voucher Serialisation | fame | AEDP | FrmSerialiseVr.frm | MISSING | — |
+| 150 | E | Voucher Serialisation | fame | AEDP | FrmSerialiseVr.frm | DONE | Voucher Serialisation |
 
 ### Main Setup → Utility
 
@@ -153,7 +153,7 @@ Generated from the live `MenuHelp` table (user `SA`), cross-referenced with
 | 153 | E | Permissions | UTL | AEDP | — | DONE | Permissions |
 | 155 | E | Backup Data | UTL | AEDP | — | DONE | Backup Data |
 | 158 | E | Sundry Master | UTL | AEDP | SundryMast.frm | DONE | Sundry Master |
-| 162 | E | Inconsistency Check | UTL | AEDP | FrmInc.frm | MISSING | — |
+| 162 | E | Inconsistency Check | UTL | AEDP | FrmInc.frm | DONE | Inconsistency Check |
 | 163 | E | Year End Updation | UTL | AEDP | frmYearEnd.frm | DONE | Year End Updation |
 | 166 | E | Menu Item Copy | UTL | AEDP | frmMenuItemCopy.frm | MISSING | — |
 | 168 | E | Guest LookUp | UTL | AEDP | — | DONE | Guest LookUp |
@@ -172,7 +172,7 @@ Generated from the live `MenuHelp` table (user `SA`), cross-referenced with
 |---:|:--:|---|---|---|---|---|---|
 | 12001100 | E | Member Select Category | MemMas | AEDP | — | DONE | Member Select Category |
 
-## Reservation  (18 options · 10 missing)
+## Reservation  (18 options · 3 missing)
 
 ### Reservation → Operations
 
@@ -182,10 +182,10 @@ Generated from the live `MenuHelp` table (user `SA`), cross-referenced with
 | 191 | E | Look Up Room types | ResOpEnt | AEDP | — | DONE | Look Up Room types |
 | 192 | E | Look Up Rooms | ResOpEnt | AEDP | — | DONE | Look Up Rooms |
 | 193 | E | Reservation With History | ResOpEnt | AEDP | — | MISSING | — |
-| 194 | E | Advance Deposit | ResOpEnt | AEDP | frmAdvanceDepDialog.frm | MISSING | — |
+| 194 | E | Advance Deposit | ResOpEnt | AEDP | frmAdvanceDepDialog.frm | DONE | Advance Deposit |
 | 195 | E | Confirmation Letters | ResOpEnt | AEDP | — | MISSING | — |
-| 196 | E | Cancellation Letters | ResOpEnt | AEDP | — | MISSING | — |
-| 197 | E | Registration Card | ResOpEnt | AEDP | — | MISSING | — |
+| 196 | E | Cancellation Letters | ResOpEnt | AEDP | — | DONE? | Cancellation Letter |
+| 197 | E | Registration Card | ResOpEnt | AEDP | — | DONE | Registration Card |
 | 198 | E | Reservation Status Screen | ResOpEnt | AEDP | — | MISSING | — |
 
 ### Reservation → Reservation Status Report
@@ -194,25 +194,25 @@ Generated from the live `MenuHelp` table (user `SA`), cross-referenced with
 |---:|:--:|---|---|---|---|---|---|
 | 200 | R | Reservation Status | ResStatusRpt | ***P | FrmReservationStatus.frm | REPORT | Reservation Status |
 | 201 | R | Reservation Status Arrival | ResStatusRpt | ***P | — | REPORT | Reservation Status Arrival |
-| 205 | R | Arrival List | ResStatusRpt | ***P | — | REPORT | — |
+| 205 | R | Arrival List | ResStatusRpt | ***P | — | REPORT | Arrival List |
 
 ### Reservation → Advance Recd. Report
 
 | Code | Flag | Option | Module | Param | VB6 form | Status | Python target |
 |---:|:--:|---|---|---|---|---|---|
-| 207 | R | Advance Recd. | AdvRecdRpt | ***P | — | REPORT | — |
-| 208 | R | Advance Recd. Arrival | AdvRecdRpt | ***P | — | REPORT | — |
+| 207 | R | Advance Recd. | AdvRecdRpt | ***P | — | REPORT | Advance Recd. |
+| 208 | R | Advance Recd. Arrival | AdvRecdRpt | ***P | — | REPORT | Advance Recd. Arrival |
 
 ### Reservation → M.I.S.
 
 | Code | Flag | Option | Module | Param | VB6 form | Status | Python target |
 |---:|:--:|---|---|---|---|---|---|
-| 211 | E | 7-730 Days Forecast | ReservationMIS | AEDP | — | MISSING | — |
-| 212 | E | 23 Day Room Availability Forecast | ReservationMIS | AEDP | — | MISSING | — |
-| 213 | E | 23 Day Room Type Availability Forecast | ReservationMIS | AEDP | — | MISSING | — |
-| 214 | E | Package Forecast | ReservationMIS | AEDP | — | MISSING | — |
+| 211 | E | 7-730 Days Forecast | ReservationMIS | AEDP | — | DONE | 7-730 Days Forecast |
+| 212 | E | 23 Day Room Availability Forecast | ReservationMIS | AEDP | — | DONE | 23 Day Room Availability Forecast |
+| 213 | E | 23 Day Room Type Availability Forecast | ReservationMIS | AEDP | — | DONE | 23 Day Room Type Availability Forecast |
+| 214 | E | Package Forecast | ReservationMIS | AEDP | — | DONE | Package Forecast |
 
-## Front Office  (57 options · 16 missing)
+## Front Office  (57 options · 1 missing)
 
 ### Front Office → Operations
 
@@ -226,75 +226,75 @@ Generated from the live `MenuHelp` table (user `SA`), cross-referenced with
 | 225 | E | Reverse Check Out | FDOMenu | AEDP | — | DONE | Reverse Check Out |
 | 226 | E | Merge Room | FDOMenu | AEDP | — | DONE | Merge Room |
 | 227 | E | Bill Re-Settlement | FDOMenu | AEDP | — | DONE | Bill Re-Settlement |
-| 228 | E | Reverse Room Merge | FDOMenu | AEDP | — | MISSING | — |
-| 229 | E | Plan Meal Tokens | FDOMenu | AEDP | — | MISSING | — |
-| 230 | E | GRC Printing | FDOMenu | AEDP | — | MISSING | — |
-| 231 | E | Blank GRC | FDOMenu | AEDP | — | MISSING | — |
+| 228 | E | Reverse Room Merge | FDOMenu | AEDP | — | DONE | Reverse Room Merge |
+| 229 | E | Plan Meal Tokens | FDOMenu | AEDP | — | DONE | Plan Meal Tokens |
+| 230 | E | GRC Printing | FDOMenu | AEDP | — | DONE | GRC Printing |
+| 231 | E | Blank GRC | FDOMenu | AEDP | — | DONE | Blank GRC |
 
 ### Front Office → Reports
 
 | Code | Flag | Option | Module | Param | VB6 form | Status | Python target |
 |---:|:--:|---|---|---|---|---|---|
-| 233 | R | Instant House Count | FDORep | ***P | — | REPORT | — |
-| 234 | R | Room Inventory | FDORep | ***P | — | REPORT | — |
-| 238 | R | Charge Payment Detail | FDORep | ***P | — | REPORT | — |
-| 239 | R | Payments By Cashier | FDORep | ***P | — | REPORT | — |
-| 240 | R | Cashier Report | FDORep | ***P | — | REPORT | — |
-| 241 | R | Settlement Report | FDORep | ***P | — | REPORT | — |
-| 242 | R | Cancel Bill Details | FDORep | ***P | — | REPORT | — |
-| 243 | R | Room Change History | FDORep | ***P | — | REPORT | — |
-| 245 | R | FOM Sales Register | FDORep | ***P | — | REPORT | Sales Register |
-| 246 | R | Room Wise Plan Detail | FDORep | ***P | — | REPORT | — |
-| 248 | R | Occupancy Report | FDORep | ***P | — | REPORT | — |
-| 249 | R | Bill Change Report | FDORep | ***P | — | REPORT | — |
-| 250 | R | Check Out Register | FDORep | ***P | — | REPORT | — |
-| 251 | R | Check In Register | FDORep | ***P | — | REPORT | — |
-| 252 | R | Expected Check Out | FDORep | ***P | — | REPORT | — |
-| 254 | R | Guest Extra Charges | FDORep | ***P | — | REPORT | — |
-| 255 | R | Checked In Guest Detail | FDORep | ***P | — | REPORT | — |
-| 256 | R | Room Rent Audit Report | FDORep | ***P | — | REPORT | — |
-| 257 | R | Sales Report | FDORep | ***P | — | REPORT | — |
-| 258 | R | Guest Payments | FDORep | ***P | — | REPORT | — |
+| 233 | R | Instant House Count | FDORep | ***P | — | REPORT | Instant House Count |
+| 234 | R | Room Inventory | FDORep | ***P | — | REPORT | Room Inventory |
+| 238 | R | Charge Payment Detail | FDORep | ***P | — | REPORT | Charge Payment Detail |
+| 239 | R | Payments By Cashier | FDORep | ***P | — | REPORT | Payments By Cashier |
+| 240 | R | Cashier Report | FDORep | ***P | — | REPORT | Cashier Report |
+| 241 | R | Settlement Report | FDORep | ***P | — | REPORT | Settlement Report |
+| 242 | R | Cancel Bill Details | FDORep | ***P | — | REPORT | Cancel Bill Details |
+| 243 | R | Room Change History | FDORep | ***P | — | REPORT | Room Change History |
+| 245 | R | FOM Sales Register | FDORep | ***P | — | REPORT | FOM Sales Register |
+| 246 | R | Room Wise Plan Detail | FDORep | ***P | — | REPORT | Room Wise Plan Detail |
+| 248 | R | Occupancy Report | FDORep | ***P | — | REPORT | Occupancy Report |
+| 249 | R | Bill Change Report | FDORep | ***P | — | REPORT | Bill Change Report |
+| 250 | R | Check Out Register | FDORep | ***P | — | REPORT | Check Out Register |
+| 251 | R | Check In Register | FDORep | ***P | — | REPORT | Check In Register |
+| 252 | R | Expected Check Out | FDORep | ***P | — | REPORT | Expected Check Out |
+| 254 | R | Guest Extra Charges | FDORep | ***P | — | REPORT | Guest Extra Charges |
+| 255 | R | Checked In Guest Detail | FDORep | ***P | — | REPORT | Checked In Guest Detail |
+| 256 | R | Room Rent Audit Report | FDORep | ***P | — | REPORT | Room Rent Audit Report |
+| 257 | R | Sales Report | FDORep | ***P | — | REPORT | Sales Report |
+| 258 | R | Guest Payments | FDORep | ***P | — | REPORT | Guest Payments |
 
 ### Front Office → Tourism Forms
 
 | Code | Flag | Option | Module | Param | VB6 form | Status | Python target |
 |---:|:--:|---|---|---|---|---|---|
-| 260 | E | Form  C | FDOForms | AEDP | — | MISSING | — |
-| 261 | E | Tourism Form 1 | FDOForms | AEDP | — | MISSING | — |
-| 262 | E | Tourism Form 2 | FDOForms | AEDP | — | MISSING | — |
-| 263 | E | Tourism Form 5 | FDOForms | AEDP | — | MISSING | — |
-| 265 | E | Tourism Form 6 | FDOForms | AEDP | — | MISSING | — |
-| 266 | E | Tourism Form 4 | FDOForms | AEDP | — | MISSING | — |
-| 267 | E | Luxury Tax Report | FDOForms | AEDP | — | MISSING | — |
+| 260 | E | Form  C | FDOForms | AEDP | — | DONE | Form C |
+| 261 | E | Tourism Form 1 | FDOForms | AEDP | — | DONE | Tourism Form 1 |
+| 262 | E | Tourism Form 2 | FDOForms | AEDP | — | DONE | Tourism Form 2 |
+| 263 | E | Tourism Form 5 | FDOForms | AEDP | — | DONE | Tourism Form 5 |
+| 265 | E | Tourism Form 6 | FDOForms | AEDP | — | DONE | Tourism Form 6 |
+| 266 | E | Tourism Form 4 | FDOForms | AEDP | — | DONE | Tourism Form 4 |
+| 267 | E | Luxury Tax Report | FDOForms | AEDP | — | DONE | Luxury Tax Report |
 | 268 | E | Monthly Return | FDOForms | AEDP | — | MISSING | — |
-| 269 | E | L.T. FORM II | FDOForms | AEDP | — | MISSING | — |
-| 270 | E | L.T. FORM IV | FDOForms | AEDP | — | MISSING | — |
+| 269 | E | L.T. FORM II | FDOForms | AEDP | — | DONE | LT Form II |
+| 270 | E | L.T. FORM IV | FDOForms | AEDP | — | DONE | LT Form IV |
 
 ### Front Office → M.I.S.
 
 | Code | Flag | Option | Module | Param | VB6 form | Status | Python target |
 |---:|:--:|---|---|---|---|---|---|
-| 272 | R | Occupancy Display | FDOMISRep | ***P | — | REPORT | — |
-| 273 | R | Guest wise Analysis | FDOMISRep | ***P | — | REPORT | — |
-| 274 | R | Company wise Analysis | FDOMISRep | ***P | — | REPORT | — |
-| 275 | R | Guestwise Charges Detail | FDOMISRep | ***P | — | REPORT | — |
-| 276 | R | Room Occupancy | FDOMISRep | ***P | — | REPORT | — |
-| 277 | R | Room Type Occupancy | FDOMISRep | ***P | — | REPORT | — |
-| 278 | R | Room Wise Room Revenue | FDOMISRep | ***P | — | REPORT | — |
+| 272 | R | Occupancy Display | FDOMISRep | ***P | — | REPORT | Occupancy Display |
+| 273 | R | Guest wise Analysis | FDOMISRep | ***P | — | REPORT | Guest wise Analysis |
+| 274 | R | Company wise Analysis | FDOMISRep | ***P | — | REPORT | Company wise Analysis |
+| 275 | R | Guestwise Charges Detail | FDOMISRep | ***P | — | REPORT | Guestwise Charges Detail |
+| 276 | R | Room Occupancy | FDOMISRep | ***P | — | REPORT | Room Occupancy |
+| 277 | R | Room Type Occupancy | FDOMISRep | ***P | — | REPORT | Room Type Occupancy |
+| 278 | R | Room Wise Room Revenue | FDOMISRep | ***P | — | REPORT | Room Wise Room Revenue |
 | 279 | R | Occupancy Analysis | FDOMISRep | ***P | — | REPORT | Occupancy Analysis |
-| 280 | R | Company wise Nights | FDOMISRep | ***P | — | REPORT | — |
-| 281 | R | Revenue During the stay | FDOMISRep | ***P | — | REPORT | — |
-| 14142100 | R | Room Type Occupancy Analysis | FDORep | ***P | — | REPORT | — |
-| 14142200 | R | Plan Report | FDORep | ***P | — | REPORT | — |
-| 14142300 | R | Business Source Occupancy Report | FDORep | ***P | — | REPORT | — |
+| 280 | R | Company wise Nights | FDOMISRep | ***P | — | REPORT | Company wise Nights |
+| 281 | R | Revenue During the stay | FDOMISRep | ***P | — | REPORT | Revenue During the stay |
+| 14142100 | R | Room Type Occupancy Analysis | FDORep | ***P | — | REPORT | Room Type Occupancy Analysis |
+| 14142200 | R | Plan Report | FDORep | ***P | — | REPORT | Plan Report |
+| 14142300 | R | Business Source Occupancy Report | FDORep | ***P | — | REPORT | Business Source Occupancy Report |
 
 ### Front Office → Tax Reports
 
 | Code | Flag | Option | Module | Param | VB6 form | Status | Python target |
 |---:|:--:|---|---|---|---|---|---|
-| 283 | E | FOM Tax Detail | FDOTaxr | AEDP | — | MISSING | — |
-| 284 | E | Tax Wise Charge Detail | FDOTaxr | AEDP | — | MISSING | — |
+| 283 | E | FOM Tax Detail | FDOTaxr | AEDP | — | DONE | FOM Tax Detail |
+| 284 | E | Tax Wise Charge Detail | FDOTaxr | AEDP | — | DONE | Tax Wise Charge Detail |
 
 ## House Keeping  (10 options · 2 missing)
 
@@ -312,7 +312,7 @@ Generated from the live `MenuHelp` table (user `SA`), cross-referenced with
 
 | Code | Flag | Option | Module | Param | VB6 form | Status | Python target |
 |---:|:--:|---|---|---|---|---|---|
-| 305 | R | House Keeping Report | HouseREP | ***P | — | REPORT | — |
+| 305 | R | House Keeping Report | HouseREP | ***P | — | REPORT | House Keeping Report |
 
 ### House Keeping → LAUNDRY
 
@@ -323,7 +323,7 @@ Generated from the live `MenuHelp` table (user `SA`), cross-referenced with
 | 15141300 | E | Laundry Memo |  | AEDP | — | MISSING | — |
 | 15141400 | E | Memo Reprint |  | AEDP | — | MISSING | — |
 
-## Inventory  (31 options · 7 missing)
+## Inventory  (31 options · 1 missing)
 
 ### Inventory → Operations
 
@@ -351,30 +351,30 @@ Generated from the live `MenuHelp` table (user `SA`), cross-referenced with
 | Code | Flag | Option | Module | Param | VB6 form | Status | Python target |
 |---:|:--:|---|---|---|---|---|---|
 | 325 | R | Purchase Register | MatRep | ***P | — | REPORT | Purchase Register |
-| 326 | R | Purchase Summary | MatRep | ***P | — | REPORT | — |
-| 327 | R | Cash/Credit Purchase | MatRep | ***P | — | REPORT | — |
+| 326 | R | Purchase Summary | MatRep | ***P | — | REPORT | Purchase Summary |
+| 327 | R | Cash/Credit Purchase | MatRep | ***P | — | REPORT | Cash/Credit Purchase |
 | 328 | R | Stock Register | MatRep | ***P | — | REPORT | Stock Register |
 | 329 | R | Stock Summary | MatRep | ***P | — | REPORT | Stock Summary |
-| 330 | R | Stock In Hand | MatRep | ***P | — | REPORT | — |
-| 331 | R | Kitchen Stock Report I/R Basis | MatRep | ***P | — | REPORT | — |
-| 332 | R | Excess Consumption Report | MatRep | ***P | — | REPORT | — |
-| 337 | R | Purchase Ledger | MatRep | ***P | — | REPORT | — |
-| 338 | R | Issue CheckList | MatRep | ***P | — | REPORT | — |
-| 339 | R | Stock Summary P/S Basis | MatRep | ***P | — | REPORT | — |
-| 340 | R | ABC Analysis | MatRep | ***P | — | REPORT | — |
-| 16132700 | R | Store Issue Report | MatRep | ***P | — | REPORT | — |
-| 16132800 | R | Liquor Sale Report | MatRep | ***P | — | REPORT | — |
+| 330 | R | Stock In Hand | MatRep | ***P | — | REPORT | Stock In Hand |
+| 331 | R | Kitchen Stock Report I/R Basis | MatRep | ***P | — | REPORT | Kitchen Stock Report I/R Basis |
+| 332 | R | Excess Consumption Report | MatRep | ***P | — | REPORT | Excess Consumption Report |
+| 337 | R | Purchase Ledger | MatRep | ***P | — | REPORT | Purchase Ledger |
+| 338 | R | Issue CheckList | MatRep | ***P | — | REPORT | Issue CheckList |
+| 339 | R | Stock Summary P/S Basis | MatRep | ***P | — | REPORT | Stock Summary P/S Basis |
+| 340 | R | ABC Analysis | MatRep | ***P | — | REPORT | ABC Analysis |
+| 16132700 | R | Store Issue Report | MatRep | ***P | — | REPORT | Store Issue Report |
+| 16132800 | R | Liquor Sale Report | MatRep | ***P | — | REPORT | Liquor Sale Report |
 
 ### Inventory → Tax Reports
 
 | Code | Flag | Option | Module | Param | VB6 form | Status | Python target |
 |---:|:--:|---|---|---|---|---|---|
-| 343 | E | VAT Register | MatVatR | AEDP | — | MISSING | — |
-| 344 | E | VAT Register II | MatVatR | AEDP | — | MISSING | — |
-| 345 | E | VAT Register III | MatVatR | AEDP | — | MISSING | — |
-| 346 | E | Form24 Annexure-A | MatVatR | AEDP | — | MISSING | — |
-| 347 | E | Form III | MatVatR | AEDP | — | MISSING | — |
-| 348 | E | UPVAT XXIV | MatVatR | AEDP | — | MISSING | — |
+| 343 | E | VAT Register | MatVatR | AEDP | — | DONE | VAT Register |
+| 344 | E | VAT Register II | MatVatR | AEDP | — | DONE | VAT Register II |
+| 345 | E | VAT Register III | MatVatR | AEDP | — | DONE | VAT Register III |
+| 346 | E | Form24 Annexure-A | MatVatR | AEDP | — | DONE | Form24 Annexure-A |
+| 347 | E | Form III | MatVatR | AEDP | — | DONE | Form III |
+| 348 | E | UPVAT XXIV | MatVatR | AEDP | — | DONE | UPVATXXIV |
 
 ## Point Of Sale  (87 options · 32 missing)
 
@@ -383,43 +383,43 @@ Generated from the live `MenuHelp` table (user `SA`), cross-referenced with
 | Code | Flag | Option | Module | Param | VB6 form | Status | Python target |
 |---:|:--:|---|---|---|---|---|---|
 | 370 | R | Sales Register | POSRep | ***P | — | REPORT | Sales Register |
-| 371 | R | Stewardwise Sale | POSRep | ***P | — | REPORT | — |
-| 372 | R | Table wise Sale | POSRep | ***P | — | REPORT | — |
-| 373 | R | Settlement Summary | POSRep | ***P | — | REPORT | — |
-| 374 | R | KOT Wise Details | POSRep | ***P | — | REPORT | — |
-| 376 | R | Cover Analysis | POSRep | ***P | — | REPORT | — |
-| 377 | R | Pending KOT | POSRep | ***P | — | REPORT | — |
+| 371 | R | Stewardwise Sale | POSRep | ***P | — | REPORT | Stewardwise Sale |
+| 372 | R | Table wise Sale | POSRep | ***P | — | REPORT | Table wise Sale |
+| 373 | R | Settlement Summary | POSRep | ***P | — | REPORT | Settlement Summary |
+| 374 | R | KOT Wise Details | POSRep | ***P | — | REPORT | KOT Wise Details |
+| 376 | R | Cover Analysis | POSRep | ***P | — | REPORT | Cover Analysis |
+| 377 | R | Pending KOT | POSRep | ***P | — | REPORT | Pending KOT |
 | 378 | R | Item wise Sale | POSRep | ***P | — | REPORT | Item wise Sale |
-| 379 | R | Deleted Unsettled Bill | POSRep | ***P | — | REPORT | — |
-| 380 | R | NC KOT Detail | POSRep | ***P | — | REPORT | — |
-| 383 | R | NC KOT Summary | POSRep | ***P | — | REPORT | — |
-| 387 | R | Group Wise Sale | POSRep | ***P | — | REPORT | — |
-| 388 | R | Customer Detail | POSRep | ***P | — | REPORT | — |
+| 379 | R | Deleted Unsettled Bill | POSRep | ***P | — | REPORT | Deleted Unsettled Bill |
+| 380 | R | NC KOT Detail | POSRep | ***P | — | REPORT | NC KOT Detail |
+| 383 | R | NC KOT Summary | POSRep | ***P | — | REPORT | NC KOT Summary |
+| 387 | R | Group Wise Sale | POSRep | ***P | — | REPORT | Group Wise Sale |
+| 388 | R | Customer Detail | POSRep | ***P | — | REPORT | Customer Detail |
 | 17173000 | E | Payment Receive Entry (POS) | POSRep | AEDP | RsPaymentReceice.frm | DONE? | Payment Receive Entry |
-| 17173100 | R | Bill Wise Adjustment Report | POSRep | ***P | — | REPORT | — |
+| 17173100 | R | Bill Wise Adjustment Report | POSRep | ***P | — | REPORT | Bill Wise Adjustment Report |
 
 ### Point Of Sale → POS M.I.S.
 
 | Code | Flag | Option | Module | Param | VB6 form | Status | Python target |
 |---:|:--:|---|---|---|---|---|---|
-| 392 | R | Collection Summary | MISREP | ***P | — | REPORT | — |
-| 393 | R | Open Item Sales | MISREP | ***P | — | REPORT | — |
-| 394 | R | Void Bills | MISREP | ***P | — | REPORT | — |
-| 395 | R | KOT Change Report | MISREP | ***P | — | REPORT | — |
-| 396 | R | Discount Summary | MISREP | ***P | — | REPORT | — |
-| 397 | R | Monthwise Sales | MISREP | ***P | — | REPORT | — |
-| 398 | R | ABC  Analysis | MISREP | ***P | — | REPORT | — |
-| 399 | R | Sale Summary | MISREP | ***P | — | REPORT | — |
-| 401 | R | Edited Bills | MISREP | ***P | — | REPORT | — |
+| 392 | R | Collection Summary | MISREP | ***P | — | REPORT | Collection Summary |
+| 393 | R | Open Item Sales | MISREP | ***P | — | REPORT | Open Item Sales |
+| 394 | R | Void Bills | MISREP | ***P | — | REPORT | Void Bills |
+| 395 | R | KOT Change Report | MISREP | ***P | — | REPORT | KOT Change Report |
+| 396 | R | Discount Summary | MISREP | ***P | — | REPORT | Discount Summary |
+| 397 | R | Monthwise Sales | MISREP | ***P | — | REPORT | Monthwise Sales |
+| 398 | R | ABC  Analysis | MISREP | ***P | — | REPORT | ABC Analysis |
+| 399 | R | Sale Summary | MISREP | ***P | — | REPORT | Sale Summary |
+| 401 | R | Edited Bills | MISREP | ***P | — | REPORT | Edited Bills |
 
 ### Point Of Sale → Tax Reports
 
 | Code | Flag | Option | Module | Param | VB6 form | Status | Python target |
 |---:|:--:|---|---|---|---|---|---|
-| 403 | R | Tax Report | PosTaxRep | ***P | — | REPORT | — |
-| 404 | R | Tax Register | PosTaxRep | ***P | — | REPORT | — |
-| 405 | R | Taxwise Details | PosTaxRep | ***P | — | REPORT | — |
-| 406 | R | Tax Summary | PosTaxRep | ***P | — | REPORT | — |
+| 403 | R | Tax Report | PosTaxRep | ***P | — | REPORT | Tax Report |
+| 404 | R | Tax Register | PosTaxRep | ***P | — | REPORT | Tax Register |
+| 405 | R | Taxwise Details | PosTaxRep | ***P | — | REPORT | Taxwise Details |
+| 406 | R | Tax Summary | PosTaxRep | ***P | — | REPORT | Tax Summary |
 
 ### Point Of Sale → ROOM SERVICE
 
@@ -531,32 +531,32 @@ Generated from the live `MenuHelp` table (user `SA`), cross-referenced with
 | Code | Flag | Option | Module | Param | VB6 form | Status | Python target |
 |---:|:--:|---|---|---|---|---|---|
 | 429 | R | Sales Register | BanqRep | ***P | — | REPORT | Sales Register |
-| 430 | R | OutStanding Report | BanqRep | ***P | — | REPORT | — |
-| 431 | R | Party wise OutStanding | BanqRep | ***P | — | REPORT | — |
-| 432 | R | Cashier  Report | BanqRep | ***P | — | REPORT | — |
+| 430 | R | OutStanding Report | BanqRep | ***P | — | REPORT | OutStanding Report |
+| 431 | R | Party wise OutStanding | BanqRep | ***P | — | REPORT | Party wise OutStanding |
+| 432 | R | Cashier  Report | BanqRep | ***P | — | REPORT | Cashier Report |
 | 433 | R | Booking Inquiry Detail | BanqRep | ***P | — | REPORT | Booking Inquiry Detail |
-| 434 | R | Settlement  Report | BanqRep | ***P | — | REPORT | — |
-| 435 | R | Daily Function Sheet | BanqRep | ***P | — | REPORT | — |
-| 436 | R | Item Wise Sales Report | BanqRep | ***P | — | REPORT | — |
-| 437 | R | Company Wise Sale Report | BanqRep | ***P | — | REPORT | — |
-| 438 | R | Function Wise Item Detail | BanqRep | ***P | — | REPORT | — |
+| 434 | R | Settlement  Report | BanqRep | ***P | — | REPORT | Settlement Report |
+| 435 | R | Daily Function Sheet | BanqRep | ***P | — | REPORT | Daily Function Sheet |
+| 436 | R | Item Wise Sales Report | BanqRep | ***P | — | REPORT | Item Wise Sales Report |
+| 437 | R | Company Wise Sale Report | BanqRep | ***P | — | REPORT | Company Wise Sale Report |
+| 438 | R | Function Wise Item Detail | BanqRep | ***P | — | REPORT | Function Wise Item Detail |
 
 ### Banquet → MIS
 
 | Code | Flag | Option | Module | Param | VB6 form | Status | Python target |
 |---:|:--:|---|---|---|---|---|---|
-| 440 | R | Cover Analysis | BanqRepMIS | ***P | — | REPORT | — |
-| 441 | R | Collection Summary | BanqRepMIS | ***P | — | REPORT | — |
+| 440 | R | Cover Analysis | BanqRepMIS | ***P | — | REPORT | Cover Analysis |
+| 441 | R | Collection Summary | BanqRepMIS | ***P | — | REPORT | Collection Summary |
 
 ### Banquet → Tax Report
 
 | Code | Flag | Option | Module | Param | VB6 form | Status | Python target |
 |---:|:--:|---|---|---|---|---|---|
-| 443 | R | Tax Report | HallTaxP | ***P | — | REPORT | — |
-| 444 | R | Tax Summary | HallTaxP | ***P | — | REPORT | — |
+| 443 | R | Tax Report | HallTaxP | ***P | — | REPORT | Tax Report |
+| 444 | R | Tax Summary | HallTaxP | ***P | — | REPORT | Tax Summary |
 | 445 | E | Banquet Taxwise Details | HallTaxP | AEDP | — | MISSING | — |
 
-## Night Audit  (25 options · 10 missing)
+## Night Audit  (25 options · 1 missing)
 
 ### Night Audit → Operation
 
@@ -573,42 +573,42 @@ Generated from the live `MenuHelp` table (user `SA`), cross-referenced with
 | Code | Flag | Option | Module | Param | VB6 form | Status | Python target |
 |---:|:--:|---|---|---|---|---|---|
 | 455 | E | Daily Report | NightAuditRR | AEDP | — | DONE | Daily Report |
-| 458 | E | Guest Trail | NightAuditRR | AEDP | — | MISSING | — |
-| 459 | E | Checkout Analysis | NightAuditRR | AEDP | — | MISSING | — |
+| 458 | E | Guest Trail | NightAuditRR | AEDP | — | DONE | Guest Trail |
+| 459 | E | Checkout Analysis | NightAuditRR | AEDP | — | DONE | Checkout Analysis |
 | 460 | R | Occupancy Analysis | NightAuditRR | ***P | — | REPORT | Occupancy Analysis |
-| 461 | E | Market Segment Analysis | NightAuditRR | AEDP | — | MISSING | — |
-| 462 | E | Business Source Analysis | NightAuditRR | AEDP | — | MISSING | — |
-| 463 | E | Company Analysis | NightAuditRR | AEDP | — | MISSING | — |
-| 465 | E | FOCC Report | NightAuditRR | AEDP | — | MISSING | — |
-| 466 | E | Food Costing Report | NightAuditRR | AEDP | — | MISSING | — |
-| 467 | E | FB Cost Statement | NightAuditRR | AEDP | — | MISSING | — |
-| 19122700 | R | Credit Report | NightAuditGSTR | ***P | — | REPORT | — |
+| 461 | E | Market Segment Analysis | NightAuditRR | AEDP | — | DONE | Market Segment Analysis |
+| 462 | E | Business Source Analysis | NightAuditRR | AEDP | — | DONE | Business Source Analysis |
+| 463 | E | Company Analysis | NightAuditRR | AEDP | — | DONE | Company Analysis |
+| 465 | E | FOCC Report | NightAuditRR | AEDP | — | DONE | FOCC Report |
+| 466 | E | Food Costing Report | NightAuditRR | AEDP | — | DONE | Food Costing Report |
+| 467 | E | FB Cost Statement | NightAuditRR | AEDP | — | DONE | FB Cost Statement |
+| 19122700 | R | Credit Report | NightAuditGSTR | ***P | — | REPORT | Credit Report |
 
 ### Night Audit → Log
 
 | Code | Flag | Option | Module | Param | VB6 form | Status | Python target |
 |---:|:--:|---|---|---|---|---|---|
 | 472 | E | Night Audit Log | NightAuditLR | AEDP | — | DONE | Night Audit Log |
-| 473 | E | Charges Remove Log | NightAuditLR | AEDP | — | MISSING | — |
+| 473 | E | Charges Remove Log | NightAuditLR | AEDP | — | DONE | Charges Remove Log |
 
 ### Night Audit → GST Reports
 
 | Code | Flag | Option | Module | Param | VB6 form | Status | Python target |
 |---:|:--:|---|---|---|---|---|---|
-| 19141100 | R | GSTR-1 | NightAuditGSTR | ***P | — | REPORT | — |
-| 19141200 | R | GSTR-2(3) | NightAuditGSTR | ***P | — | REPORT | — |
-| 19141300 | R | GSTR-2(4A) | NightAuditGSTR | ***P | — | REPORT | — |
-| 19141400 | R | GSTR-2(4B) | NightAuditGSTR | ***P | — | REPORT | — |
-| 19141500 | R | Reconciliation (GSTR-2A) | NightAuditGSTR | ***P | — | REPORT | — |
+| 19141100 | R | GSTR-1 | NightAuditGSTR | ***P | — | REPORT | GSTR1 |
+| 19141200 | R | GSTR-2(3) | NightAuditGSTR | ***P | — | REPORT | GSTR2(3) |
+| 19141300 | R | GSTR-2(4A) | NightAuditGSTR | ***P | — | REPORT | GSTR2(4A) |
+| 19141400 | R | GSTR-2(4B) | NightAuditGSTR | ***P | — | REPORT | GSTR2(4B) |
+| 19141500 | R | Reconciliation (GSTR-2A) | NightAuditGSTR | ***P | — | REPORT | Reconciliation (GSTR-2A) |
 | 19141600 | E | Upload Process | NightAuditGSTR | AEDP | FrmUploadProcess.frm | MISSING | — |
 
 ### Night Audit → Tally Reports
 
 | Code | Flag | Option | Module | Param | VB6 form | Status | Python target |
 |---:|:--:|---|---|---|---|---|---|
-| 19151100 | R | Tally POS Report | TallyPOSRPT | ***P | — | REPORT | — |
+| 19151100 | R | Tally POS Report | TallyPOSRPT | ***P | — | REPORT | Tally POS Report |
 
-## Outdoor Banquet  (29 options · 2 missing)
+## Outdoor Banquet  (29 options · 1 missing)
 
 ### Outdoor Banquet → Setup
 
@@ -641,27 +641,27 @@ Generated from the live `MenuHelp` table (user `SA`), cross-referenced with
 | Code | Flag | Option | Module | Param | VB6 form | Status | Python target |
 |---:|:--:|---|---|---|---|---|---|
 | 561 | R | Sales Register | OdcRep | ***P | — | REPORT | Sales Register |
-| 562 | R | OutStanding Report | OdcRep | ***P | — | REPORT | — |
-| 563 | R | Party wise OutStanding | OdcRep | ***P | — | REPORT | — |
-| 564 | R | Cashier Collection Summary | OdcRep | ***P | — | REPORT | — |
+| 562 | R | OutStanding Report | OdcRep | ***P | — | REPORT | OutStanding Report |
+| 563 | R | Party wise OutStanding | OdcRep | ***P | — | REPORT | Party wise OutStanding |
+| 564 | R | Cashier Collection Summary | OdcRep | ***P | — | REPORT | Cashier Collection Summary |
 | 565 | R | Booking Inquiry Detail | OdcRep | ***P | — | REPORT | Booking Inquiry Detail |
-| 566 | R | Settlement  Report | OdcRep | ***P | — | REPORT | — |
-| 567 | R | Daily Function Sheet | OdcRep | ***P | — | REPORT | — |
-| 568 | R | Function Wise Item Detail | OdcRep | ***P | — | REPORT | — |
+| 566 | R | Settlement  Report | OdcRep | ***P | — | REPORT | Settlement Report |
+| 567 | R | Daily Function Sheet | OdcRep | ***P | — | REPORT | Daily Function Sheet |
+| 568 | R | Function Wise Item Detail | OdcRep | ***P | — | REPORT | Function Wise Item Detail |
 
 ### Outdoor Banquet → MIS
 
 | Code | Flag | Option | Module | Param | VB6 form | Status | Python target |
 |---:|:--:|---|---|---|---|---|---|
-| 570 | E | Cover Analysis Report | OdcMis | AEDP | — | MISSING | — |
-| 571 | R | Cashier Collection Summary | OdcMis | ***P | — | REPORT | — |
+| 570 | E | Cover Analysis Report | OdcMis | AEDP | — | DONE | Cover Analysis Report |
+| 571 | R | Cashier Collection Summary | OdcMis | ***P | — | REPORT | Cashier Collection Summary |
 
 ### Outdoor Banquet → Tax Report
 
 | Code | Flag | Option | Module | Param | VB6 form | Status | Python target |
 |---:|:--:|---|---|---|---|---|---|
-| 573 | R | Tax Report | OdcTaxR | ***P | — | REPORT | — |
-| 574 | R | Tax Summary | OdcTaxR | ***P | — | REPORT | — |
+| 573 | R | Tax Report | OdcTaxR | ***P | — | REPORT | Tax Report |
+| 574 | R | Tax Summary | OdcTaxR | ***P | — | REPORT | Tax Summary |
 | 575 | E | Banquet Taxwise Details | OdcTaxR | AEDP | — | MISSING | — |
 
 ## Other  (1 options · 0 missing)

@@ -15,7 +15,7 @@ from __future__ import annotations
 
 from datetime import date, datetime
 
-from HMS_py.core import db
+from HMS_py.core.shared import db
 
 SITE_CODE = db.get_site_code()  # BUG-014: Analysis.ini-driven (was hardcoded "KK")          # Analysis.ini key 7
 USER = db.get_user()                                                                      # audit identity
@@ -67,7 +67,7 @@ def _make_docid_atomic(bookno: int, site: str, vprefix: str,
     try:
         cur = cn.cursor() if cn else None
         if cur is None:
-            from HMS_py.core import db
+            from HMS_py.core.shared import db
             cn = db.connect()
             cur = cn.cursor()
         # Use UPDLOCK to prevent concurrent bookno generation conflicts
@@ -401,19 +401,31 @@ def advance_deposit(
     cn = cn or db.connect()
     try:
         # --- 1. Booking validation (VB6: Proc_6_108 GuestFolio/BookingDocId) ---
+        # Three accepted targets, in VB6 precedence order:
+        #   a) a folio created from this booking (GuestFolio.BookingDocId)
+        #   b) an in-house folio addressed directly (GuestFolio.DocId)
+        #   c) a pre-arrival booking with no folio yet (Booking.DocId)
         gf = db.query(
             "SELECT TOP 1 FolioNo, GuestProf FROM GuestFolio "
             "WHERE BookingDocId = ? AND Site_Code = ?",
             (docid, site), cn=cn)
         if not gf:
+            gf = db.query(
+                "SELECT TOP 1 FolioNo, GuestProf FROM GuestFolio "
+                "WHERE DocId = ? AND Site_Code = ?",
+                (docid, site), cn=cn)
+        if gf:
+            folio = int(gf[0].FolioNo or 0)
+            guestprof = (gf[0].GuestProf or "").strip() or guestprof
+        else:
             bk = db.query(
                 "SELECT TOP 1 DocId FROM Booking WHERE DocId = ? AND Site_Code = ?",
                 (docid, site), cn=cn)
             if not bk:
                 raise ValueError(f"Booking '{docid}' GuestFolio/Booking me nahi mila")
-        gf = gf[0]
-        folio = int(gf.FolioNo or 0)
-        guestprof = (gf.GuestProf or "").strip() or guestprof
+            # Booking exists but has no folio yet: VB6 still accepts the
+            # advance and posts it against the booking DocId.
+            folio = 0
         # room info from RoomOcc (optional, re_settlement pattern)
         rc = db.query(
             "SELECT TOP 1 RoomNo, RoomCat, RoomType FROM RoomOcc WHERE DocId = ?",
@@ -511,4 +523,190 @@ def advance_deposit(
     finally:
         if own:
             cn.close()
+
+
+# ---------------------------------------------------------------------------
+# Advance Deposit — read-only lookups for the dialog
+# (VB6 frmAdvanceDepDialog.frm: booking search, pay-type grid, tax grid,
+#  existing-advance list at loc_17AAE7F "ST.VType In ('ARRES','ADRES')")
+# ---------------------------------------------------------------------------
+# Voucher types the VB6 form treats as advance/advance-return postings.
+ADVANCE_VTYPES: tuple[str, ...] = ("ADRES", "ARRES", "AD", "ADE", "AR1", "AR2")
+
+
+def _placeholders(values) -> str:
+    """Return '?, ?, ?' for an IN (...) clause of *values*."""
+    return ", ".join("?" for _ in values)
+
+
+def advance_voucher_types(cn=None, site: str | None = None,
+                          on_date=None) -> list[dict]:
+    """Advance voucher types with the prefix valid on *on_date*.
+
+    VB6 loc_1C4BDBF joins Voucher_Type with Voucher_Prefix on a date window;
+    a type with no prefix for the date cannot be posted, so ``prefix`` is
+    empty for those rows and the UI flags them.
+
+    *site* is optional: the analysis database keeps voucher masters and
+    folios under different Site_Code values, so the dialog passes the site of
+    the row being posted against rather than the global default.
+    """
+    on_date = on_date or date.today()
+    if isinstance(on_date, str):
+        on_date = date.fromisoformat(on_date)
+    sql = ("SELECT vt.V_Type, vt.Description, vt.Site_Code, "
+           "  (SELECT TOP 1 vp.Prefix FROM Voucher_Prefix vp "
+           "   WHERE vp.V_Type = vt.V_Type AND vp.Site_Code = vt.Site_Code "
+           "     AND ? BETWEEN vp.Date_From AND vp.Date_To "
+           "   ORDER BY vp.Date_From DESC) AS Prefix "
+           "FROM Voucher_Type vt "
+           "WHERE vt.Description LIKE '%Advance%'")
+    params: list = [on_date]
+    if site:
+        sql += " AND vt.Site_Code = ?"
+        params.append(site)
+    sql += " ORDER BY vt.V_Type, vt.Site_Code"
+    rows = db.query(sql, tuple(params), cn=cn)
+    return [
+        {
+            "vtype": (r.V_Type or "").strip(),
+            "description": (r.Description or "").strip(),
+            "site": (r.Site_Code or "").strip(),
+            "prefix": (r.Prefix or "").strip(),
+        }
+        for r in rows
+    ]
+
+
+def advance_pay_types(cn=None, site: str | None = None) -> list[dict]:
+    """Payment types usable for an advance (VB6 RevMast FieldType='P')."""
+    sql = ("SELECT Code, Name, PAYTYPE FROM RevMast "
+           "WHERE ISNULL(PAYTYPE, '') <> 'Hold' "
+           "  AND (FieldType = 'P' OR ISNULL(FieldType, '') = '')")
+    params: list = []
+    if site:
+        sql += " AND Site_Code = ?"
+        params.append(site)
+    sql += " ORDER BY Name"
+    return [
+        {
+            "code": (r.Code or "").strip(),
+            "name": (r.Name or "").strip(),
+            "paytype": (r.PAYTYPE or "").strip(),
+        }
+        for r in db.query(sql, tuple(params), cn=cn)
+    ]
+
+
+def list_advance_targets(term: str = "", cn=None, limit: int = 200,
+                         site: str | None = None) -> list[dict]:
+    """Bookings + in-house folios that can receive an advance deposit.
+
+    VB6 frmAdvanceDepDialog offers both booking guests (loc_13A28EB) and
+    in-house room guests (loc_13A285E). *site* is optional because the
+    analysis DB holds folios and rooms under different Site_Code values.
+    """
+    like = f"%{(term or '').strip()}%"
+    limit = max(1, int(limit))
+    out: list[dict] = []
+
+    sql = (f"SELECT TOP {limit} DocId, GuestName, BookNo, ArrDate, DepDate, "
+           "DepositeReq, ISNULL(ResStatus, '') AS ResStatus, Site_Code "
+           "FROM Booking WHERE ISNULL(Cancel, 'N') <> 'Y' "
+           "AND (GuestName LIKE ? OR DocId LIKE ?)")
+    params: list = [like, like]
+    if site:
+        sql += " AND Site_Code = ?"
+        params.append(site)
+    sql += " ORDER BY BookNo DESC"
+    for r in db.query(sql, tuple(params), cn=cn):
+        out.append({
+            "kind": "booking",
+            "docid": (r.DocId or "").strip(),
+            "guest_name": (r.GuestName or "").strip(),
+            "ref_no": r.BookNo,
+            "arr_date": r.ArrDate,
+            "dep_date": r.DepDate,
+            "advance_due": float(r.DepositeReq or 0),
+            "status": (r.ResStatus or "").strip(),
+            "site": (r.Site_Code or "").strip(),
+        })
+
+    sql = (f"SELECT TOP {limit} gf.DocId, gf.Name, gf.FolioNo, gf.Vdate, "
+           "gf.DepDate, ro.RoomNo, gf.Site_Code "
+           "FROM GuestFolio gf "
+           "INNER JOIN RoomOcc ro ON ro.DocId = gf.DocId "
+           "  AND ro.Site_Code = gf.Site_Code "
+           "WHERE ro.ChkOutDate IS NULL "
+           "AND (gf.Name LIKE ? OR gf.DocId LIKE ? OR ro.RoomNo LIKE ?)")
+    params = [like, like, like]
+    if site:
+        sql += " AND gf.Site_Code = ?"
+        params.append(site)
+    sql += " ORDER BY ro.RoomNo"
+    for r in db.query(sql, tuple(params), cn=cn):
+        out.append({
+            "kind": "folio",
+            "docid": (r.DocId or "").strip(),
+            "guest_name": (r.Name or "").strip(),
+            "ref_no": r.FolioNo,
+            "arr_date": r.Vdate,
+            "dep_date": r.DepDate,
+            "advance_due": 0.0,
+            "status": f"Room {(r.RoomNo or '').strip()}".strip(),
+            "site": (r.Site_Code or "").strip(),
+        })
+    return out
+
+
+def list_advance_deposits(docid: str, cn=None, site: str | None = None,
+                          vtypes: tuple[str, ...] = ADVANCE_VTYPES) -> list[dict]:
+    """Existing advance/refund lines posted against *docid*.
+
+    Mirrors VB6 loc_17AAE7F: ``PayCharge where RefDocId='...' And ST.VType In
+    ('ARRES','ADRES') Order By Vdate, VNo, SNo``.
+    """
+    docid = (docid or "").strip()
+    if not docid or not vtypes:
+        return []
+    sql = ("SELECT SNo, Vdate, RTRIM(Vtype) AS Vtype, VNo, VPrefix, "
+           "PayCode, PayType, AmtCr, AmtDr, Comments, DocId, Site_Code "
+           "FROM PayCharge WHERE RefDocID = ? "
+           f"AND RTRIM(Vtype) IN ({_placeholders(vtypes)})")
+    params: list = [docid, *vtypes]
+    if site:
+        sql += " AND Site_Code = ?"
+        params.append(site)
+    sql += " ORDER BY Vdate, VNo, SNo"
+    return [
+        {
+            "sno": r.SNo,
+            "vdate": r.Vdate,
+            "vtype": (r.Vtype or "").strip(),
+            "vno": r.VNo,
+            "vprefix": (r.VPrefix or "").strip(),
+            "paycode": (r.PayCode or "").strip(),
+            "paytype": (r.PayType or "").strip(),
+            "amt_cr": float(r.AmtCr or 0),
+            "amt_dr": float(r.AmtDr or 0),
+            "comments": (r.Comments or "").strip(),
+            "docid": (r.DocId or "").strip(),
+            "site": (r.Site_Code or "").strip(),
+        }
+        for r in db.query(sql, tuple(params), cn=cn)
+    ]
+
+
+def advance_totals(docid: str, cn=None, site: str | None = None) -> dict:
+    """Advance received / refunded / net for a booking or folio."""
+    rows = list_advance_deposits(docid, cn=cn, site=site)
+    received = sum(r["amt_cr"] for r in rows)
+    refunded = sum(r["amt_dr"] for r in rows)
+    return {
+        "advance": round(received, 2),
+        "refund": round(refunded, 2),
+        "net": round(received - refunded, 2),
+        "count": len(rows),
+    }
+
 

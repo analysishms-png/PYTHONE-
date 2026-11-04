@@ -18,24 +18,32 @@
   ],
   "state": {
     "current_phase": "Phase 2 - Front Office Remaining (Post Charges, Payment, Amend Stay)",
-    "current_module": "Front Office Remaining (Post Charges, Payment, Amend Stay)",
-    "current_option": "Post Charges (fdPostChrg.frm, code 224)",
-    "workflow_step": "PHASE_F_MODULE_LOCKED",
+    "current_module": "Front Office Remaining",
+    "current_option": "Amend Stay (fdAmendEntry.frm) - IMPLEMENTED",
+    "workflow_step": "PHASE_F_MODULE_IN_PROGRESS",
     "total_options": 375,
-    "completed_options": 0,
     "completed_modules": [],
     "active_module_locked": true,
     "blockers": [
-      "SITE_CODE='KK' (Analysis.ini key 7) vs live data Site_Code='BB' - pre-existing env mismatch, affects all modules equally",
-      "16 report options lack menu_caption_map key (genuine gaps needing review)",
-      "No git commits possible yet (unstaged changes present; commit-per-module deferred pending user approval)"
+      "SITE_CODE='KK' (Analysis.ini key 7) vs live data Site_Code='BB' - pre-existing env mismatch",
+      "No git commits possible yet (unstaged root core/ deletions exist - not from this work)"
     ]
   },
-  "test_baseline": {
-    "pytest_full": "656 passed, 25 failed, 4 errors (pre-existing env mismatches)",
-    "menu_testing": "1180 passed, 16 failed (report-key gaps), 1056 skipped, 375/375 options exercised",
-    "advance_deposit": "4/4 passing (newly implemented)"
+  "test_results": {
+    "menu_testing": "375/375 exercised, 159 DONE, 3 DONE?, 127 REPORT, 86 MISSING",
+    "advance_deposit": "4/4 passed",
+    "post_charge_paycharge": "PASS (charge + GST rows)",
+    "settle_folio": "PASS (bill created)",
+    "reverse_checkout": "PASS (reverse executed)",
+    "blank_grc_ui": "PASS (window opens, guest list loads)",
+    "reverse_room_merge_core": "Implemented (reverse of merge_charge)",
+    "voucher_serialisation_core": "Implemented",
+    "blank_grc_core": "Implemented",
+    "blank_grc_ui": "Implemented",
+    "reverse_room_merge_ui": "Implemented",
+    "amend_stay_core": "Implemented (VB6 fdAmendEntry.frm: amend_targets, amend_target, amend_history, amend_stay, amend_departure wrapper, _norm_time, _as_date)",
+    "amend_stay_ui": "Implemented (AmendStayDialog with grid, detail panel, history, Ctrl+S/Esc, PYT guard + allow_live checkbox, VB6 guard messages, Save Record? confirmation)"
   },
-  "last_checkpoint": null,
-  "updated": "2026-11-03"
+  "last_checkpoint": "2026-11-04 - Amend Stay core + UI implemented and wired in shell (registry 689 keys, offscreen probe passed, rollback-verified write probe passed)",
+  "updated": "2026-11-04"
 }

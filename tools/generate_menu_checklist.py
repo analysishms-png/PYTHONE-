@@ -25,7 +25,7 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 VB6_DIR = PROJECT_ROOT / "LOGIC" / "VISUALBASIC"
-SHELL_PY = PROJECT_ROOT / "ui" / "shell.py"
+SHELL_PY = PROJECT_ROOT / "HMS_py" / "ui" / "shell" / "shell.py"
 OUT_MD = PROJECT_ROOT / "MENU_MODULE_CHECKLIST.md"
 OUT_JSON = PROJECT_ROOT / "_qa" / "menu_checklist.json"
 
@@ -96,17 +96,52 @@ def load_vb6_captions() -> dict[str, str]:
 
 
 def load_registry_keys() -> list[str]:
-    content = SHELL_PY.read_text(encoding="utf-8")
-    m = re.search(
-        r"def _form_registry\(\) -> dict\[str, callable\]:.*?return\s+(\{.*?\})\s*(?:def|class|\$)",
-        content,
-        re.DOTALL | re.MULTILINE,
-    )
-    if not m:
+    """Collect every literal dict key used inside `_form_registry()`.
+
+    AST-based: string keys of all dict literals (including nested `**{...}`
+    spreads) inside the function body. This survives lambdas, line wrapping
+    and tuple-valued entries, unlike a regex over the source text.
+    """
+    import ast
+
+    try:
+        tree = ast.parse(SHELL_PY.read_text(encoding="utf-8"))
+    except (OSError, SyntaxError) as exc:  # pragma: no cover - tooling guard
+        print(f"WARN: cannot parse {SHELL_PY}: {exc}", file=sys.stderr)
         return []
-    text = m.group(1)
-    keys = re.findall(r'"([^"]+)"\s*:', text) + re.findall(r"'([^']+)'\s*:", text)
-    return sorted(set(keys))
+
+    func = next(
+        (
+            node
+            for node in ast.walk(tree)
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+            and node.name == "_form_registry"
+        ),
+        None,
+    )
+    if func is None:
+        return []
+
+    keys: set[str] = set()
+    for node in ast.walk(func):
+        if not isinstance(node, ast.Dict):
+            continue
+        for key in node.keys:
+            if isinstance(key, ast.Constant) and isinstance(key.value, str):
+                keys.add(key.value)
+
+    # `_form_registry()` also spreads the report caption map at runtime
+    # (`**{cap: _open_report(cap) for cap in menu_caption_map()}`), which the
+    # AST cannot see because those keys are computed. Ask the engine directly.
+    try:
+        sys.path.insert(0, str(PROJECT_ROOT))
+        from HMS_py.core.reporting.reports import menu_caption_map
+
+        keys.update(menu_caption_map())
+    except Exception as exc:  # pragma: no cover - tooling guard
+        print(f"WARN: report caption map unavailable: {exc}", file=sys.stderr)
+
+    return sorted(keys)
 
 
 def match_registry(caption: str, reg_norm: dict[str, str], reg_keys: list[str]) -> tuple[str | None, str]:

@@ -1,11 +1,11 @@
 {
   "schema": "HMS_py migration checkpoint - resume point",
-  "updated": "2026-11-03",
-  "resume_from": "PHASE_E_MODULE_SELECTION",
-  "last_completed_action": "advance_deposit() implemented + 4 unit tests passing (Reservation module, option code 194)",
-  "current_module_lock": null,
-  "next_module_candidate": "Front Office Remaining (Post Charges, Payment, Amend Stay) - FR-004 / Phase 2",
-  "next_option_candidate": "Post Charges (fdPostChrg.frm, code 224, currently PARTIAL) - extract folio logic to folio.py (BUG-028)",
+  "updated": "2026-11-04",
+  "resume_from": "PHASE_F_MODULE_IN_PROGRESS",
+  "last_completed_action": "Amend Stay (fdAmendEntry.frm) core + UI implemented and wired in shell. Offscreen probe: registry 689 keys, grid 1 row, selection enables Save, history 0. Rollback-verified write probe: PYT insert + amend happy path updates GuestFolio (DepDate+2d, NoDays 4->6, U_AE='E'), RoomOcc (DepTime='10:30'), PlanDetails (NoOfDays 6), inserts GuestFolioAmend (U_AE='A'), FolioLog flag 'M'. Guards return exact VB6 strings. Second amend accumulates history per VB6 DELETE predicate.",
+  "current_module_lock": "Front Office Remaining (Post Charges, Payment, Amend Stay) - FR-004 / Phase 2",
+  "next_module_candidate": "UTL (Menu Item Copy 166, Task Scheduler 180) or POS per-outlet duplicates consolidation",
+  "next_option_candidate": "Menu Item Copy (code 166, frmMenuItemCopy.frm) - copies ItemGrp/ItemCatMast/RevMast/Item/ItemMast/ItemRate/BOM between outlets; source/target outlet + ALL checkbox + Applicable From date; mutating, needs transaction + confirmation",
   "state_files": [
     "MIGRATION_AUTOMATION_STATE.json",
     "MIGRATION_TASK_QUEUE.json",
@@ -18,11 +18,17 @@
     "TEST_EXECUTION_LOG.csv",
     "TEST_COVERAGE_REPORT.md",
     "TEST_BUG_REGISTER.md",
-    "TEST_FINAL_REPORT.md"
+    "TEST_FINAL_REPORT.md",
+    "_qa/probe_amend_write.py (rollback-verified write probe)",
+    "_qa/probe_amend_ui.py (offscreen probe)",
+    "_qa/probe_amend_core.py (core read-only probe)"
   ],
   "blockers": [
-    "SITE_CODE='KK' (Analysis.ini) vs live Site_Code='BB' - pre-existing env mismatch",
+    "SITE_CODE='KK' (Analysis.ini key 7) vs live data Site_Code='BB' - pre-existing env mismatch",
     "16 report options lack menu_caption_map key",
-    "No git commits (unstaged changes present; commit-per-module deferred pending user approval)"
+    "No git commits (unstaged changes present; commit-per-module deferred pending user approval)",
+    "Only 1 free RO room in live DB - cannot run 2-room end-to-end merge/reverse-merge test",
+    "Live Booking table empty - Advance Deposit cannot be exercised end-to-end live",
+    "ADRES prefix window 2024-04-01..2025-03-31 - posting at today correctly rejected"
   ]
 }

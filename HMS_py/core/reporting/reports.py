@@ -2855,6 +2855,9 @@ VB6_CAPTION_ALIASES: dict[str, str] = {
     "Package Forecast": "PackageForecast",         # menuHelp me no trailing space
     "Journal Books Log": "JournalBookLog",         # menuHelp variant of 'Journal Book Log'
     "TDS Report": "TDSReport",                     # menuHelp Flag=R FAREPORT leaf (FaTDSChal data)
+    "Registration Card": "RegistrationCard",
+    "Plan Meal Tokens": "PlanMealTokens",
+    "GRC Printing": "GRC",
     # menuHelp Night Audit GST block (reason-map wave 2026-09-23)
     "Reconciliation (GSTR-2A)": "Reconciliation(R2A)",  # GSTR2A recon = R2A engine (Sale2 vs GSTR-2 data)
     # --- captions added to close report-key gaps (menu checklist vs engine) ---

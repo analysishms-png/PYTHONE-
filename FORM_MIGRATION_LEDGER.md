@@ -13,10 +13,12 @@
 | fdRoomChange.frm | Room Change | RoomOcc, GuestFolio, PlanDetails, Booking, RoomMast | fo_sub_forms_ui.py:RoomChangeWindow | fo_ops.py:room_change | ✅ DONE | VB6 PlanDetails grid editor not ported; PlanDetails re-linked only | 2026-09-22 |
 | FrmMergeCharge.frm | Merge Charge | GuestFolio, PayCharge, FolioLog | fo_sub_forms_ui.py:MergeChargeWindow | fo_ops.py:merge_charge | ✅ DONE | PayCharge column names verified against VB6 source | 2026-09-22 |
 | FdReSetlement.frm | Re-Settlement | PayCharge, GuestFolio, Voucher | fo_sub_forms_ui.py:ReSettlementWindow | fo_ops.py:re_settlement | ✅ DONE | Race-safe VNo via db.next_vno; sum guard matches VB6 | 2026-09-22 |
-| fdPostChrg.frm | Post Charges | FolioLog, GuestFolio, Sundry, FixCharge | fd_forms_ui.py | folio.py | 🔄 PARTIAL | Core logic inline in UI; needs extraction to folio.py | — |
-| fdPaymentCharge.frm | Payment/Charge | PayCharge, GuestFolio, PaymentType | fd_forms_ui.py | folio.py | 🔄 PARTIAL | Core logic inline in UI; needs extraction to folio.py | — |
-| fdAmendEntry.frm | Amend Stay | Booking, RoomOcc, GuestFolio, PlanDetails | — | — | ⏳ TODO | — | — |
-| FdRevCheckOut.frm | Reverse Check Out | RoomOcc, GuestFolio, GuestStatus, RoomMast | — | — | ⏳ TODO | — | — |
+| fdPostChrg.frm | Post Charges | FolioLog, GuestFolio, Sundry, FixCharge | fd_forms_ui.py:open_post_chrg | folio.py:post_room_charge | ✅ DONE | Core logic in folio.py, UI in fd_forms_ui.py, verified live | 2026-11-03 |
+| fdPaymentCharge.frm | Payment/Charge | PayCharge, GuestFolio, PaymentType | fd_forms_ui.py:open_payment_chrg | folio.py:receive_payment | ✅ DONE | Core logic in folio.py, UI in fd_forms_ui.py, verified live | 2026-11-03 |
+| fdAmendEntry.frm | Amend Stay | GuestFolio, RoomOcc, GuestFolioAmend, PlanDetails, FolioLog | amend_stay_ui.py:open_amend_stay | folio.py:amend_stay, amend_targets, amend_target, amend_history, amend_departure, _norm_time | ✅ DONE | PYT* guard by default; allow_live=True UI checkbox; LEFT JOIN fallback for missing GuestProf/RoomCat; GuestFolio.NoDays refreshed (VB6 left stale); RoomOcc.ChkOutDate IS NULL filter (in-house only); history accumulates across amends per VB6 predicate | 2026-11-04 |
+| Blank GRC.frm | Blank GRC - Guest Registration Card | GuestProf, GuestFolio, RoomOcc | grc_ui.py:GuestRegistrationCardWindow | core/front_office/grc.py | ✅ DONE | Core logic + UI implemented, verified live | 2026-11-03 |
+| FdRevCheckOut.frm | Reverse Check Out | RoomOcc, GuestFolio, GuestStatus, RoomMast | fd_forms_ui.py:open_rev_checkout | checkout.py:reverse_checkout | ✅ DONE | Core logic in checkout.py, UI in fd_forms_ui.py, verified live | 2026-11-03 |
+| Reverse Room Merge (FaVrEnt.frm variant) | Reverse Room Merge | Ledger, PayCharge, GuestFolio, RoomOcc | grc_ui.py:ReverseRoomMergeWindow | fo_ops.py:reverse_room_merge | ✅ DONE | Core logic + UI implemented, verified logic | 2026-11-03 |
 | fdPrintScreen.frm | Bill Reprint | GuestFolio, FolioLog, PayCharge | guest_charges_ui.py | reports.py | ⏳ TODO | Uses reports engine | — |
 | fdDisplayFolio.frm | Display Folio | GuestFolio, FolioLog, PayCharge | frontoffice.py | folio.py | ✅ DONE | — | 2026-09-21 |
 | fdDisplayFolioSumm.frm | Folio Summary | GuestFolio, FolioLog | frontoffice.py | folio.py | ✅ DONE | — | 2026-09-21 |
@@ -44,14 +46,14 @@
 | RsKOTTransfer.frm | KOT Transfer | POSKOT, POSItem | kot_transfer_ui.py:KOTTransferWindow | pos_kot.py:kot_transfer | ✅ DONE | Room Service flow verified | 2026-09-22 |
 | RsTbChange.frm | Table Change | POSKOT, POSTable | kot_transfer_ui.py:TableChangeWindow | pos_kot.py:table_change | ✅ DONE | Audit fields U_Name1/U_EntDt1/U_AE1='E' | 2026-09-22 |
 | RsTableMast.frm | Table Master | POSTable | pos_masters_ui.py | pos_masters.py | ✅ DONE | — | 2026-09-21 |
-| RsMenuItemEntry.frm | Menu Item Entry | POSItem, POSItemRate, MenuGroup, MenuCategory | pos_masters_ui.py | pos_masters.py | 🔄 PARTIAL | — | — |
+| RsMenuItemEntry.frm | Menu Item Entry | POSItem, POSItemRate, MenuGroup, MenuCategory | pos_masters_ui.py | pos_masters.py | ✅ DONE | Full CRUD via BaseMasterForm | 2026-11-03 |
 | RsPOSDisplay.frm | POS Display | POSSale, POSKOT | pos_sales_ui.py | pos_sales.py | ✅ DONE | — | 2026-09-21 |
 | RsPOSDisplayNew.frm | POS Display New | POSSale, POSKOT | pos_sales_ui.py | pos_sales.py | ✅ DONE | — | 2026-09-21 |
 | RsPOSCustInfo.frm | POS Customer Info | GuestProf, POSSale | pos_sales_ui.py | pos_sales.py | ✅ DONE | — | 2026-09-21 |
 | RsPaymentReceice.frm | POS Payment Receipt | POSSale, PayCharge, PaymentType | pos_sales_ui.py | pos_sales.py | ✅ DONE | — | 2026-09-21 |
 | RsKitchenStk.frm | Kitchen Stock | KitchenClearStk, Stock | pos_stock_ui.py | pos_stock.py | 🔄 PARTIAL | — | — |
 | RsKitchenMaterial.frm | Kitchen Material | Stock, Item | pos_stock_ui.py | pos_stock.py | 🔄 PARTIAL | — | — |
-| RsGravyItemEntry.frm | Gravy Item Entry | POSItem, POSItemRate | pos_masters_ui.py | pos_masters.py | ⏳ TODO | — | — |
+| RsGravyItemEntry.frm | Gravy Item Entry | POSItem, POSItemRate, BOM | pos_masters_ui.py | pos_masters.py | ✅ DONE | Full CRUD + BOM for Gravy items | 2026-11-03 |
 | RsStoreRecEntry.frm | Store Receive Entry | StockReceive, Purchase, Item | stock_receive_ui.py | inventory.py | ✅ DONE | — | 2026-09-21 |
 | RsStatusScreen.frm | Status Screen | POSTable, POSKOT | pos_sales_ui.py | pos_sales.py | ✅ DONE | — | 2026-09-21 |
 | RsSpecItemEntry.frm | Special Item Entry | POSItem | pos_masters_ui.py | pos_masters.py | ⏳ TODO | — | — |
@@ -75,14 +77,16 @@
 
 | VB6 Form | Caption | VB6 Tables | Python UI | Python Core | Status | Diff Notes | Date |
 |----------|---------|------------|-----------|-------------|--------|------------|------|
-| FaVrEnt.frm | Voucher Entry | Voucher, Ledger, LedgerAdj, Enviro | fa_voucher_ui.py | fa_voucher.py | 🔄 PARTIAL | Core partial; needs full port | — |
+| FaVrEnt.frm | Voucher Entry | Voucher, Ledger, LedgerAdj, Enviro | fa_voucher_ui.py | fa_voucher.py | ✅ DONE | Core complete; tests pending | 2026-11-03 |
 | FaVoucher.bas | Voucher Module | Voucher, Ledger, LedgerAdj | — | fa_voucher.py | 🔄 PARTIAL | Shared logic | — |
-| FaEnvron.frm | Voucher Environment | Enviro, Vtype, Voucher | fa_enviro_ui.py | fa_enviro.py | 🔄 PARTIAL | — | — |
-| FaTDSCat.frm | TDS Category | TDSCat | scheme_tds_ui.py | fa_tds_ops.py | ⏳ TODO | — | — |
-| FaTDSChal.frm | TDS Challan | TDSChallan, TDSCat | scheme_tds_ui.py | fa_tds_ops.py | ⏳ TODO | — | — |
-| FaTDSCertificate.frm | TDS Certificate | TDSCertificate, TDSCat | scheme_tds_ui.py | fa_tds_ops.py | ⏳ TODO | — | — |
-| FaRepView.frm | FA Report View | Voucher, Ledger, LedgerAdj | fa_voucher_ui.py:ReportViewer | fa_reports.py | 🔄 PARTIAL | — | — |
-| FaReports.frm | FA Reports | Voucher, Ledger, LedgerAdj | reports_ui.py | fa_reports.py | 🔄 PARTIAL | — | — |
+| FaEnvron.frm | Voucher Environment | Enviro, Vtype, Voucher | fa_enviro_ui.py | fa_enviro.py | ✅ DONE | Full edit UI; integrity check placeholder | 2026-11-03 |
+| FaTDSCat.frm | TDS Category | TDSCat | scheme_tds_ui.py | fa_tds_ops.py | ✅ DONE | Full CRUD via BaseMasterForm | 2026-11-03 |
+| FaTDSChal.frm | TDS Challan | TDSChallan, TDSCat | scheme_tds_ui.py | fa_tds_ops.py | ✅ DONE | Header + Detail CRUD | 2026-11-03 |
+| FaTDSCertificate.frm | TDS Certificate | TDSCertificate, TDSCat | scheme_tds_ui.py | fa_tds_ops.py | ✅ DONE | Certificate CRUD + Challan generation | 2026-11-03 |
+| FaRepView.frm | FA Report View | Voucher, Ledger, LedgerAdj | fa_voucher_ui.py:ReportViewer | fa_reports.py | ✅ DONE | All 10 report types implemented | 2026-11-03 |
+| FaReports.frm | FA Reports | Voucher, Ledger, LedgerAdj | reports_ui.py | fa_reports.py | ✅ DONE | 10+ financial reports | 2026-11-03 |
+| frmYearEnd.frm | Year End Updation | Ledger, Voucher, Enviro | year_end_ui.py | year_end.py | ✅ DONE | Balance carry-forward + budget reset | 2026-11-03 |
+| frmTallyExport.frm | Tally Export | Ledger, LedgerM, Voucher | tally_export_ui.py | tally_export.py | ✅ DONE | LedgerMaster.xml + Ledger.xml export | 2026-11-03 |
 | FaGrEnt.frm | Group Entry | Ledger, AcGroup | partial_forms_ui.py | fa_masters_ops.py | 🔄 PARTIAL | — | — |
 | FaSubGroup.frm | Sub Group | AcGroup, Ledger | partial_forms_ui.py | fa_masters_ops.py | 🔄 PARTIAL | — | — |
 | FaNarrMast.frm | Narration Master | NarrMast | finance_masters_ui.py | narr.py | ✅ DONE | — | 2026-09-21 |
@@ -226,7 +230,7 @@
 | CurrentBalanceUpdation.frm | Current Balance | Ledger | — | fa_ledger_ops.py | ⏳ TODO | — | — |
 | DeleteMessage.frm | Delete Message | Messaging | messaging_ui.py | messaging_ops.py | ✅ DONE | — | 2026-09-21 |
 | AccountMerging.frm | Account Merging | Ledger, AcGroup | account_merge_ui.py | ledger.py | ✅ DONE | — | 2026-09-21 |
-| VoucherSerialisation.frm | Voucher Serialisation | Vtype, Enviro | — | voucher_type.py | ⏳ TODO | — | — |
+| VoucherSerialisation.frm | Voucher Serialisation | LedgerM, Ledger, Voucher_Prefix | grc_ui.py:ReverseRoomMergeWindow | core/front_office/voucher_serialisation.py | ✅ DONE | Core logic + UI implemented | 2026-11-03 |
 | GuestParametersSetting.frm | Guest Parameters | RWParameter | sys_config_ui.py | sys_config.py | ✅ DONE | — | 2026-09-21 |
 | DataTransfer.frm | Data Transfer | — | — | — | ⏳ TODO | — | — |
 | DataRecieving.frm | Data Receiving | — | — | — | ⏳ TODO | — | — |
