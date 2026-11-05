@@ -744,6 +744,11 @@ def _form_registry() -> dict[str, callable]:
         from HMS_py.ui import inventory as _inv
     except ImportError:
         _inv = None
+    # Housekeeping (HK House Operation Stock, HK Room Op Stock, HK Issue/Receive)
+    try:
+        from HMS_py.ui import housekeeping as hk_ui
+    except ImportError:
+        hk_ui = None
     try:
         from HMS_py.ui import folio_ui as folui
     except ImportError:
@@ -1673,8 +1678,7 @@ def _form_registry() -> dict[str, callable]:
         "Table Change Entry": (lambda w: kotui.open_table_change(w)) if kotui else None,
         "Kitchen Closing Stock": (lambda w: kclstk_ui.open_kitchen_closing_stock(w)) if kclstk_ui else _coming_soon("Kitchen Closing Stock"),
         "Issue/Recd. Entry": (lambda w: stiss_ui.open_stock_issue(w)) if stiss_ui else _coming_soon("Issue/Recd. Entry"),
-        "House Keeping Op.Stock Entry": ((lambda w: misc_ui.open_opening_stock(w))
-                                         if misc_ui else _coming_soon("House Keeping Op.Stock Entry")),
+        "House Keeping Op.Stock Entry": (lambda w: hk_ui.open_hk_house_op_stock(w, user=getattr(w, 'user', 'PYADMIN'))) if hk_ui else _coming_soon("House Keeping Op.Stock Entry"),
         "Payment Due Letter Entry": (lambda w: memb_ui.open_member_billing(w)) if memb_ui else None,
         # ── PARTIAL-batch 2: VB6 form -> core-module-mapped opener ──
         # (core module ka table LIVE hai; dialog opers tested hain)

@@ -37,10 +37,22 @@
   - Shell: Wire "Group Reservation" ✅
   - Tests: `tests/unit/test_group_reservation_ui.py` (TODO)
 
-- [ ] **Banquet Reservation** (`resBanq.frm` 68KB)
-  - Core: `core/front_office/banquet_ops.py:banquet_booking()`
-  - UI: `ui/front_office/hall_booking_ui.py:BanquetBookingDialog`
-  - Shell: Wire "Reservation Banquet"
+- [x] **Banquet Booking** (`HallBooking.frm`) ✅ **DONE**
+  - Core: `core/front_office/hall_booking.py` ✅
+  - UI: `ui/front_office/hall_booking_ui.py:HallBookingDialog` ✅
+  - Shell: Wire "Banquet Booking" ✅
+
+- [x] **Banquet Operations** (Billing, Estimates, Advance, Settlement, etc.) ✅ **DONE**
+  - Billing: `banquet_ops.py:open_banquet_billing` ✅
+  - Estimates: `banquet_ops.py:open_banquet_estimate` ✅
+  - Advance: `banquet_ops.py:open_banquet_advance` ✅
+  - Settlement: `banquet_ops.py:open_banquet_settlement` ✅
+  - Venue Availability: `banquet_ops.py:open_venue_availability` ✅
+  - Chef Pre-Costing: `banquet_ops.py:open_chef_precosting` ✅
+  - Catalog Selection: `banquet_ops.py:open_catalog_selection` ✅
+  - Bill Sundry Setting: `banquet_ops.py:open_banquet_sundry_setting` ✅
+  - Guest Comments: `banquet_ops.py:open_guest_comments` ✅
+  - Shell: All wired ✅
 
 ### 2. POS - Payment & Token
 - [x] **POS Payment Receive** (`RsPaymentReceice.frm` 188KB) ✅ **DONE**
@@ -65,10 +77,11 @@
   - `RsTouchScreenTokenEntry.frm` → Touch mode flag in `pos_payment_ui.py` ✅
 
 ### 3. HOUSEKEEPING - Linen & Stock
-- [ ] **HK House Operation Stock** (`HKHouseOpStk.frm` 97KB)
-  - Core: `core/housekeeping/linen.py:house_op_stock()`
-  - UI: `ui/housekeeping/block_master_ui.py:HouseOpStockDialog`
-  - Shell: Wire "House Keeping Op.Stock Entry"
+- [x] **HK House Operation Stock** (`HKHouseOpStk.frm` 97KB) ✅ **DONE**
+  - Core: `core/housekeeping/linen.py:hk_house_op_stock_list()` ✅
+  - UI: `ui/housekeeping/hk_house_op_stock_ui.py:HKHouseOpStockBrowser` ✅
+  - Shell: Wire "House Keeping Op.Stock Entry" ✅
+  - Tests: (TODO - add tests)
 
 - [ ] **HK Room Operation Stock** (`HKRoomOpStk.frm` 101KB)
   - Core: `core/housekeeping/linen.py:room_op_stock()`
