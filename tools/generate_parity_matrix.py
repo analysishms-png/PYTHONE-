@@ -16,7 +16,7 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).parent.parent
 VB6_DIR = PROJECT_ROOT / "LOGIC" / "VISUALBASIC"
-SHELL_PY = PROJECT_ROOT / "ui" / "shell.py"
+SHELL_PY = PROJECT_ROOT / "HMS_py" / "ui" / "shell" / "shell.py"
 QA_DIR = PROJECT_ROOT / "_qa"
 LIVE_TABLES_JSON = QA_DIR / "live_tables.json"
 

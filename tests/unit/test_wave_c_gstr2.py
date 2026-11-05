@@ -14,7 +14,7 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..")))
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
-from HMS_py.core import reports
+from HMS_py.core.reporting import reports
 
 
 GSTR2_KEYS = ("GSTR2(3)", "GSTR2(4A)", "GSTR2(4B)")

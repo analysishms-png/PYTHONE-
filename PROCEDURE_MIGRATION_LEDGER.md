@@ -45,6 +45,9 @@
 | RsSaleBillSplit.frm:CmdSave_Click | `SplitBill(sale_no, splits)` | pos_sales.py | `split_bill()` | ✅ DONE | — | 2026-09-21 |
 | RsKitchenStk.frm:CmdSave_Click | `UpdateKitchenStock(items)` | pos_stock.py | `update_kitchen_stock()` | 🔄 PARTIAL | — | — |
 | RsStoreRecEntry.frm:CmdSave_Click | `ReceiveStock(po_no, items)` | inventory.py | `receive_stock()` | ✅ DONE | — | 2026-09-21 |
+| RsMenuItemEntry.frm:TopCtrl1_eSave | `SaveItem(code, name, grp, cat, rest, ...)` | pos_masters.py | `item_insert()` | ✅ DONE | Full CRUD via ItemAPI | 2026-11-03 |
+| RsGravyItemEntry.frm:TopCtrl1_eSave | `SaveGravyItem(code, name, grp, cat, rest, ...)` | pos_masters.py | `gravy_insert()` | ✅ DONE | Full CRUD + BOM for Gravy items | 2026-11-03 |
+| RsStoreRecEntry.frm:CmdSave_Click | `ReceiveStock(po_no, items)` | inventory.py | `receive_stock()` | ✅ DONE | — | 2026-09-21 |
 
 ---
 
@@ -52,11 +55,19 @@
 
 | VB6 Module/Proc | VB6 Signature | Python Module | Python Function | Status | Diff Notes | Date |
 |-----------------|---------------|---------------|-----------------|--------|------------|------|
-| FaVrEnt.frm:CmdSave_Click | `SaveVoucher(vtype, vdate, ledger, amount, ...)` | fa_voucher.py | `save_voucher()` | 🔄 PARTIAL | Core partial; validation missing | — |
-| FaEnvron.frm:Form_Load | `LoadEnviro()` | fa_enviro.py | `load_enviro()` | 🔄 PARTIAL | — | — |
-| FaTDSCat.frm:CmdSave_Click | `SaveTDSCat(code, name, rate)` | fa_tds_ops.py | `save_tds_cat()` | ⏳ TODO | — | — |
-| FaTDSChal.frm:CmdSave_Click | `GenerateTDSChallan(period)` | fa_tds_ops.py | `generate_tds_challan()` | ⏳ TODO | — | — |
-| FaRepView.frm:Form_Load | `ViewReport(report_type)` | fa_reports.py | `view_report()` | 🔄 PARTIAL | Uses ReportViewer | — |
+| FaVrEnt.frm:CmdSave_Click | `SaveVoucher(vtype, vdate, ledger, amount, ...)` | fa_voucher.py | `post_voucher()` | ✅ DONE | Core complete; validation included | 2026-11-03 |
+| FaEnvron.frm:Form_Load | `LoadEnviro()` | fa_enviro.py | `get()` | ✅ DONE | Full settings load | 2026-11-03 |
+| FaEnvron.frm:btnok_Click | `SaveEnviro()` | fa_enviro.py | `update_settings()` | ✅ DONE | Multi-setting update | 2026-11-03 |
+| FaEnvron.frm:BtnIntegrity_Click | `IntegrityCheck()` | fa_enviro_ui.py | `_integrity_check()` | 🔄 PARTIAL | Placeholder; VB6 tool | 2026-11-03 |
+| FaTDSCat.frm:CmdSave_Click | `SaveTDSCat(code, name, rate)` | fa_tds_ops.py | `tdscat_insert()` | ✅ DONE | Full CRUD via TDSCatAPI | 2026-11-03 |
+| FaTDSChal.frm:CmdSave_Click | `GenerateTDSChallan(period)` | fa_tds_ops.py | `tdschal_insert()` | ✅ DONE | Header + Detail CRUD via TDSChalAPI | 2026-11-03 |
+| FaTDSCertificate.frm:CmdSave_Click | `SaveTDSCertificate(certi_no, certi_date, code, ...)` | fa_tds_ops.py | `tdscerti_insert()` | ✅ DONE | Certificate CRUD via TDSCertificateAPI | 2026-11-03 |
+| FaTDSChal.frm:btsadd_Click | `AddTDSEntries()` | fa_tds_ops.py | `generate_tds_challan()` | ✅ DONE | Pending LEDGERTDS → Challan | 2026-11-03 |
+| FaTDSCertificate.frm:TopCtrl1_eSave | `SaveCertificate()` | fa_tds_ops.py | `tdscerti_insert()` | ✅ DONE | Certificate CRUD + Challan linkage | 2026-11-03 |
+| FaRepView.frm:Form_Load | `ViewReport(report_type)` | fa_reports.py | `view_report()` | ✅ DONE | 10+ report types | 2026-11-03 |
+| FaReports.frm:Form_Load | `ViewReport(report_type)` | fa_reports.py | `view_report()` | ✅ DONE | 10+ report types | 2026-11-03 |
+| frmYearEnd.frm:CmdYrUpdate_Click | `YearEndUpdation()` | year_end.py | `carry_forward_balances()` | ✅ DONE | Balance carry-forward + budget reset | 2026-11-03 |
+| frmTallyExport.frm:btnStart_Click | `ExportTallyXML()` | tally_export.py | `export_all()` | ✅ DONE | LedgerMaster.xml + Ledger.xml | 2026-11-03 |
 | FaVoucher.bas:AutoVNo | `AutoVNo(vtype, vprefix)` | fa_voucher.py | `auto_vno()` | 🔄 PARTIAL | Uses db.next_vno() | — |
 
 ---

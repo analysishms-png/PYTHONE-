@@ -5,9 +5,10 @@ import pytest
 from datetime import date, timedelta
 
 # Add the actual project root to path so imports like 'HMS_py.*' resolve.
-# __file__ is .../HMS_py/HMS_py/tests/conftest.py, so we need to go up three
-# levels to reach the top-level project directory: .../HMS_py
-PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+# __file__ is .../HMS_py/tests/conftest.py, so go up one level to reach the
+# top-level project directory: .../HMS_py (where pytest.ini, Analysis.ini and
+# the HMS_py package live).
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, PROJECT_ROOT)
 
 # Test database connection (uses same config as main app)

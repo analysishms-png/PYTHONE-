@@ -720,6 +720,26 @@ def _form_registry() -> dict[str, callable]:
         from HMS_py.ui import walkin_rack_ui as wrui
     except ImportError:
         wrui = None
+    # Check-In modern UI (VB6 fdCheckIn.frm + fdWalkInEntry.frm)
+    try:
+        from HMS_py.ui.front_office import checkin_ui as ckui
+    except ImportError:
+        ckui = None
+    # Group Check-Out modern UI (VB6 FdGrpCheckOut.frm)
+    try:
+        from HMS_py.ui.front_office import group_checkout_ui as grpco_ui
+    except ImportError:
+        grpco_ui = None
+    # Group Reservation modern UI (VB6 resGroup.frm)
+    try:
+        from HMS_py.ui.front_office import group_booking_ui as grpbook_ui
+    except ImportError:
+        grpbook_ui = None
+    # Reservation Room Lookup (VB6 resRoomNo.frm / resRoomType.frm)
+    try:
+        from HMS_py.ui.front_office import reservation_browser as resbrowser_ui
+    except ImportError:
+        resbrowser_ui = None
     try:
         from HMS_py.ui import inventory as _inv
     except ImportError:
@@ -732,6 +752,16 @@ def _form_registry() -> dict[str, callable]:
         from HMS_py.ui import kot_entry as kot
     except ImportError:
         kot = None
+    # POS Payment Receive (VB6 RsPaymentReceice.frm)
+    try:
+        from HMS_py.ui.pos import pos_payment_ui as pospay_ui
+    except ImportError:
+        pospay_ui = None
+    # POS Order Booking (VB6 RsBookingEntry.frm / RsBookingEntryAdvance.frm)
+    try:
+        from HMS_py.ui.pos import pos_order_booking_ui as posbook_ui
+    except ImportError:
+        posbook_ui = None
     # Reports Center (REPORTS_TXT collection ka port — read-only engine)
     try:
         from HMS_py.ui import reports_ui as _rpt
@@ -1185,10 +1215,9 @@ def _form_registry() -> dict[str, callable]:
         # VB6: "Customer History" menu leaf opens frmGuestInfo (HMS.bas loc_1E32DAE)
         # — same guest info form as Guest Profile, alias wire for POSMas leaf.
         "Customer History": lambda w: fo.open_guestprof(w),
-        "Check In": (lambda w: wrui.open_walkin_entry(
-            w, user=getattr(w, 'user', 'PYADMIN'))) if wrui else _coming_soon("Check In"),
-        "Check-In": lambda w: fo.open_checkin(w, user=w.user),
-        "Checkin": lambda w: fo.open_checkin(w, user=w.user),
+        "Check In": (lambda w: ckui.open_checkin(w, user=getattr(w, 'user', 'PYADMIN'))) if ckui else _coming_soon("Check In"),
+        "Check-In": lambda w: ckui.open_checkin(w, user=w.user) if ckui else _coming_soon("Check-In"),
+        "Checkin": lambda w: ckui.open_checkin(w, user=w.user) if ckui else _coming_soon("Checkin"),
         # P5 POS + Night Audit:
         "KOT Entry": (lambda w: kot.open_kot_entry(w, user=w.user)) if kot else None,
         "POS Status": _pos,
@@ -1333,8 +1362,8 @@ def _form_registry() -> dict[str, callable]:
         # P4-b Folio/Check-Out (folio_ui - FolioLog + Amend views):
         "Folio Log": (lambda w: folui.open_folio(w)) if folui else None,
         "Amend Departure": (lambda w: folui.open_folio(w)) if folui else None,
-        "Payment Receive Entry": (lambda w: folui.open_folio(w)) if folui else None,
-        "Receive Payment": (lambda w: folui.open_folio(w)) if folui else None,
+        "Payment Receive Entry": (lambda w: pospay_ui.open_payment_receive_browse(w, user=getattr(w, 'user', 'PYADMIN'))) if pospay_ui else _coming_soon("Payment Receive Entry"),
+        "Receive Payment": (lambda w: pospay_ui.open_payment_receive(w, user=getattr(w, 'user', 'PYADMIN'))) if pospay_ui else _coming_soon("Receive Payment"),
         # Pending (minimal - only truly missing tables):
         "Tax Structure": (lambda w: tsu.open_taxstru(w)) if tsu else None,
         "Parameter": _open_enviro,
@@ -1499,7 +1528,7 @@ def _form_registry() -> dict[str, callable]:
             "Check Out Clearance Screen", "Changes Department",
             "Table Change Entry", "Sale Bill Entry", "Settlement Entry",
             "Display Table",
-            "Order Booking", "Bill Lookup", "Order Booking Advance",
+            "Display Table",
             "KOT Transfer", "Token Entry", "Assign Delivery", "Payment Receive",
             "Salary Creation", 
              "Rate Group Master",
@@ -1509,6 +1538,10 @@ def _form_registry() -> dict[str, callable]:
             "Godrej Locks", "Cascade", "Tile Horizontal", "Tile Vertical",
             "Manage MDI", "Restaurant Change ",
         )}),
+        # Order Booking (VB6 RsBookingEntry.frm / RsBookingEntryAdvance.frm)
+        "Order Booking": (lambda w: posbook_ui.open_order_booking(w, user=getattr(w, 'user', 'PYADMIN'))) if posbook_ui else _coming_soon("Order Booking"),
+        "Bill Lookup": (lambda w: posbook_ui.open_order_booking(w, user=getattr(w, 'user', 'PYADMIN'))) if posbook_ui else _coming_soon("Bill Lookup"),
+        "Order Booking Advance": (lambda w: posbook_ui.open_order_booking(w, user=getattr(w, 'user', 'PYADMIN'))) if posbook_ui else _coming_soon("Order Booking Advance"),
         # Banquet operations (VB6 Banquet > Operation; tables LIVE)
         "Banquet Booking": (lambda w: hall_ui.open_hall_booking(w)) if hall_ui else _coming_soon("Banquet Booking"),
         "Banquet Billing": (lambda w: banq_ui.open_banquet_billing(w)) if banq_ui else _coming_soon("Banquet Billing"),
@@ -1718,10 +1751,19 @@ def _form_registry() -> dict[str, callable]:
             w, user=getattr(w, "user", None))) if amstay_ui else _coming_soon("Amend Stay"),
         "Look Up Reservation By Guest Name": (lambda w: fdui.open_lookup_reservation(w)) if fdui else _coming_soon("Look Up Reservation By Guest Name"),
         "Room Check Out": (lambda w: fdui.open_room_checkout(w, user=getattr(w, 'user', 'PYADMIN'))) if fdui else _coming_soon("Room Check Out"),
+        # Group Check-Out (VB6 FdGrpCheckOut.frm / FdGrpdetCheckOut.frm)
+        "Group Check Out": (lambda w: grpco_ui.open_group_checkout(w, user=getattr(w, 'user', 'PYADMIN'))) if grpco_ui else _coming_soon("Group Check Out"),
+        "Group Check Out Entry (Detail)": (lambda w: grpco_ui.open_group_checkout(w, user=getattr(w, 'user', 'PYADMIN'))) if grpco_ui else _coming_soon("Group Check Out Entry (Detail)"),
         "Guest Ledger": (lambda w: fdui.open_guest_ledger(w)) if fdui else _coming_soon("Guest Ledger"),
         "Summerized Guest Ledger": (lambda w: fdui.open_guest_ledger_summ(w)) if fdui else _coming_soon("Summerized Guest Ledger"),
         "Room Check Out Entry": (lambda w: fdui.open_group_checkout(w, user=getattr(w, 'user', 'PYADMIN'))) if fdui else _coming_soon("Room Check Out Entry"),
         "Room Check Out Entry (Detail)": (lambda w: fdui.open_group_detail_checkout(w, user=getattr(w, 'user', 'PYADMIN'))) if fdui else _coming_soon("Room Check Out Entry (Detail)"),
+        "Look Up Room": (lambda w: fdui.open_lookup_room(w)) if fdui else _coming_soon("Look Up Room"),
+        # Reservation Status (VB6 FrmReservationStatus.frm)
+        "Reservation Status": (lambda w: resbrowser_ui.open_reservation_status(w, user=getattr(w, 'user', 'PYADMIN'))) if resbrowser_ui else _coming_soon("Reservation Status"),
+        # Reservation Room Lookup (VB6 resRoomNo.frm / resRoomType.frm)
+        "Reservation Look Up Room Wise": (lambda w: resbrowser_ui.open_room_wise_lookup(w, user=getattr(w, 'user', 'PYADMIN'))) if resbrowser_ui else _coming_soon("Reservation Look Up Room Wise"),
+        "Room Category Wise Reservation Look Up": (lambda w: resbrowser_ui.open_room_type_lookup(w, user=getattr(w, 'user', 'PYADMIN'))) if resbrowser_ui else _coming_soon("Room Category Wise Reservation Look Up"),
         "Look Up Room": (lambda w: fdui.open_lookup_room(w)) if fdui else _coming_soon("Look Up Room"),
         "Depart Sundry Setting": (lambda w: fdui.open_depart_sundry(w)) if fdui else _coming_soon("Depart Sundry Setting"),
         # Wave 6: posting/settlement batch
@@ -1737,6 +1779,9 @@ def _form_registry() -> dict[str, callable]:
         # Reports Center (REPORTS_TXT / mdi leaves — read-only engine)
         **({cap: _open_report(cap)
             for cap in (_rpmod.menu_caption_map() if _rpmod else {})}),
+
+        # Reservation Status Screen (VB6 FrmReservationStatus.frm) - must come AFTER report expansion to avoid caption conflict
+        "Reservation Status": (lambda w: resbrowser_ui.open_reservation_status(w, user=getattr(w, 'user', 'PYADMIN'))) if resbrowser_ui else _coming_soon("Reservation Status"),
     }
 
 

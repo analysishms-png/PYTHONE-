@@ -1,0 +1,20 @@
+Hey! 👋
+
+Here's the structure prompt 👉
+
+My website's structure is getting messy as I add more features. I need you to:
+
+1. Organize the project into a clean folder structure
+2. Separate business logic from UI components
+3. Remove duplicate and dead code
+4. Use consistent naming conventions
+5. Add proper error handling everywhere
+6. Separate environment configs from code
+7. Modularize reusable components
+8. Add proper state management
+9. Document the codebase
+10. Set up a scalable API structure
+
+📋 Paste it into Claude/Cursor and see what happens. 🚀
+
+👀 Let me know how it goes!

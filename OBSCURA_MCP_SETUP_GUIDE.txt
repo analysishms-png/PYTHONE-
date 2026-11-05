@@ -1,0 +1,269 @@
+================================================================================
+  OBSCURA BROWSER AUTOMATION - GLOBAL MCP SETUP & MAINTENANCE GUIDE
+  OpenCode (global / all projects)  |  Windows
+  Installed: 30 Oct 2026            Version: v0.2.5
+================================================================================
+
+1. WHAT THIS IS
+--------------------------------------------------------------------------------
+Obscura is a headless browser engine written in Rust (~76 MiB, no Chromium,
+no Node, no other dependencies). It ships an MCP server that exposes browser
+automation tools to AI agents. This machine runs it as a GLOBAL OpenCode MCP
+server named `obscura-browser`.
+
+  Repo        https://github.com/h4ckf0r0day/obscura
+  License     Apache-2.0
+  Release     v0.2.5 (2026-10-17), tag GPG-verified (key B5690EEEBB952194)
+  Changelog   https://github.com/h4ckf0r0day/obscura/releases/tag/v0.2.5
+
+
+2. INSTALLATION (already done - kept here for rebuilds)
+--------------------------------------------------------------------------------
+Install dir (GLOBAL, both binaries MUST stay in the SAME folder):
+    C:\Users\Analysis\.local\obscura\
+        obscura.exe          79,357,952 bytes
+        obscura-worker.exe   73,408,000 bytes
+
+Download + extract:
+    curl -L -o obscura.zip ^
+      https://github.com/h4ckf0r0day/obscura/releases/download/v0.2.5/obscura-x86_64-windows.zip
+    unzip obscura.zip -d C:\Users\Analysis\.local\obscura
+
+Verify:
+    obscura.exe --version        ->  obscura 0.2.5
+
+Archive variants (pick ONE):
+    obscura-x86_64-windows.zip             <- USED HERE (render = screenshots/PDF)
+    obscura-x86_64-windows-stealth.zip     render + anti-fingerprint + tracker block
+    obscura-x86_64-windows-no-render.zip   no screenshots/PDF (smaller)
+    obscura-x86_64-windows-no-render-stealth.zip
+
+PATH (USER scope, HKCU\Environment):
+    C:\Users\Analysis\.local\obscura
+
+
+3. GLOBAL CONFIGURATION PATH
+--------------------------------------------------------------------------------
+    C:\Users\Analysis\.config\opencode\opencode.json
+
+This is OpenCode's GLOBAL (user) config. Every project/directory inherits it.
+There is NO project-level obscura config anywhere - by design.
+
+Backup made before the change:
+    C:\Users\Analysis\.config\opencode\opencode.json.bak-20261030-111321-obscura
+
+
+4. MCP CONFIGURATION (the exact block)
+--------------------------------------------------------------------------------
+    "mcp": {
+      "obscura-browser": {
+        "type": "local",
+        "command": [
+          "C:\\Users\\Analysis\\.local\\obscura\\obscura.exe",
+          "mcp"
+        ],
+        "enabled": true,
+        "timeout": 120000
+      },
+      ...
+    }
+
+Notes:
+  - OpenCode's key is `mcp` (NOT `mcpServers`).
+  - `type` and `command` are REQUIRED by the schema (McpLocalConfig).
+  - stdio transport is the default of `obscura mcp` (we do NOT pass --http,
+    which would open a network port instead).
+  - Absolute paths - works regardless of cwd.
+  - NO API key / credential is used or stored.
+  - `timeout: 120000` matches the other local entries in this file
+    (default is only 30 s, too tight for slow page loads).
+  - Server name `obscura-browser` becomes the tool prefix, so tools appear
+    as `obscura-browser_browser_navigate`, `obscura-browser_browser_click`, ...
+
+State after install:  15 MCP servers total, 6 enabled:
+    obscura-browser, context7, sequential-thinking, memory, playwright
+    (+ gh_grep, provided by an OpenCode plugin)
+
+
+5. AVAILABLE TOOLS (38, verified live via tools/list)
+--------------------------------------------------------------------------------
+Navigation
+  browser_navigate(url, waitUntil?)        waitUntil: load|domcontentloaded|networkidle0
+  browser_back()  browser_forward()  browser_reload()
+  browser_tab_new() browser_tab_list() browser_tab_switch() browser_tab_close()
+
+Read / inspect
+  browser_snapshot(max_chars?)             URL + title + actionable element refs + body text
+  browser_markdown(max_chars?)             token-dense Markdown of the page
+  browser_interactive_elements(limit?)     clickable/typeable elements WITH stable refs
+  browser_links(limit?, internal_only?)    every anchor as {text, href}
+  browser_extract(schema)                  structured fields by CSS selector (@attr, [] for arrays)
+  browser_count(selector)  browser_get_attribute(selector, attribute)
+
+Act
+  browser_click(ref?|selector?)            ref preferred (from a snapshot)
+  browser_fill(ref?|selector?, value)
+  browser_type(ref?|selector?, text)       appends
+  browser_detect_forms()
+  browser_fill_form(fields[], submit_ref?) fills many fields; submit is OPTIONAL
+  browser_select_option(selector, value)
+  browser_press_key(key, selector?)
+  browser_scroll(...)
+
+Capture
+  browser_screenshot(width?, height?)      returns an INLINE PNG (no path param!)
+  browser_pdf(landscape?, print_background?, scale?, paper_*, margin_*)
+
+Wait
+  browser_wait_for(selector, timeout?)
+  browser_wait_for_text(...)
+  browser_wait_for_function(function, timeout?, pollIntervalMs?)
+
+Observe
+  browser_console_messages()
+  browser_network_requests()
+
+Session
+  browser_evaluate(expression, timeoutMs?)
+  browser_get_cookies() browser_set_cookie() browser_clear_cookies()
+  browser_storage_state() browser_set_storage_state()
+  browser_search(...)
+  browser_close()                          closes pages + resets state
+
+
+6. USAGE EXAMPLES
+--------------------------------------------------------------------------------
+In an OpenCode prompt, name the server to steer the agent:
+
+  "Use obscura-browser to open https://example.com and tell me the page title."
+
+  "Use obscura-browser to fill the search box on https://example.com
+   and take a snapshot of the results."
+
+  "Use obscura-browser to screenshot https://news.ycombinator.com"
+
+CLI smoke test (no OpenCode needed):
+    obscura.exe fetch https://example.com --eval "document.title"
+    obscura.exe fetch https://example.com --dump text
+    obscura.exe fetch https://example.com --screenshot page.png
+
+Localhost / LAN dev servers are BLOCKED by default (SSRF protection).
+Allow them explicitly:
+    obscura.exe --allow-private-network fetch http://127.0.0.1:3000 --dump text
+  (or set OBSCURA_ALLOW_PRIVATE_NETWORK=1)
+
+
+7. DIAGNOSTICS
+--------------------------------------------------------------------------------
+A. Is it connected?
+       cd <any project>
+       opencode mcp list
+   Expect:  "obscura-browser connected"
+
+B. List the 38 tools directly (no OpenCode involved):
+       cd C:\Users\Analysis\.local\obscura
+       node _probe.mjs
+
+C. Print specific tool schemas:
+       node _schemas.mjs
+
+D. Does the binary run?
+       obscura.exe --version
+       obscura.exe fetch https://example.com --eval "document.title"
+
+
+8. TROUBLESHOOTING
+--------------------------------------------------------------------------------
+"obscura-browser" not in `opencode mcp list`
+  -> Check the entry exists in the GLOBAL file (not a project opencode.json):
+       C:\Users\Analysis\.config\opencode\opencode.json
+  -> Check the exe path in `command` exists.
+
+MCP spawns but tools are missing / timeout errors
+  -> Raise "timeout" in the entry (ms). Page loads on slow networks need it.
+  -> Run `node _probe.mjs` to see whether the server itself answers.
+
+`spawn ...obscura.exe ENOENT`
+  -> PATH entry missing, or the absolute path in `command` is wrong.
+     Check:  [Environment]::GetEnvironmentVariable('Path','User')
+
+Screenshot produced no file
+  -> Expected. `browser_screenshot` takes ONLY width/height and returns the PNG
+     as an inline MCP image. There is no `path` argument.
+
+Cannot reach http://localhost:... or a LAN host
+  -> Obscura blocks private IPs by default. Use --allow-private-network or
+     OBSCURA_ALLOW_PRIVATE_NETWORK=1 (see docs/Environment-variables.md).
+
+Tool names look like `obscura-browser_browser_navigate`
+  -> Normal. OpenCode prefixes MCP tools with the server name.
+     To disable them all at once use a glob in config:
+       "tools": { "obscura-browser_*": false }
+
+Want to turn it off without deleting it
+  -> In the global opencode.json set:  "enabled": false
+
+Other MCP servers became slow
+  -> MCP tools all count against context. Disable servers you do not use:
+       "tools": { "serverName_*": false }
+     or set that server's "enabled": false.
+
+
+9. UPDATE INSTRUCTIONS
+--------------------------------------------------------------------------------
+1. Check the latest release:
+       https://github.com/h4ckf0r0day/obscura/releases/latest
+   (current: v0.2.5)
+2. Stop any running OpenCode session (kills the spawned MCP process).
+3. Download the SAME variant you have (render, no stealth):
+       obscura-x86_64-windows.zip
+4. Extract OVER the install dir, replacing both .exe files:
+       unzip -o obscura.zip -d C:\Users\Analysis\.local\obscura
+5. Verify:   obscura.exe --version
+6. Reconnect:  opencode mcp list
+Nothing else changes - config and PATH stay valid (path is version-independent).
+
+
+10. UNINSTALL INSTRUCTIONS
+--------------------------------------------------------------------------------
+1. Remove from PATH (HKCU\Environment), entry:
+       C:\Users\Analysis\.local\obscura
+2. Delete the `obscura-browser` block from
+       C:\Users\Analysis\.config\opencode\opencode.json
+   (backup to restore from: opencode.json.bak-20261030-111321-obscura)
+3. Delete the install folder:
+       C:\Users\Analysis\.local\obscura
+4. Open a NEW terminal (PATH changes do not affect already-open ones).
+5. Confirm:  opencode mcp list   -> obscura-browser should be gone
+             where obscura      -> should not be found
+
+
+11. SECURITY NOTES
+--------------------------------------------------------------------------------
+- Third-party binary. Tag is GPG-verified, but this project publishes NO
+  SHA256 checksum assets, so supply-chain verification is limited to GitHub's
+  signature on the release tag.
+- Obscura runs with YOUR privileges: full local file + network access.
+  Treat it like any other local tool you trust.
+- No API key or credential is stored for this server.
+- MCP server binds nothing by default: stdio only. The `--http` mode (which
+  would listen on 127.0.0.1:3000) is NOT used here - do not expose it publicly.
+- Private/internal IPs are blocked by default (SSRF guard). Do not disable
+  --allow-private-network unless you trust the target.
+- Agent policy for this machine: ask before logging into real accounts,
+  before submitting sensitive forms, and never do irreversible actions
+  without explicit approval. (Verification run filled a practice form at
+  quotes.toscrape.com but deliberately did NOT submit it.)
+
+
+================================================================================
+  RELATED DOCS
+    OpenCode MCP  : https://opencode.ai/docs/mcp-servers/
+    OpenCode cfg  : https://opencode.ai/docs/config/
+    Obscura repo  : https://github.com/h4ckf0r0day/obscura
+    Setup guide   : https://peach-aluminum-e38.notion.site/Obscura-Setup-Guide-for-AI-Browser-Automation-4027989e90b080fba9c9c2b6c32b00e6
+
+  SAME DESKTOP FOLDER:
+    NVIDIA_SETUP_PROBLEM_AND_PLAN.txt
+    SKILL_MCP_SETUP_PROMPT.txt
+================================================================================

@@ -20,8 +20,9 @@
 | BUG-027 | inventory | MEDIUM | Hardcoded supplier `KK000265` in purchase logic | Purchase.frm supplier selection | inventory.py line ~XXX | OPEN | 2026-11-03 |
 | BUG-028 | folio | MEDIUM | Post Charges core logic inline in UI (fd_forms_ui.py) not extracted to folio.py | fdPostChrg.frm save sequence | fd_forms_ui.py, folio.py | OPEN | 2026-11-03 |
 | BUG-029 | folio | MEDIUM | Payment/Charge core logic inline in UI (fd_forms_ui.py) not extracted to folio.py | fdPaymentCharge.frm save sequence | fd_forms_ui.py, folio.py | OPEN | 2026-11-03 |
-| BUG-030 | fa_voucher | HIGH | Voucher Entry (FaVrEnt) core partial - missing validation, commit sequence | FaVrEnt.frm CmdSave_Click | fa_voucher.py, fa_voucher_ui.py | OPEN | 2026-11-03 |
-| BUG-031 | fa_enviro | MEDIUM | Voucher Environment (FaEnvron) partial - year/period handling differs | FaEnvron.frm Form_Load | fa_enviro.py, fa_enviro_ui.py | OPEN | 2026-11-03 |
+| BUG-030 | fa_voucher | HIGH | Voucher Entry (FaVrEnt) core partial - missing validation, commit sequence | FaVrEnt.frm CmdSave_Click | fa_voucher.py, fa_voucher_ui.py | FIXED | 2026-11-03 |
+| BUG-031 | fa_enviro | MEDIUM | Voucher Environment (FaEnvron) partial - year/period handling differs | FaEnvron.frm Form_Load | fa_enviro.py, fa_enviro_ui.py | FIXED | 2026-11-03 |
+| BUG-034 | year_end | HIGH | Year End Updation missing Company row creation, Voucher_Prefix reset, menuHelp/menuHelp1 copy, UserPermission copy | frmYearEnd.frm CmdYrUpdate_Click | year_end.py | OPEN | 2026-11-03 |
 | BUG-032 | pos_masters | LOW | Menu Item Entry (RsMenuItemEntry) missing rate group assignment | RsMenuItemEntry.frm | pos_masters_ui.py, pos_masters.py | OPEN | 2026-11-03 |
 | BUG-033 | pos_stock | MEDIUM | Kitchen Stock (RsKitchenStk) consumption update missing material tracking | RsKitchenStk.frm | pos_stock_ui.py, pos_stock.py | OPEN | 2026-11-03 |
 

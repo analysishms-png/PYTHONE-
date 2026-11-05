@@ -1,0 +1,1120 @@
+================================================================================
+  NVIDIA API KEY SETUP — PROBLEM & PLAN REPORT
+  Claude Code  +  OpenCode
+  Date : 30 October 2026
+  Note : Is file me API key masked hai (nvapi-7r-...MChh6L).
+================================================================================
+
+
+################################################################################
+#  SECTION A : CLAUDE CODE + NVIDIA                                            #
+################################################################################
+
+--------------------------------------------------------------------------------
+A-1. PROBLEM : "Claude run nahi ho raha"
+--------------------------------------------------------------------------------
+SYMPTOM
+  - Terminal me: `claude: command not found`
+  - Port 4001 par koi process LISTEN nahi tha
+  - Matlab Claude Code apna backend (proxy) tak hi nahi pahunch pa raha tha
+
+ROOT CAUSE (2 alag problems mili)
+  (1) NVIDIA proxy BAND tha.
+      settings.json me ANTHROPIC_BASE_URL = http://localhost:4001 set hai,
+      lekin us port par koi process chal hi nahi raha tha.
+      -> Claude Code ne request bheji hi nahi, isliye kuch kaam nahi karta tha.
+
+  (2) `claude` command PATH me nahi thi.
+      CLI installed tha:  C:\Users\Analysis\.claude\.. -> C:\Users\Analysis\.local\bin\claude.exe
+      Version: 2.1.312 (Claude Code)  -- ye khud BILKUL theek tha
+      Lekin  C:\Users\Analysis\.local\bin  folder user PATH me add hi nahi tha.
+
+PLAN / FIX
+  Step 1. NVIDIA API key verify (bina kuch badle, seedha API call):
+          POST https://integrate.api.nvidia.com/v1/chat/completions
+          -> HTTP 200  => key VALID hai, koi change ki zarurat nahi
+
+  Step 2. Proxy start:
+          cd C:\Users\Analysis\.claude
+          node nvidia-proxy.mjs
+          Health check -> {"status":"ok","port":4001,"key_configured":true}
+
+  Step 3. PATH fix (user scope):
+          [Environment]::SetEnvironmentVariable(
+            'Path', <existing> + ';C:\Users\Analysis\.local\bin', 'User')
+          Registry HKCU\Environment me confirm kiya.
+
+  Step 4. Test:
+          claude -p "Reply with exactly: CLAUDE_WORKING"  -> output OK, exit 0
+
+VERIFICATION
+  [OK] proxy /health          = HTTP 200, key_configured: true
+  [OK] claude -p (default)    -> response mila, exit 0
+  [OK] claude -p (--model)    -> response mila, exit 0
+  [OK] PATH registry me       -> .local\bin present
+
+NOTE (zaruri)
+  PATH ka change already-open terminals me nahi dikhta.
+  Naya terminal / naya IDE window kholna padta hai.
+
+--------------------------------------------------------------------------------
+A-2. PROBLEM : Proxy reboot ke baad dobara band na jaye
+--------------------------------------------------------------------------------
+FINDING
+  Startup folder me pehe se entry thi:
+    C:\Users\Analysis\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\nvidia-proxy.lnk
+  Shortcut config SAHI tha:
+    TargetPath  : C:\Users\Analysis\.claude\start-nvidia-proxy.cmd
+    WorkingDir  : C:\Users\Analysis\.claude
+    WindowStyle : 7 (minimized)
+
+  Kyun kaam nahi kiya -> shortcut 08:34 me BANAYA GAYA THA, aur logon usse
+  PEHELE ho chuka tha. Isliye wo ek baar chala hi nahi tha. (Setup bug nahi,
+  timing issue tha.)
+
+PLAN / FIX (Logon simulation test)
+  1. Running proxy kill   -> port 4001 FREE confirm
+  2. Startup shortcut launch (wahi tarika jo logon par hota hai)
+  3. Health check + Claude test
+
+VERIFICATION
+  [OK] shortcut se proxy khud start hua  -> PID naya, /health HTTP 200
+  [OK] claude -p -> AUTOSTART_OK, exit 0
+  [OK] exactly 1 proxy instance chal raha tha (duplicate nahi)
+
+--------------------------------------------------------------------------------
+A-3. PROBLEM (observed once) : Proxy ek baar WEDGE ho gaya
+--------------------------------------------------------------------------------
+SYMPTOM
+  - /health bhi hang karne laga  -> HTTP=000, curl 30s timeout
+  - POST /v1/messages bhi hang
+  - Ek leftover claude.exe process atka hua tha (bada memory use)
+  - Outbound NVIDIA call bilkul theek tha (HTTP 200) -> uplink theek tha,
+    problem local proxy ke event loop me thi
+
+FIX
+  - Proxy restart
+  - Leftover claude.exe process kill
+  - Dono ke baad: 3 consecutive clean runs, koi wedge nahi
+
+STATUS
+  Ek baar observe hua; restart ke baad dobara nahi hua.
+  Agar dobara dikhe to -> ek watchdog (health-check + auto-restart) add karna
+  chahiye. ABHI ADD NAHI KIYA (request me tha hi nahi).
+
+--------------------------------------------------------------------------------
+A-4. PROBLEM : "[claude-code:unrecognized_model]" warning har run me
+--------------------------------------------------------------------------------
+SYMPTOM
+  har `claude -p ...` run me stderr par ek line:
+  [claude-code:unrecognized_model] {"model":"nvidia/nemotron-3-ultra-550b-a55b",
+                                    "query_source":"sdk"}
+  Output theek aata tha, sirf ek extra line chhap ti thi.
+
+RESEARCH (binary reverse-engineering)
+  claude.exe me exact emit function mila:
+      var mhr = "[claude-code:unrecognized_model]";
+      function bEe(e, n) {
+        if (n === "model_validation") return;
+        if (A3e(e)) return;
+        ...
+        if (Qwe(e) || Qwe(r) || RL(e, r, $f(e))) return;   // catalog gate
+        a("tengu_api_unrecognized_model", {...});
+        if (hre() !== null && CLAUDE_CODE_SESSION_KIND !== "bg") aK(s + "\n");
+      }
+
+  Do important baatein mili:
+   (1) Ye warning SIRF print mode (-p) me print hoti hai, kyunki
+       hre() = launchOptions.printOutputFormat()  -> TUI me null hota hai.
+       matlab: interactive TUI me ye warning KABHI aati hi nahi.
+   (2) Agar model catalog me status "described"/"known" ho jaye to warning
+       skip ho jati hai. Official mapping mechanism hai:
+       `modelPicker` row + `behavesAs`.
+
+ATTEMPTED (jo KAAM NAHI KIYA)
+  CLAUDE_CODE_ALLOW_OTHER_MODELS=1  -> TEST KIYA, warning phir bhi aayi.
+  Ye flag sirf "client-data document me entry na ho to exit mat karo" ke liye
+  hai, warning silence karne ke liye NAHI hai.
+
+PLAN / FIX (jo KAAM KIYA)
+  File : C:\Users\Analysis\.claude\settings.json
+
+  "modelPicker": {
+    "options": [
+      { "model": "nvidia/nemotron-3-ultra-550b-a55b",
+        "label": "Nemotron 3 Ultra 550B",
+        "behavesAs": "claude-opus-4-8" },
+      { "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "label": "Nemotron 3.5 Lightning 30B",
+        "behavesAs": "claude-haiku-4-5" }
+    ]
+  }
+
+  Kyun ye sahi hai -> schema ka apna description:
+  "For a model this version of Claude Code does not know: the ID of a model
+   it does know ... Changes NEITHER the row's label NOR the model ID sent."
+  Matlab: warning gayi, lekin NVIDIA ka model ID jaisa tha waisa hi ja raha hai.
+
+  behavesAs values kahan se -> claude.exe ke andar se is version ke known
+  model IDs extract kiye (claude-opus-4-8, claude-haiku-4-5, etc.)
+
+  zaruri tha -> modelPicker sirf managed / --settings / USER settings me
+  honor hota hai (project checkout se nahi). File user settings me hai.
+
+VERIFICATION
+  [OK] default model run  -> stdout mila, STDERR EMPTY
+  [OK] lightning model    -> stdout mila, STDERR EMPTY
+  [OK] tool-using run     -> stdout mila, STDERR EMPTY
+  [OK] proxy log me model ID SAME:
+         model=nvidia/nemotron-3-ultra-550b-a55b
+         model=nvidia/nemotron-3.5-lightning-30b-a3b
+  [OK] bonus: /model picker me ab dono rows apne label ke saath dikhenge
+
+
+################################################################################
+#  SECTION B : OPENCODE + NVIDIA                                               #
+################################################################################
+
+--------------------------------------------------------------------------------
+B-0. RESEARCH (pehle samjha, phir add kiya)
+--------------------------------------------------------------------------------
+  [1] models.dev catalog check kiya (233 providers) ->
+      built-in `nvidia` provider MILA:
+        npm  : @ai-sdk/openai-compatible
+        api  : https://integrate.api.nvidia.com/v1
+        env  : NVIDIA_API_KEY
+        models: 52, jinme dono hamare available:
+          nvidia/nemotron-3-ultra-550b-a55b     -> YES
+          nvidia/nemotron-3.5-lightning-30b-a3b -> YES
+      -> matlab CUSTOM provider banana hi nahi pada.
+
+  [2] opencode config schema (opencode.ai/config.json) verify kiya ->
+        provider.<id>.options.apiKey   -> VALID field
+        model ref format               -> providerId/modelId
+        (isliye model ref bana: nvidia/nvidia/nemotron-3-ultra-550b-a55b)
+
+  [3] oh-my-opencode-slim plugin ka schema (unpkg) check kiya ->
+        preset entry = { model, variant?, skills }
+        (isliye pata chala variant optional hai)
+
+--------------------------------------------------------------------------------
+B-1. PROBLEM : opencode me NVIDIA configured hi nahi tha
+--------------------------------------------------------------------------------
+SYMPTOM
+  opencode.json me koi `provider` section hi nahi tha, na model default tha.
+
+PLAN / FIX
+  File : C:\Users\Analysis\.config\opencode\opencode.json
+
+  "model":       "nvidia/nvidia/nemotron-3-ultra-550b-a55b",
+  "small_model": "nvidia/nvidia/nemotron-3.5-lightning-30b-a3b",
+  "provider": {
+    "nvidia": {
+      "name": "NVIDIA NIM",
+      "options": { "apiKey": "nvapi-7r-...MChh6L" }
+    }
+  }
+
+  (purane MCP servers 14, plugins 3, permissions -> sab untouched)
+
+VERIFICATION
+  [OK] JSON parse OK
+  [OK] `opencode models nvidia` -> provider recognised, dono models listed
+
+--------------------------------------------------------------------------------
+B-2. PROBLEM (MAIN) : opencode CRASH karta tha
+--------------------------------------------------------------------------------
+ERROR
+  Error: { "name": "UnknownError",
+    "data": { "message": "Unexpected server error..." } }   exit=1
+
+  Detailed log se asli wajah:
+  ProviderModelNotFoundError: Model not found: openai/gpt-6.1-sol.
+  Did you mean: gpt-6.1-sol, gpt-6.1-sol-pro, gpt-6.1-sol-fast?
+
+ROOT CAUSE
+  opencode me plugin chal raha hai:  oh-my-opencode-slim
+  Uski config (oh-my-opencode-slim.json) me tha:
+        "preset": "openai"
+  Is preset ne agents ko force kar diya tha:
+        orchestrator -> openai/gpt-6.1-sol
+        oracle        -> openai/gpt-6.1-sol
+        fixer         -> openai/gpt-6.1-sol
+        explorer      -> openai/gpt-6-luna
+        designer      -> openai/gpt-6-luna
+  Lekin OpenAI provider configured hi NAHI tha -> model not found -> crash.
+
+  IMPORTANT: Sirf NVIDIA key add karne se ye fix NAHI hota. Ye alag problem thi.
+
+PLAN / FIX
+  File : C:\Users\Analysis\.config\opencode\oh-my-opencode-slim.json
+
+  1. "preset": "openai"   ->   "preset": "nvidia"
+  2. naya block add kiya:
+
+     "nvidia": {
+       "orchestrator": { "model": "nvidia/nvidia/nemotron-3-ultra-550b-a55b",
+                         "skills": ["*"] },
+       "oracle":       { "model": "nvidia/nvidia/nemotron-3-ultra-550b-a55b",
+                         "skills": ["simplify"] },
+       "explorer":     { "model": "nvidia/nvidia/nemotron-3.5-lightning-30b-a3b",
+                         "skills": [] },
+       "designer":     { "model": "nvidia/nvidia/nemotron-3.5-lightning-30b-a3b",
+                         "skills": [] },
+       "fixer":        { "model": "nvidia/nvidia/nemotron-3-ultra-550b-a55b",
+                         "skills": [] },
+       "observer":     { "model": "nvidia/nvidia/nemotron-3.5-lightning-30b-a3b",
+                         "skills": [] }
+     }
+
+  DESIGN DECISION — `variant` field KYUN chhoda:
+     models.dev par dono NVIDIA models ke liye  variants = null  hai.
+     variant lagane se dobara error aata. Isliye omit kiya.
+     (dono models ka  tool_call = true  hai -> coding ke liye sahi)
+
+VERIFICATION
+  [OK] `opencode run` -> "orchestrator · nvidia/nemotron-3-ultra-550b-a55b"
+                          -> OPENCODE_NVIDIA_OK, exit 0
+  [OK] ab wo ProviderModelNotFoundError BILKUL nahi aata
+
+
+################################################################################
+#  SECTION C : FINAL TEST RESULTS                                              #
+################################################################################
+
+CLAUDE CODE
+  ------------------------------------------------------------------------
+  | # | Test                                    | Result          | Status |
+  ------------------------------------------------------------------------
+  | 1 | Proxy /health                           | HTTP 200        |  OK    |
+  | 2 | NVIDIA API key (direct curl)            | HTTP 200        |  OK    |
+  | 3 | claude -p default model                 | response, e=0   |  OK    |
+  | 4 | claude -p --model lightning             | response, e=0   |  OK    |
+  | 5 | claude -p tool call (Bash)              | tool executed   |  OK    |
+  | 6 | stream-json streaming (5 events/~6s)    | progressive     |  OK    |
+  | 7 | multi-turn interactive session          | state preserved |  OK    |
+  | 8 | warning silenced - default model        | stderr EMPTY    |  OK    |
+  | 9 | warning silenced - lightning model      | stderr EMPTY    |  OK    |
+  |10 | warning silenced - tool run             | stderr EMPTY    |  OK    |
+  ------------------------------------------------------------------------
+  Result: ALL PASS
+
+  Tool round trip (proxy log proof):
+     04:14:43  stop=tool_use   <- model ne Bash tool maanga
+     04:15:06  stop=end_turn   <- tool_result ke baad final answer
+
+OPENCODE
+  ------------------------------------------------------------------------
+  | # | Test                                    | Result          | Status |
+  ------------------------------------------------------------------------
+  | 1 | API key present in config               | nvapi-7r-...    |  OK    |
+  | 2 | `opencode models nvidia`                | 6 nemotron ids  |  OK    |
+  | 3 | live run (default model)                | OC_TEST_A_OK    |  OK    |
+  | 4 | no auth/model errors                    | none            |  OK    |
+  | 5 | tool call (bash)                        | OC_TOOL_OK      |  OK    |
+  | 6 | second model (lightning)                | OC_TEST_B_OK    |  OK    |
+  | 7 | key valid                               | no 401          |  OK    |
+  | 8 | direct key test (bina opencode)         | HTTP 200        |  OK    |
+  ------------------------------------------------------------------------
+  Result: 8/8 PASS
+
+
+################################################################################
+#  SECTION D : FILES CHANGED + BACKUPS                                         #
+################################################################################
+
+  1) C:\Users\Analysis\.claude\settings.json
+     -> modelPicker (2 rows) add kiya
+     Backup: .claude\settings.json.bak-20261030-094000-modelpicker
+
+  2) C:\Users\Analysis\.claude\nvidia-proxy.mjs
+     -> KUCH BADDAL NAHI gaya. Sirf start kiya.
+
+  3) C:\Users\Analysis\.config\opencode\opencode.json
+     -> provider.nvidia + model + small_model add kiya
+     Backup: .config\opencode\opencode.json.bak-20261030-092256-nvidia
+
+  4) C:\Users\Analysis\.config\opencode\oh-my-opencode-slim.json
+     -> preset openai -> nvidia, naya presets.nvidia block
+     Backup: .config\opencode\oh-my-opencode-slim.json.bak-20261030-092603
+
+  5) Windows User PATH (HKCU\Environment)
+     -> ;C:\Users\Analysis\.local\bin  append kiya
+     Undo: PATH entry delete kar do
+
+
+################################################################################
+#  SECTION E : ROLLBACK / TROUBLESHOOTING                                      #
+################################################################################
+
+  Warning wapas aa rahi hai?
+    -> settings.json me modelPicker block check karo, JSON valid hai ya nahi.
+    -> Rollback: settings.json.bak-20261030-094000-modelpicker restore karo.
+
+  Claude phir se "not found" bol raha hai?
+    -> Naya terminal khol (PATH change purane terminal me nahi aata).
+    -> PATH me C:\Users\Analysis\.local\bin hona chahiye.
+
+  Claude response nahi de raha?
+    -> Proxy chal raha hai ya nahi:  curl http://127.0.0.1:4001/health
+    -> Band ho to:  double-click  C:\Users\Analysis\.claude\start-nvidia-proxy.cmd
+    -> Log dekho:   C:\Users\Analysis\.claude\nvidia-proxy.log
+
+  opencode "Model not found: openai/gpt-6.1-sol" bol raha hai?
+    -> oh-my-opencode-slim.json me "preset"  "nvidia"  hona chahiye.
+    -> Rollback file: oh-my-opencode-slim.json.bak-20261030-092603
+
+  API key badalni hai?
+    -> Claude : .claude\settings.json  -> env.ANTHROPIC_AUTH_TOKEN
+    -> OpenCode: .config\opencode\opencode.json -> provider.nvidia.options.apiKey
+    (dono jagah same NVIDIA key hai)
+
+
+================================================================================
+  END OF REPORT
+================================================================================
+
+
+NvidiaAPI key :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
+
+================================================================================
+  SKILL + MCP SETUP  --  FULL PROMPT & GUIDELINE
+  Claude Code  +  OpenCode  +  sab AI agents ke liye
+  Machine : Windows  |  Date: 30 Oct 2026
+  Source  : C:\Users\Analysis (global)  +  D:\ (project/reference)
+================================================================================
+
+
+################################################################################
+#                                                                              #
+#   PART 0 -- COPY-PASTE PROMPT (isko kisi bhi AI agent ko do)                 #
+#                                                                              #
+################################################################################
+
+--------------------------------------------------------------------------------
+PROMPT (English, kisi bhi AI coding agent ke liye)
+--------------------------------------------------------------------------------
+
+Set up Skills + MCP + Agents GLOBALLY for Claude Code and OpenCode on this
+Windows machine, using D:\ as the reference source. Follow these rules exactly:
+
+1) LOCATIONS -- put things ONLY in the global/user scope so they work from
+   every folder (C:\dev\*, C:\Users\Analysis, D:\, etc.):
+
+   Claude Code:
+     Global config dir : C:\Users\Analysis\.claude\
+       agents\          -> one .md per agent, MUST start with --- and have
+                            frontmatter:  name, description, tools, model
+       skills\          -> one folder per skill, MUST contain SKILL.md
+       hooks\           -> hook scripts (.py)
+       settings.json    -> env, modelPicker, enabledPlugins, hooks
+     MCP registry      : C:\Users\Analysis\.claude.json  -> "mcpServers": {...}
+     Binary on PATH    : C:\Users\Analysis\.local\bin\claude.exe
+                          (this folder must be in the USER PATH)
+
+   OpenCode:
+     Global config     : C:\Users\Analysis\.config\opencode\opencode.json
+       "mcp"           -> { name: { type, command|url, enabled } }
+       "provider"      -> LLM providers + apiKey
+       "agent"         -> inline agent definitions
+       "plugin"        -> plugin list
+     Agents on disk    : C:\Users\Analysis\.config\opencode\agents\*.md
+     Extra agent/skill kit : C:\Users\Analysis\.opencode\  (agents\, skills\,
+                             commands\, plugins\, rules\, hooks\)
+
+   Cross-tool Agent Skills (open format):
+     C:\Users\Analysis\.agents\skills\<name>\SKILL.md
+
+2) RULE -- a skill placed ONLY in  C:\Users\Analysis\.agents\skills  is NOT
+   global for Claude Code. It only resolves when the current working directory
+   itself contains a .agents\ folder. ALWAYS also copy every skill into
+   C:\Users\Analysis\.claude\skills\  so it resolves from any folder.
+
+3) PROJECT vs GLOBAL
+     <project>\.claude\            overrides/extends  ~/.claude
+     <project>\opencode.json       MERGES with the global opencode.json
+                                    (it does NOT replace it)
+   So keep shared agents/skills/MCP in GLOBAL. Keep only project-specific
+   things (env, project-only agents) at project level.
+
+4) MCP
+   - Claude Code: add to  ~/.claude.json  ->  "mcpServers".
+     Verify with:   claude mcp list        (expect: ... - Connected)
+   - OpenCode:     add to  opencode.json  ->  "mcp", set "enabled": true.
+     Verify with:   opencode mcp list
+   - Local stdio servers on Windows need  ["cmd","/c","npx","-y","<pkg>"].
+
+5) SKILLS format
+   Each skill = a folder with SKILL.md:
+     ---
+     name: my-skill
+     description: >-
+       What it does and WHEN to use it.
+     ---
+     <instructions>
+   Verify with:  claude -p "/my-skill reply with X"
+   A skill that returns "not installed in this session" is in the WRONG folder.
+
+6) AGENTS format (Claude Code)
+     ---
+     name: my-agent
+     description: What it does / when to pick it
+     tools: Read, Grep, Glob
+     model: inherit
+     ---
+     <system prompt>
+   Verify with:  claude -p --agent my-agent "reply with X"
+   Broken/undecodable .md files are SILENTLY skipped -- always verify the
+   available-agents list, do not trust the file count.
+
+7) HEALTH CHECK (run from a folder with NO local config, e.g. C:\dev\graph-tools)
+     claude mcp list
+     claude -p --agent architect "reply with X"
+     claude -p "/some-skill reply with X"
+     opencode agent list
+     opencode mcp list
+     opencode run "reply with X"
+
+8) THIS MACHINE'S EXTRA PREREQUISITE (NVIDIA, not optional)
+   Claude Code is wired to a local proxy that translates the Anthropic API to
+   NVIDIA.  ANTHROPIC_BASE_URL = http://localhost:4001
+   If it is down, nothing works. Check and start:
+       curl http://127.0.0.1:4001/health
+       double-click  C:\Users\Analysis\.claude\start-nvidia-proxy.cmd
+   Auto-start entry:  Startup\nvidia-proxy.lnk
+   Log:  C:\Users\Analysis\.claude\nvidia-proxy.log
+
+
+################################################################################
+#                                                                              #
+#   PART 1 -- GUIDELINE: what goes where (full map)                            #
+#                                                                              #
+################################################################################
+
+--------------------------------------------------------------------------------
+1.1  DIRECTORY MAP (is machine par)
+--------------------------------------------------------------------------------
+
+GLOBAL / USER SCOPE  <-- yahan rako, tabhi sab folders me chalega
+|
+|-- C:\Users\Analysis\.claude\                [Claude Code global config]
+|   |-- settings.json        env, modelPicker, enabledPlugins, theme
+|   |-- agents\              132 valid .md agents  (5->3 corrupt quarantine)
+|   |-- skills\              34 skills             <-- TRUE global skills
+|   |-- hooks\               post_edit_checks.py
+|   |-- nvidia-proxy.mjs     Anthropic -> NVIDIA translator
+|   |-- start-nvidia-proxy.cmd
+|   `-- backups\corrupt-agents-20261030\   3 unrecoverable agents + README
+|
+|-- C:\Users\Analysis\.claude.json            [Claude MCP + project registry]
+|   `-- mcpServers: { context7 }
+|
+|-- C:\Users\Analysis\.agents\skills\         28 cross-tool Agent Skills
+|                                              (speckit-*, vb6-python-parity...)
+|
+|-- C:\Users\Analysis\.config\opencode\       [OpenCode global config]
+|   |-- opencode.json         provider(nvidia), mcp(14), plugin, permission
+|   |-- agents\               6 agents (architect, backend-dev, ceo...)
+|   `-- AGENTS.md             global instructions (context7 usage)
+|
+|-- C:\Users\Analysis\.opencode\              [opencode kit v1.3.144]
+|   |-- agents\  128   skills\ 216   commands\  contexts\  rules\
+|   `-- plugins\ agentmemory-capture.ts, ponytail.mjs
+|
+`-- C:\Users\Analysis\.local\bin\claude.exe   (must be on USER PATH)
+
+
+PROJECT / REFERENCE SCOPE
+|
+|-- D:\                                        [project root, reference source]
+|   |-- .claude\
+|   |   |-- agents\   7 agents  (sab global me SAME byte-identical)
+|   |   |-- skills\   5 skills  (sab global me SAME)
+|   |   |-- hooks\    post_edit_checks.py
+|   |   `-- settings.json   hooks + enabledPlugins + extraKnownMarketplaces
+|   |-- .claude.json   mcpServers: NONE, projects = purane LENOVO machine paths
+|   |-- .agents\skills\  11 skills  (speckit-* x10 + vb6-python-parity)
+|   |-- .github\skills\  speckit-* (same 10)
+|   `-- .opencode\      128 agents, 216 skills (byte-identical to ~/.opencode)
+|
+|-- C:\dev\graph-tools\         koi config NAHI -> pure global use karta hai
+|   `-- cytoscape.js\           AGENTS.md + CLAUDE.md (third-party repo, chhodo)
+|
+`-- C:\Users\Analysis\multi-agent-orchestrator\
+    `-- opencode.json           ollama provider + swarm agents (project-specific,
+                                global NVIDIA ko override NAHI karta -- merge hota hai)
+
+
+--------------------------------------------------------------------------------
+1.2  CURRENT STATE (verified 30 Oct 2026)
+--------------------------------------------------------------------------------
+
+CLAUDE CODE
+  Agents   132 files, 0 invalid, 136+ available  (plugins se extra)
+  Skills   34 in ~/.claude/skills  +  28 in ~/.agents/skills
+           47 skills resolve from C:\dev\graph-tools
+  MCP      context7  ->  Connected   (global)
+  PATH     C:\Users\Analysis\.local\bin added to USER PATH
+  Hooks    PostToolUse -> post_edit_checks.py   (copied from D:, path fixed,
+           verified firing) extraKnownMarketplaces.ecc declared
+  NOTE     installed_plugins.json -> plugins: {} , so enabledPlugins
+           "ecc@ecc" is a DANGLING reference until you run
+           `claude plugin install` (marketplace is now declared though).
+
+OPENCODE
+  Agents   143 (from C:\ and D:\), incl. 6 own + kit's 128 + oh-my-opencode roles
+  Skills   via plugins (superpowers, oh-my-opencode-slim, opencode-ensemble)
+           + kit 216 in ~/.opencode/skills
+  MCP      14 configured, 5 ENABLED+CONNECTED:
+             gh_grep, context7, sequential-thinking, memory, playwright
+           9 disabled:
+             filesystem, chrome-devtools, github, brave-search, tavily,
+             firecrawl, notion, sentry, stripe, mongodb
+  Model    nvidia/nemotron-3-ultra-550b-a55b      (default)
+           nvidia/nemotron-3.5-lightning-30b-a3b  (small_model)
+
+
+################################################################################
+#                                                                              #
+#   PART 2 -- PROBLEMS JO MILE, aur unka fix (dobara mat dohrana)              #
+#                                                                              #
+################################################################################
+
+P1. `claude` command not found
+    -> C:\Users\Analysis\.local\bin USER PATH me nahi tha.
+       Fix: [Environment]::SetEnvironmentVariable('Path', $p+';C:\Users\Analysis\.local\bin','User')
+       Note: naya terminal kholna padta hai.
+
+P2. Claude backend tak nahi pahunch raha tha
+    -> NVIDIA proxy (port 4001) band tha.
+       Fix: start-nvidia-proxy.cmd ; Startup\nvidia.lnk se auto-start
+
+P3. Warning: [claude-code:unrecognized_model] har -p run me
+    -> NVIDIA model ID Claude Code ki catalog me nahi.
+       TRIED & FAILED: CLAUDE_CODE_ALLOW_OTHER_MODELS=1  (kuch nahi kiya)
+       WORKING FIX: ~/.claude/settings.json me
+         "modelPicker": { "options": [ { "model": "nvidia/...",
+           "label": "...", "behavesAs": "claude-opus-4-8" }, ... ] }
+       Ye model ID bhejna BILKUL change nahi karta (schema ka wada hai).
+
+P4. opencode CRASH: ProviderModelNotFoundError: openai/gpt-6.1-sol
+    -> oh-my-opencode-slim plugin ka "preset": "openai" OpenAI models force
+       kar raha tha jo the hi nahi.
+       Fix: preset -> "nvidia" + presets.nvidia block (6 roles).
+       NOTE: variant field SKIP kiya -- dono NVIDIA models ka variants=null hai.
+
+P5. Skill "/X" bol raha hai "not installed in this session"
+    -> skill galat jagah thi. ~\.agents\skills global NAHI hai Claude ke liye.
+       Fix: ~/.claude/skills me copy.  (VERIFY: 47 skills ab har folder se)
+
+P6. Agents file count 135 tha, par available list me 136 aur 3 missing
+    -> 3 files corrupt the (100% bytes = 0xFF / binary), Claude chup-chup
+       skip kar deta hai. Opencode me bhi same corruption.
+       Fix: ~/.claude/backups/corrupt-agents-20261030/ me quarantine.
+       (content recoverable NAHI hai -- kahin clean copy nahi mili)
+
+P7. D:\.claude\settings.json ka hook TOOTA hua hai
+    -> command point karta hai  C:\Users\LENOVO\Desktop\serialkey\...
+       (purane machine ka path, is machine par exist hi nahi karta)
+    FIXED 2026-10-30: hook + extraKnownMarketplaces ko D: se utha kar GLOBAL
+    (~/.claude/settings.json) me daala, path BADAL ke is machine par:
+       "command": "python \"C:\Users\Analysis\.claude\hooks\post_edit_checks.py\""
+    Verified: script exit 0, aur real Write call par hook FIRE hua
+    (post_edit_checks.log 16785 -> 16837 bytes, ruff checks chale).
+    NOTE: D:\ khud ka settings.json abhi bhi purana toota path rakhta hai.
+
+P8. `claude agents --json` [] dikhata hai
+    -> ye subcommand ka quirk hai, REAL list alag se milti hai:
+       claude -p --agent <bad-name> "hi"   (error me poori list chhapti hai)
+       Isliye hamesha --agent se verify karo, --json pe mat bharosa karo.
+
+
+################################################################################
+#                                                                              #
+#   PART 3 -- REPO / DOC LINKS                                                 #
+#                                                                              #
+################################################################################
+
+CORE TOOL
+  Claude Code (repo, issue tracker)   https://github.com/anthropics/claude-code
+  Claude Code docs                    https://docs.claude.com/en/docs/claude-code
+  OpenCode (by SST)                   https://github.com/sst/opencode
+  OpenCode docs                       https://opencode.ai/docs/
+    - Providers (custom/OpenAI-comp)  https://opencode.ai/docs/providers
+    - Config                          https://opencode.ai/docs/config
+    - Skills                          https://opencode.ai/docs/skills
+    - MCP                             https://opencode.ai/docs/mcp
+
+SKILLS
+  Anthropic Agent Skills (official)   https://github.com/anthropics/skills
+  OpenCode Agent Skills               https://opencode.ai/docs/skills
+
+MCP (Model Context Protocol)
+  Spec / docs                         https://modelcontextprotocol.io
+  Reference servers collection        https://github.com/modelcontextprotocol/servers
+  Context7 (docs lookup)              https://github.com/upstash/context7
+  Playwright MCP (browser)            https://github.com/microsoft/playwright-mcp
+  Sequential thinking                 https://www.npmjs.com/package/@modelcontextprotocol/server-sequential-thinking
+  Memory                              https://www.npmjs.com/package/@modelcontextprotocol/server-memory
+  Filesystem                          https://www.npmjs.com/package/@modelcontextprotocol/server-filesystem
+
+LLM PROVIDER / MODEL CATALOG
+  models.dev catalog                  https://models.dev
+  NVIDIA NIM API docs                 https://docs.api.nvidia.com/nim/
+  NVIDIA API endpoint                 https://integrate.api.nvidia.com/v1
+  AI SDK OpenAI-compatible adapter    https://www.npmjs.com/package/@ai-sdk/openai-compatible
+
+SPECKIT SKILLS (github spec-kit)
+  Repo                                https://github.com/github/spec-kit
+
+OPENCODE PLUGINS USED HERE
+  oh-my-opencode-slim                 https://www.npmjs.com/package/oh-my-opencode-slim
+  opencode-ensemble                   https://www.npmjs.com/package/@hueyexe/opencode-ensemble
+
+
+################################################################################
+#                                                                              #
+#   PART 4 -- QUICK COMMAND SHEET                                              #
+#                                                                              #
+################################################################################
+
+--- Claude Code ---------------------------------------------------------------
+  claude                                        # interactive TUI
+  claude -p "prompt"                            # one-shot, output on stdout
+  claude mcp list                               # MCP health
+  claude -p --agent <name> "prompt"             # run a specific agent
+  claude -p "/<skill> prompt"                   # invoke a skill
+  claude agents                                 # interactive agent browser (TTY)
+  claude --help                                 # all flags
+
+  Careful: --allowedTools is VARIADIC. Keep the prompt right after -p:
+    claude -p "do X" --allowedTools "Bash"      <-- correct
+    claude -p --allowedTools "Bash" "do X"      <-- WRONG (prompt eaten)
+
+--- OpenCode ------------------------------------------------------------------
+  opencode                                      # interactive TUI
+  opencode run "prompt"                         # one-shot
+  opencode mcp list                             # MCP health (aliases: ls)
+  opencode agent list                           # all agents
+  opencode models [provider]                    # models of a provider
+  opencode agent create                         # new agent
+
+--- NVIDIA proxy ---------------------------------------------------------------
+  curl http://127.0.0.1:4001/health             # must return {"status":"ok"}
+  tail -f C:\Users\Analysis\.claude\nvidia-proxy.log
+
+--- Health check from a clean folder -----------------------------------------
+  cd C:\dev\graph-tools
+  claude mcp list
+  claude -p --agent architect "reply OK"
+  claude -p "/brainstorming reply OK"
+  opencode agent list
+  opencode run "reply OK"
+
+
+================================================================================
+  END
+  Related file: NVIDIA_SETUP_PROBLEM_AND_PLAN.txt (same Desktop folder)
+================================================================================
+
+# GLOBAL INSTALLATION: OBSCURA AI BROWSER AUTOMATION + OPENCODE MCP
+
+Act as an expert AI Agent Infrastructure Engineer and MCP Integration Specialist.
+
+## OBJECTIVE
+
+Install, configure and integrate Obscura as a GLOBAL browser automation MCP server for OpenCode.
+
+The integration must work across ALL OpenCode projects and directories, not just one repository.
+
+## OFFICIAL LINKS
+
+Obscura GitHub:
+https://github.com/h4ckf0r0day/obscura
+
+Latest Releases:
+https://github.com/h4ckf0r0day/obscura/releases/latest
+
+Obscura Setup Guide:
+https://peach-aluminum-e38.notion.site/Obscura-Setup-Guide-for-AI-Browser-Automation-4027989e90b080fba9c9c2b6c32b00e6
+
+OpenCode MCP Documentation:
+https://opencode.ai/docs/mcp/
+
+OpenCode Configuration:
+https://opencode.ai/docs/config/
+
+## PHASE 1: DOCUMENTATION & REPOSITORY ANALYSIS
+
+- Read the official Obscura README.
+- Read installation instructions.
+- Inspect available releases.
+- Identify MCP server entry point.
+- Identify actual MCP tools and their schemas.
+- Identify dependencies and runtime requirements.
+- Verify supported Windows installation method.
+- Never assume commands or options without checking documentation.
+
+## PHASE 2: GLOBAL INSTALLATION
+
+Install Obscura globally using the official supported installation method.
+
+Requirements:
+- Use a permanent global installation directory.
+- Make executable commands accessible globally through PATH if supported.
+- Keep required binaries and dependencies together.
+- Do not install separately for individual projects.
+- Verify installation from a different working directory.
+
+## PHASE 3: GLOBAL OPENCODE MCP CONFIGURATION
+
+Configure Obscura in OpenCode's GLOBAL configuration.
+
+Use the official global OpenCode configuration location and supported MCP configuration schema.
+
+Requirements:
+- Register MCP server as `obscura-browser`.
+- Use absolute executable paths.
+- Use stdio transport unless official documentation requires otherwise.
+- Make the MCP server available in every OpenCode project.
+- Preserve existing providers, agents, plugins and MCP servers.
+- Merge configuration safely instead of replacing existing settings.
+- Avoid project-specific configuration.
+- Do not hardcode API keys or credentials.
+
+## PHASE 4: GLOBAL BROWSER TOOL ACCESS
+
+Verify actual tools exposed by Obscura.
+
+Expected capabilities:
+
+- Navigate websites.
+- Read page content.
+- Inspect page snapshots.
+- Take screenshots.
+- Click elements.
+- Fill input fields.
+- Type text.
+- Press keyboard keys.
+- Select dropdown options.
+- Execute supported JavaScript.
+- Wait for page elements.
+- Inspect browser console and network activity.
+
+Make these tools available to OpenCode agents globally.
+
+## PHASE 5: GLOBAL VERIFICATION
+
+Test the integration from at least two different working directories.
+
+Test:
+1. OpenCode MCP server connection.
+2. Browser startup.
+3. Website navigation.
+4. Page content extraction.
+5. Browser screenshot.
+6. Button click.
+7. Input filling.
+8. Browser shutdown.
+9. MCP reconnection after restarting OpenCode.
+
+Confirm that the integration is genuinely global.
+
+## PHASE 6: AGENT INTEGRATION
+
+Make Obscura available to:
+- Main OpenCode Agent.
+- Coding Agents.
+- Research Agents.
+- Testing Agents.
+- Debugging Agents.
+- Multi-Agent Orchestrators.
+
+Do not modify agent permissions unnecessarily.
+
+## PHASE 7: GLOBAL DOCUMENTATION
+
+Create a global setup and maintenance guide containing:
+
+- Installation commands.
+- Global configuration path.
+- MCP configuration.
+- Available tools.
+- Usage examples.
+- Troubleshooting.
+- Update instructions.
+- Uninstallation instructions.
+
+## SECURITY
+
+- Never expose API keys.
+- Never expose browser debugging ports publicly.
+- Ask permission before logging into real accounts.
+- Ask permission before submitting sensitive forms.
+- Never perform irreversible actions without approval.
+- Use trusted official releases.
+
+## EXECUTION RULES
+
+1. Inspect existing OpenCode configuration.
+2. Read official Obscura documentation.
+3. Prepare a global installation plan.
+4. Show planned changes.
+5. Wait for approval before modifying files.
+6. Install and configure globally.
+7. Test from multiple project directories.
+8. Fix errors and verify again.
+9. Provide a final installation report.
+
+IMPORTANT:
+This must be a GLOBAL OpenCode integration, not a project-level MCP configuration.
+
+Start with documentation analysis and existing configuration inspection.
+# MASTER PROMPT: Install and Configure CopilotKit OpenDots in OpenCode & Claude Code
+
+## Role
+Act as a Senior AI DevOps Engineer, Windows Automation Engineer, Full-Stack Developer, and MCP Integration Specialist.
+
+Your task is to install, configure, test, and document the **CopilotKit/OpenDots** repository on my Windows 11 PC and make it usable alongside OpenCode and Claude Code.
+
+Repository:
+https://github.com/CopilotKit/OpenDots
+
+Official documentation:
+https://github.com/CopilotKit/OpenDots/blob/main/README.md
+
+## 1. First: Inspect My Environment
+
+Before making changes, inspect:
+
+- Windows version and architecture
+- Node.js and npm versions
+- Git installation
+- Python installation
+- OpenCode installation and configuration
+- Claude Code installation and configuration
+- Existing MCP server configurations
+- Existing AI model providers and environment variables
+- Available disk space and project folders
+
+Generate an environment report.
+
+Do not assume that a required dependency is installed.
+
+## 2. Protect Existing Configurations
+
+CRITICAL RULES:
+
+- Never delete or reset my existing OpenCode configuration.
+- Never delete or overwrite my existing Claude Code configuration.
+- Preserve all existing MCP servers, agents, skills, commands, and API provider settings.
+- Create timestamped backups before editing any configuration.
+- Do not expose API keys or passwords in logs.
+- Never replace existing configuration files with generic templates.
+- Merge new configuration only after validating JSON and checking for conflicts.
+- Ask for approval before destructive or irreversible changes.
+
+My existing OpenCode MCP servers are important. Preserve all of them.
+
+## 3. Clone and Install OpenDots
+
+Clone:
+
+https://github.com/CopilotKit/OpenDots
+
+Suggested project directory:
+
+C:\AI-Projects\OpenDots
+
+Follow the repository's current README and setup documentation.
+
+Expected initial commands:
+
+git clone https://github.com/CopilotKit/OpenDots.git
+cd OpenDots
+npm ci
+copy .env.example .env
+
+Use the Node.js version supported by the repository. README specifies Node.js 24.
+
+If my installed version is incompatible, explain the issue and propose a safe version-switching method. Do not break other Node.js projects.
+
+## 4. Configure AI Services
+
+Inspect the actual environment variable names and configuration requirements from the repository.
+
+Configure:
+
+- CopilotKit Intelligence
+- OPENAI_API_KEY
+- OPENAI_MODEL
+- CPK_INTELLIGENCE_API_KEY
+- CPK_TELEMETRY_ID, if required
+- Other required provider variables
+
+Do not invent API keys.
+
+If credentials are missing, create a clearly documented checklist and ask me to provide them securely.
+
+Support the repository's documented hosted Intelligence setup and local Docker evaluation option.
+
+Do not claim local inference unless a genuinely local model provider is configured.
+
+## 5. Integrate OpenCode
+
+Inspect my existing OpenCode configuration and documentation.
+
+Goal:
+
+- Make OpenDots project easy to open and manage from OpenCode.
+- Create a dedicated OpenDots project workspace.
+- Add project-specific instructions for AI coding agents.
+- Allow OpenCode agents to inspect, develop, debug, and maintain OpenDots.
+- Configure useful project tasks and commands.
+- Preserve all existing MCP servers and providers.
+
+Check whether any direct integration is officially supported.
+
+Do not falsely claim that OpenDots automatically imports OpenCode MCP servers.
+
+If direct integration is not supported, create a safe documented manual integration strategy.
+
+## 6. Integrate Claude Code
+
+Configure Claude Code to work on the same OpenDots source project.
+
+Create project-level instructions only where appropriate.
+
+Support:
+
+- Code analysis
+- Feature development
+- Bug fixing
+- Testing
+- Documentation
+- MCP configuration review
+- Repository maintenance
+
+Preserve global Claude Code agents, skills, hooks, and settings.
+
+Do not overwrite global configuration.
+
+## 7. Configure OpenDots Features
+
+Inspect the source code and configure the following features where supported:
+
+1. Specialist Dots
+2. Dot instructions and roles
+3. Persistent conversations
+4. Spaces and Pages
+5. Browser integration
+6. Dot computer integration through OpenBot
+7. MCP server connections
+8. Human approval workflows
+9. Composio connected apps
+10. Voice calls
+11. Slack integration
+12. Background work and scheduled tasks
+
+Clearly distinguish:
+
+- Installed
+- Configured
+- Requires credentials
+- Requires external service
+- Tested successfully
+- Not supported yet
+
+Do not mark a feature as working just because its configuration file exists.
+
+## 8. Security and Permissions
+
+Implement safe defaults:
+
+- Read-only tools by default.
+- Approval before write operations.
+- Approval before shell commands with destructive effects.
+- Separate permissions for each Dot.
+- Keep API keys server-side.
+- Never expose computer-service credentials in frontend code.
+- Do not execute untrusted commands automatically.
+- Do not expose my Windows host filesystem to a Dot without explicit permission.
+
+Use isolated computer containers according to the official OpenBot setup.
+
+## 9. Testing and Verification
+
+Run available project checks:
+
+- Dependency installation check
+- Environment validation
+- TypeScript checks
+- Lint checks
+- Build
+- Unit tests
+- Application startup
+- Local browser accessibility
+- Intelligence connection test
+- Model response test
+- Dot creation test
+- Space and Page persistence test
+
+Test OpenCode and Claude Code separately against the same project.
+
+Report actual results. Do not fabricate successful tests.
+
+## 10. Final Deliverables
+
+Create these files inside the project:
+
+docs/INSTALLATION_REPORT.md
+docs/ENVIRONMENT_REPORT.md
+docs/OPENCODE_INTEGRATION.md
+docs/CLAUDE_CODE_INTEGRATION.md
+docs/MCP_INTEGRATION.md
+docs/SECURITY_REPORT.md
+docs/TEST_REPORT.md
+docs/TROUBLESHOOTING.md
+
+Also create safe Windows scripts:
+
+scripts/check-environment.ps1
+scripts/start-opendots.ps1
+scripts/stop-opendots.ps1
+scripts/backup-configs.ps1
+scripts/verify-installation.ps1
+
+Scripts must be tested and must not silently overwrite existing files.
+
+## 11. Execution Strategy
+
+Work in phases:
+
+Phase 1: Inspect environment and repository.
+Phase 2: Create backups.
+Phase 3: Install dependencies.
+Phase 4: Configure OpenDots.
+Phase 5: Configure Intelligence and model provider.
+Phase 6: Integrate OpenCode.
+Phase 7: Integrate Claude Code.
+Phase 8: Configure optional services.
+Phase 9: Run tests.
+Phase 10: Generate reports.
+
+After each phase:
+
+- Show what was done.
+- Show files created or modified.
+- Show errors and warnings.
+- Ask approval before any risky operation.
+
+Do not stop after generating a plan. Execute all safe steps that do not require my credentials or approval.
+
+## Final Objective
+
+I want one working OpenDots installation that I can develop and maintain using both OpenCode and Claude Code.
+
+The application should run locally in my browser, have properly configured AI services, and support specialist AI agents, MCP tools, approval workflows, and isolated computer environments.
+
+Start by inspecting my system and repository. Do not modify anything until the backup and safety plan is ready.
+

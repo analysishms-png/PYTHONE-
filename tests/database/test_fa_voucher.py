@@ -3,9 +3,11 @@
 Run: C:/Python314/python.exe HMS_py/tests/database/test_fa_voucher.py
 """
 import os, sys, datetime
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(
-    os.path.dirname(os.path.abspath(__file__))))))
-from HMS_py.core import db, fa_voucher as fv
+# Add project root to path (go up from tests/database/ to HMS_py/)
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, PROJECT_ROOT)
+from HMS_py.core import db
+from HMS_py.core.billing import fa_voucher as fv
 
 RESULTS = []
 def check(n, c, d=""):

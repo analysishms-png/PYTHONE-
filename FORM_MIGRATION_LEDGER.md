@@ -8,7 +8,7 @@
 
 | VB6 Form | Caption | VB6 Tables | Python UI | Python Core | Status | Diff Notes | Date |
 |----------|---------|------------|-----------|-------------|--------|------------|------|
-| fdCheckIn.frm | Check In | GuestProf, GuestFolio, RoomOcc, RoomMast, GuestStatus | frontoffice.py:open_checkin | checkin.py | ✅ DONE | Verified parity | 2026-09-22 |
+| fdCheckIn.frm | Check In | GuestProf, GuestFolio, RoomOcc, RoomMast, GuestStatus | checkin_ui.py:CheckInBrowser + CheckInWizard | checkin.py (list_checkins, create_checkin, group_checkin, split_folio) | ✅ DONE | Modernized: multi-step wizard (Guest→Room→Details→Confirm), visual room rack, guest search/create (Laravel addnewprofile pattern), KPI cards, toast notifications, modal dialogs, keyboard shortcuts; Core: site/Vprefix filters removed for live data parity | 2026-11-04 |
 | FdCheckOut.frm | Check Out | GuestFolio, RoomOcc, PayCharge, RoomMast, GuestStatus | checkout_ui.py:open_checkout | checkout.py, fo_ops.py | ✅ DONE | Verified parity | 2026-09-22 |
 | fdRoomChange.frm | Room Change | RoomOcc, GuestFolio, PlanDetails, Booking, RoomMast | fo_sub_forms_ui.py:RoomChangeWindow | fo_ops.py:room_change | ✅ DONE | VB6 PlanDetails grid editor not ported; PlanDetails re-linked only | 2026-09-22 |
 | FrmMergeCharge.frm | Merge Charge | GuestFolio, PayCharge, FolioLog | fo_sub_forms_ui.py:MergeChargeWindow | fo_ops.py:merge_charge | ✅ DONE | PayCharge column names verified against VB6 source | 2026-09-22 |

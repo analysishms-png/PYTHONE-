@@ -1,0 +1,339 @@
+================================================================================
+  SKILL + MCP SETUP  --  FULL PROMPT & GUIDELINE
+  Claude Code  +  OpenCode  +  sab AI agents ke liye
+  Machine : Windows  |  Date: 30 Oct 2026
+  Source  : C:\Users\Analysis (global)  +  D:\ (project/reference)
+================================================================================
+
+
+################################################################################
+#                                                                              #
+#   PART 0 -- COPY-PASTE PROMPT (isko kisi bhi AI agent ko do)                 #
+#                                                                              #
+################################################################################
+
+--------------------------------------------------------------------------------
+PROMPT (English, kisi bhi AI coding agent ke liye)
+--------------------------------------------------------------------------------
+
+Set up Skills + MCP + Agents GLOBALLY for Claude Code and OpenCode on this
+Windows machine, using D:\ as the reference source. Follow these rules exactly:
+
+1) LOCATIONS -- put things ONLY in the global/user scope so they work from
+   every folder (C:\dev\*, C:\Users\Analysis, D:\, etc.):
+
+   Claude Code:
+     Global config dir : C:\Users\Analysis\.claude\
+       agents\          -> one .md per agent, MUST start with --- and have
+                            frontmatter:  name, description, tools, model
+       skills\          -> one folder per skill, MUST contain SKILL.md
+       hooks\           -> hook scripts (.py)
+       settings.json    -> env, modelPicker, enabledPlugins, hooks
+     MCP registry      : C:\Users\Analysis\.claude.json  -> "mcpServers": {...}
+     Binary on PATH    : C:\Users\Analysis\.local\bin\claude.exe
+                          (this folder must be in the USER PATH)
+
+   OpenCode:
+     Global config     : C:\Users\Analysis\.config\opencode\opencode.json
+       "mcp"           -> { name: { type, command|url, enabled } }
+       "provider"      -> LLM providers + apiKey
+       "agent"         -> inline agent definitions
+       "plugin"        -> plugin list
+     Agents on disk    : C:\Users\Analysis\.config\opencode\agents\*.md
+     Extra agent/skill kit : C:\Users\Analysis\.opencode\  (agents\, skills\,
+                             commands\, plugins\, rules\, hooks\)
+
+   Cross-tool Agent Skills (open format):
+     C:\Users\Analysis\.agents\skills\<name>\SKILL.md
+
+2) RULE -- a skill placed ONLY in  C:\Users\Analysis\.agents\skills  is NOT
+   global for Claude Code. It only resolves when the current working directory
+   itself contains a .agents\ folder. ALWAYS also copy every skill into
+   C:\Users\Analysis\.claude\skills\  so it resolves from any folder.
+
+3) PROJECT vs GLOBAL
+     <project>\.claude\            overrides/extends  ~/.claude
+     <project>\opencode.json       MERGES with the global opencode.json
+                                    (it does NOT replace it)
+   So keep shared agents/skills/MCP in GLOBAL. Keep only project-specific
+   things (env, project-only agents) at project level.
+
+4) MCP
+   - Claude Code: add to  ~/.claude.json  ->  "mcpServers".
+     Verify with:   claude mcp list        (expect: ... - Connected)
+   - OpenCode:     add to  opencode.json  ->  "mcp", set "enabled": true.
+     Verify with:   opencode mcp list
+   - Local stdio servers on Windows need  ["cmd","/c","npx","-y","<pkg>"].
+
+5) SKILLS format
+   Each skill = a folder with SKILL.md:
+     ---
+     name: my-skill
+     description: >-
+       What it does and WHEN to use it.
+     ---
+     <instructions>
+   Verify with:  claude -p "/my-skill reply with X"
+   A skill that returns "not installed in this session" is in the WRONG folder.
+
+6) AGENTS format (Claude Code)
+     ---
+     name: my-agent
+     description: What it does / when to pick it
+     tools: Read, Grep, Glob
+     model: inherit
+     ---
+     <system prompt>
+   Verify with:  claude -p --agent my-agent "reply with X"
+   Broken/undecodable .md files are SILENTLY skipped -- always verify the
+   available-agents list, do not trust the file count.
+
+7) HEALTH CHECK (run from a folder with NO local config, e.g. C:\dev\graph-tools)
+     claude mcp list
+     claude -p --agent architect "reply with X"
+     claude -p "/some-skill reply with X"
+     opencode agent list
+     opencode mcp list
+     opencode run "reply with X"
+
+8) THIS MACHINE'S EXTRA PREREQUISITE (NVIDIA, not optional)
+   Claude Code is wired to a local proxy that translates the Anthropic API to
+   NVIDIA.  ANTHROPIC_BASE_URL = http://localhost:4001
+   If it is down, nothing works. Check and start:
+       curl http://127.0.0.1:4001/health
+       double-click  C:\Users\Analysis\.claude\start-nvidia-proxy.cmd
+   Auto-start entry:  Startup\nvidia-proxy.lnk
+   Log:  C:\Users\Analysis\.claude\nvidia-proxy.log
+
+
+################################################################################
+#                                                                              #
+#   PART 1 -- GUIDELINE: what goes where (full map)                            #
+#                                                                              #
+################################################################################
+
+--------------------------------------------------------------------------------
+1.1  DIRECTORY MAP (is machine par)
+--------------------------------------------------------------------------------
+
+GLOBAL / USER SCOPE  <-- yahan rako, tabhi sab folders me chalega
+|
+|-- C:\Users\Analysis\.claude\                [Claude Code global config]
+|   |-- settings.json        env, modelPicker, enabledPlugins, theme
+|   |-- agents\              132 valid .md agents  (5->3 corrupt quarantine)
+|   |-- skills\              34 skills             <-- TRUE global skills
+|   |-- hooks\               post_edit_checks.py
+|   |-- nvidia-proxy.mjs     Anthropic -> NVIDIA translator
+|   |-- start-nvidia-proxy.cmd
+|   `-- backups\corrupt-agents-20261030\   3 unrecoverable agents + README
+|
+|-- C:\Users\Analysis\.claude.json            [Claude MCP + project registry]
+|   `-- mcpServers: { context7 }
+|
+|-- C:\Users\Analysis\.agents\skills\         28 cross-tool Agent Skills
+|                                              (speckit-*, vb6-python-parity...)
+|
+|-- C:\Users\Analysis\.config\opencode\       [OpenCode global config]
+|   |-- opencode.json         provider(nvidia), mcp(14), plugin, permission
+|   |-- agents\               6 agents (architect, backend-dev, ceo...)
+|   `-- AGENTS.md             global instructions (context7 usage)
+|
+|-- C:\Users\Analysis\.opencode\              [opencode kit v1.3.144]
+|   |-- agents\  128   skills\ 216   commands\  contexts\  rules\
+|   `-- plugins\ agentmemory-capture.ts, ponytail.mjs
+|
+`-- C:\Users\Analysis\.local\bin\claude.exe   (must be on USER PATH)
+
+
+PROJECT / REFERENCE SCOPE
+|
+|-- D:\                                        [project root, reference source]
+|   |-- .claude\
+|   |   |-- agents\   7 agents  (sab global me SAME byte-identical)
+|   |   |-- skills\   5 skills  (sab global me SAME)
+|   |   |-- hooks\    post_edit_checks.py
+|   |   `-- settings.json   hooks + enabledPlugins + extraKnownMarketplaces
+|   |-- .claude.json   mcpServers: NONE, projects = purane LENOVO machine paths
+|   |-- .agents\skills\  11 skills  (speckit-* x10 + vb6-python-parity)
+|   |-- .github\skills\  speckit-* (same 10)
+|   `-- .opencode\      128 agents, 216 skills (byte-identical to ~/.opencode)
+|
+|-- C:\dev\graph-tools\         koi config NAHI -> pure global use karta hai
+|   `-- cytoscape.js\           AGENTS.md + CLAUDE.md (third-party repo, chhodo)
+|
+`-- C:\Users\Analysis\multi-agent-orchestrator\
+    `-- opencode.json           ollama provider + swarm agents (project-specific,
+                                global NVIDIA ko override NAHI karta -- merge hota hai)
+
+
+--------------------------------------------------------------------------------
+1.2  CURRENT STATE (verified 30 Oct 2026)
+--------------------------------------------------------------------------------
+
+CLAUDE CODE
+  Agents   132 files, 0 invalid, 136+ available  (plugins se extra)
+  Skills   34 in ~/.claude/skills  +  28 in ~/.agents/skills
+           47 skills resolve from C:\dev\graph-tools
+  MCP      context7  ->  Connected   (global)
+  PATH     C:\Users\Analysis\.local\bin added to USER PATH
+  Hooks    PostToolUse -> post_edit_checks.py   (copied from D:, path fixed,
+           verified firing) extraKnownMarketplaces.ecc declared
+  NOTE     installed_plugins.json -> plugins: {} , so enabledPlugins
+           "ecc@ecc" is a DANGLING reference until you run
+           `claude plugin install` (marketplace is now declared though).
+
+OPENCODE
+  Agents   143 (from C:\ and D:\), incl. 6 own + kit's 128 + oh-my-opencode roles
+  Skills   via plugins (superpowers, oh-my-opencode-slim, opencode-ensemble)
+           + kit 216 in ~/.opencode/skills
+  MCP      14 configured, 5 ENABLED+CONNECTED:
+             gh_grep, context7, sequential-thinking, memory, playwright
+           9 disabled:
+             filesystem, chrome-devtools, github, brave-search, tavily,
+             firecrawl, notion, sentry, stripe, mongodb
+  Model    nvidia/nemotron-3-ultra-550b-a55b      (default)
+           nvidia/nemotron-3.5-lightning-30b-a3b  (small_model)
+
+
+################################################################################
+#                                                                              #
+#   PART 2 -- PROBLEMS JO MILE, aur unka fix (dobara mat dohrana)              #
+#                                                                              #
+################################################################################
+
+P1. `claude` command not found
+    -> C:\Users\Analysis\.local\bin USER PATH me nahi tha.
+       Fix: [Environment]::SetEnvironmentVariable('Path', $p+';C:\Users\Analysis\.local\bin','User')
+       Note: naya terminal kholna padta hai.
+
+P2. Claude backend tak nahi pahunch raha tha
+    -> NVIDIA proxy (port 4001) band tha.
+       Fix: start-nvidia-proxy.cmd ; Startup\nvidia.lnk se auto-start
+
+P3. Warning: [claude-code:unrecognized_model] har -p run me
+    -> NVIDIA model ID Claude Code ki catalog me nahi.
+       TRIED & FAILED: CLAUDE_CODE_ALLOW_OTHER_MODELS=1  (kuch nahi kiya)
+       WORKING FIX: ~/.claude/settings.json me
+         "modelPicker": { "options": [ { "model": "nvidia/...",
+           "label": "...", "behavesAs": "claude-opus-4-8" }, ... ] }
+       Ye model ID bhejna BILKUL change nahi karta (schema ka wada hai).
+
+P4. opencode CRASH: ProviderModelNotFoundError: openai/gpt-6.1-sol
+    -> oh-my-opencode-slim plugin ka "preset": "openai" OpenAI models force
+       kar raha tha jo the hi nahi.
+       Fix: preset -> "nvidia" + presets.nvidia block (6 roles).
+       NOTE: variant field SKIP kiya -- dono NVIDIA models ka variants=null hai.
+
+P5. Skill "/X" bol raha hai "not installed in this session"
+    -> skill galat jagah thi. ~\.agents\skills global NAHI hai Claude ke liye.
+       Fix: ~/.claude/skills me copy.  (VERIFY: 47 skills ab har folder se)
+
+P6. Agents file count 135 tha, par available list me 136 aur 3 missing
+    -> 3 files corrupt the (100% bytes = 0xFF / binary), Claude chup-chup
+       skip kar deta hai. Opencode me bhi same corruption.
+       Fix: ~/.claude/backups/corrupt-agents-20261030/ me quarantine.
+       (content recoverable NAHI hai -- kahin clean copy nahi mili)
+
+P7. D:\.claude\settings.json ka hook TOOTA hua hai
+    -> command point karta hai  C:\Users\LENOVO\Desktop\serialkey\...
+       (purane machine ka path, is machine par exist hi nahi karta)
+    FIXED 2026-10-30: hook + extraKnownMarketplaces ko D: se utha kar GLOBAL
+    (~/.claude/settings.json) me daala, path BADAL ke is machine par:
+       "command": "python \"C:\Users\Analysis\.claude\hooks\post_edit_checks.py\""
+    Verified: script exit 0, aur real Write call par hook FIRE hua
+    (post_edit_checks.log 16785 -> 16837 bytes, ruff checks chale).
+    NOTE: D:\ khud ka settings.json abhi bhi purana toota path rakhta hai.
+
+P8. `claude agents --json` [] dikhata hai
+    -> ye subcommand ka quirk hai, REAL list alag se milti hai:
+       claude -p --agent <bad-name> "hi"   (error me poori list chhapti hai)
+       Isliye hamesha --agent se verify karo, --json pe mat bharosa karo.
+
+
+################################################################################
+#                                                                              #
+#   PART 3 -- REPO / DOC LINKS                                                 #
+#                                                                              #
+################################################################################
+
+CORE TOOL
+  Claude Code (repo, issue tracker)   https://github.com/anthropics/claude-code
+  Claude Code docs                    https://docs.claude.com/en/docs/claude-code
+  OpenCode (by SST)                   https://github.com/sst/opencode
+  OpenCode docs                       https://opencode.ai/docs/
+    - Providers (custom/OpenAI-comp)  https://opencode.ai/docs/providers
+    - Config                          https://opencode.ai/docs/config
+    - Skills                          https://opencode.ai/docs/skills
+    - MCP                             https://opencode.ai/docs/mcp
+
+SKILLS
+  Anthropic Agent Skills (official)   https://github.com/anthropics/skills
+  OpenCode Agent Skills               https://opencode.ai/docs/skills
+
+MCP (Model Context Protocol)
+  Spec / docs                         https://modelcontextprotocol.io
+  Reference servers collection        https://github.com/modelcontextprotocol/servers
+  Context7 (docs lookup)              https://github.com/upstash/context7
+  Playwright MCP (browser)            https://github.com/microsoft/playwright-mcp
+  Sequential thinking                 https://www.npmjs.com/package/@modelcontextprotocol/server-sequential-thinking
+  Memory                              https://www.npmjs.com/package/@modelcontextprotocol/server-memory
+  Filesystem                          https://www.npmjs.com/package/@modelcontextprotocol/server-filesystem
+
+LLM PROVIDER / MODEL CATALOG
+  models.dev catalog                  https://models.dev
+  NVIDIA NIM API docs                 https://docs.api.nvidia.com/nim/
+  NVIDIA API endpoint                 https://integrate.api.nvidia.com/v1
+  AI SDK OpenAI-compatible adapter    https://www.npmjs.com/package/@ai-sdk/openai-compatible
+
+SPECKIT SKILLS (github spec-kit)
+  Repo                                https://github.com/github/spec-kit
+
+OPENCODE PLUGINS USED HERE
+  oh-my-opencode-slim                 https://www.npmjs.com/package/oh-my-opencode-slim
+  opencode-ensemble                   https://www.npmjs.com/package/@hueyexe/opencode-ensemble
+
+
+################################################################################
+#                                                                              #
+#   PART 4 -- QUICK COMMAND SHEET                                              #
+#                                                                              #
+################################################################################
+
+--- Claude Code ---------------------------------------------------------------
+  claude                                        # interactive TUI
+  claude -p "prompt"                            # one-shot, output on stdout
+  claude mcp list                               # MCP health
+  claude -p --agent <name> "prompt"             # run a specific agent
+  claude -p "/<skill> prompt"                   # invoke a skill
+  claude agents                                 # interactive agent browser (TTY)
+  claude --help                                 # all flags
+
+  Careful: --allowedTools is VARIADIC. Keep the prompt right after -p:
+    claude -p "do X" --allowedTools "Bash"      <-- correct
+    claude -p --allowedTools "Bash" "do X"      <-- WRONG (prompt eaten)
+
+--- OpenCode ------------------------------------------------------------------
+  opencode                                      # interactive TUI
+  opencode run "prompt"                         # one-shot
+  opencode mcp list                             # MCP health (aliases: ls)
+  opencode agent list                           # all agents
+  opencode models [provider]                    # models of a provider
+  opencode agent create                         # new agent
+
+--- NVIDIA proxy ---------------------------------------------------------------
+  curl http://127.0.0.1:4001/health             # must return {"status":"ok"}
+  tail -f C:\Users\Analysis\.claude\nvidia-proxy.log
+
+--- Health check from a clean folder -----------------------------------------
+  cd C:\dev\graph-tools
+  claude mcp list
+  claude -p --agent architect "reply OK"
+  claude -p "/brainstorming reply OK"
+  opencode agent list
+  opencode run "reply OK"
+
+
+================================================================================
+  END
+  Related file: NVIDIA_SETUP_PROBLEM_AND_PLAN.txt (same Desktop folder)
+================================================================================
