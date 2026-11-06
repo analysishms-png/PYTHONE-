@@ -14,6 +14,10 @@ from HMS_py.ui.housekeeping.hk_iss_rec_ui import (
     HKIssueReceiveBrowser,
     open_hk_issue_receive,
 )
+from HMS_py.ui.housekeeping.hk_room_block_ui import (
+    HKRoomBlockBrowser,
+    open_hk_room_block,
+)
 
 __all__ = [
     "HKHouseOpStockBrowser",
@@ -22,4 +26,6 @@ __all__ = [
     "open_hk_room_op_stock",
     "HKIssueReceiveBrowser",
     "open_hk_issue_receive",
+    "HKRoomBlockBrowser",
+    "open_hk_room_block",
 ]

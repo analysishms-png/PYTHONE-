@@ -95,6 +95,12 @@
   - Shell: Wire "HK Issue/Receive Entry" ✅
   - Tests: (TODO - add tests)
 
+- [x] **HK Room Block** (`HKRoomBlock.frm` 91KB) ✅ **DONE**
+  - Core: `core/housekeeping/linen.py:hk_room_block_list()`, `hk_room_block_create()`, `hk_room_block_remove()` ✅
+  - UI: `ui/housekeeping/hk_room_block_ui.py:HKRoomBlockBrowser` ✅
+  - Shell: Wire "HK Room Block Entry" ✅
+  - Tests: (TODO - add tests)
+
 ### 4. SYSTEM - Job Scheduler & Upload
 - [ ] **Job Scheduler** (`FrmJobScheduler.frm` 81KB)
   - Core: `core/setup/job_scheduler.py`

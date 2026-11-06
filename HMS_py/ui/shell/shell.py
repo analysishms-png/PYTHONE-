@@ -1681,6 +1681,7 @@ def _form_registry() -> dict[str, callable]:
         "House Keeping Op.Stock Entry": (lambda w: hk_ui.open_hk_house_op_stock(w, user=getattr(w, 'user', 'PYADMIN'))) if hk_ui else _coming_soon("House Keeping Op.Stock Entry"),
         "HK Room Op Stock Entry": (lambda w: hk_ui.open_hk_room_op_stock(w, user=getattr(w, 'user', 'PYADMIN'))) if hk_ui else _coming_soon("HK Room Op Stock Entry"),
         "HK Issue/Receive Entry": (lambda w: hk_ui.open_hk_issue_receive(w, user=getattr(w, 'user', 'PYADMIN'))) if hk_ui else _coming_soon("HK Issue/Receive Entry"),
+        "HK Room Block Entry": (lambda w: hk_ui.open_hk_room_block(w, user=getattr(w, 'user', 'PYADMIN'))) if hk_ui else _coming_soon("HK Room Block Entry"),
         "Payment Due Letter Entry": (lambda w: memb_ui.open_member_billing(w)) if memb_ui else None,
         # ── PARTIAL-batch 2: VB6 form -> core-module-mapped opener ──
         # (core module ka table LIVE hai; dialog opers tested hain)

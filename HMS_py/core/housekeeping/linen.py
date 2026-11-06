@@ -367,21 +367,74 @@ def hk_room_block_list(cn=None, site: str = SITE_CODE) -> list[dict]:
         "ISNULL(Type, '') IN ('O', 'M') AND (LogSite_Code = ? OR LogSite_Code = 'HO') "
         "ORDER BY FromDate DESC", (SITE_CODE,), cn=cn)
     return [{"roomno": r[0] or "", "type": r[1] or "", "reason": r[2] or "",
-             "from_date": r[3], "to_date": r[3]} for r in rows]
+             "from_date": r[3], "to_date": r[4]} for r in rows]
 
 
 def hk_room_block_create(roomno: str, block_type: str = "O", reason: str = "",
                          from_date=None, to_date=None, cn=None, commit: bool = True,
                          site: str = SITE_CODE, user: str = USER) -> int:
-    """Create room block (Maintenance/OOO)."""
-    pass  # TODO: Implement
+    """Create room block (Maintenance/OOO).
+    
+    block_type: 'O' = Out of Order, 'M' = Maintenance
+    """
+    if not roomno:
+        raise ValueError("Room number zaroori hai")
+    if block_type not in ('O', 'M'):
+        raise ValueError("Block type must be 'O' (OOO) or 'M' (Maintenance)")
+    
+    from_date = from_date or datetime.date.today()
+    to_date = to_date or datetime.date.today()
+    
+    own = cn is None
+    cn = cn or db.connect()
+    try:
+        db.execute(
+            "INSERT INTO RoomBLockOut (RoomCode, Type, Reasons, FromDate, ToDate, "
+            "LogSite_Code, U_Name, U_EntDt, U_AE) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (roomno, block_type, reason, from_date, to_date,
+             SITE_CODE, USER, datetime.datetime.now(), "A"),
+            cn=cn, commit=False)
+        if commit:
+            cn.commit()
+        return 1
+    except Exception:
+        try:
+            cn.rollback()
+        except Exception:
+            pass
+        raise
+    finally:
+        if own:
+            cn.close()
 
 
 def hk_room_block_remove(roomno: str, block_type: str = "O",
                          cn=None, commit: bool = True,
                          site: str = SITE_CODE) -> int:
     """Remove room block."""
-    pass  # TODO: Implement
+    if not roomno:
+        raise ValueError("Room number zaroori hai")
+    
+    own = cn is None
+    cn = cn or db.connect()
+    try:
+        rows = db.execute(
+            "DELETE FROM RoomBLockOut WHERE RoomCode = ? AND Type = ? "
+            "AND (LogSite_Code = ? OR LogSite_Code = 'HO')",
+            (roomno, block_type, SITE_CODE), cn=cn, commit=False)
+        if commit:
+            cn.commit()
+        return rows
+    except Exception:
+        try:
+            cn.rollback()
+        except Exception:
+            pass
+        raise
+    finally:
+        if own:
+            cn.close()
 
 
 # ──────────────────────────────────────────────────────────────────────
