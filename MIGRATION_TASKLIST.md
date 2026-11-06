@@ -76,6 +76,12 @@
   - `RsTouchScreenKOTEntry.frm` → Touch mode flag in `kot_entry.py` ✅
   - `RsTouchScreenTokenEntry.frm` → Touch mode flag in `pos_payment_ui.py` ✅
 
+- [x] **POS Settlement / Night Audit** (`fdNDAcPostChrg.frm` / `fdAcPostChrg.frm`) ✅ **DONE**
+  - Core: `core/pos/pos_settlement.py` ✅ (get_unsettled_paycharges, post_charges_for_date, run_night_audit)
+  - UI: `ui/pos/pos_settlement_ui.py` ✅ (POS_SettlementEntry, NightAuditDialog)
+  - Shell: Wire "POS Settlement Entry" / "Night Audit Process" ✅
+  - Tests: (TODO - add tests)
+
 ### 3. HOUSEKEEPING - Linen & Stock
 - [x] **HK House Operation Stock** (`HKHouseOpStk.frm` 97KB) ✅ **DONE**
   - Core: `core/housekeeping/linen.py:hk_house_op_stock_list()` ✅

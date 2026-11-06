@@ -767,6 +767,11 @@ def _form_registry() -> dict[str, callable]:
         from HMS_py.ui.pos import pos_order_booking_ui as posbook_ui
     except ImportError:
         posbook_ui = None
+    # POS Settlement / Night Audit (VB6 fdNDAcPostChrg.frm / fdAcPostChrg.frm)
+    try:
+        from HMS_py.ui.pos import pos_settlement_ui as posstl_ui
+    except ImportError:
+        posstl_ui = None
     # Reports Center (REPORTS_TXT collection ka port — read-only engine)
     try:
         from HMS_py.ui import reports_ui as _rpt
@@ -1682,6 +1687,8 @@ def _form_registry() -> dict[str, callable]:
         "HK Room Op Stock Entry": (lambda w: hk_ui.open_hk_room_op_stock(w, user=getattr(w, 'user', 'PYADMIN'))) if hk_ui else _coming_soon("HK Room Op Stock Entry"),
         "HK Issue/Receive Entry": (lambda w: hk_ui.open_hk_issue_receive(w, user=getattr(w, 'user', 'PYADMIN'))) if hk_ui else _coming_soon("HK Issue/Receive Entry"),
         "HK Room Block Entry": (lambda w: hk_ui.open_hk_room_block(w, user=getattr(w, 'user', 'PYADMIN'))) if hk_ui else _coming_soon("HK Room Block Entry"),
+        "POS Settlement Entry": (lambda w: posstl_ui.open_pos_settlement_entry(w, user=getattr(w, 'user', 'PYADMIN'))) if posstl_ui else _coming_soon("POS Settlement Entry"),
+        "Night Audit Process": (lambda w: posstl_ui.open_pos_settlement_entry(w, user=getattr(w, 'user', 'PYADMIN'))) if posstl_ui else _coming_soon("Night Audit Process"),
         "Payment Due Letter Entry": (lambda w: memb_ui.open_member_billing(w)) if memb_ui else None,
         # ── PARTIAL-batch 2: VB6 form -> core-module-mapped opener ──
         # (core module ka table LIVE hai; dialog opers tested hain)
