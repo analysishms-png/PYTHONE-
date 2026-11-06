@@ -18,7 +18,7 @@ from PyQt6.QtWidgets import (QColorDialog, QComboBox, QDialog, QFormLayout,
 
 from HMS_py.ui.main_window.theme import (DEFAULTS, PRESETS, apply_tokens, load_tokens,
                              palette, preset_tokens, reset_tokens,
-                             save_tokens, apply_theme)
+                             save_tokens, apply_theme, status_base_defaults)
 
 _EDITABLE_COLORS = (
     ("accent", "Accent (buttons, focus)"),
@@ -188,7 +188,7 @@ class AppearanceDialog(QDialog):
                        **load_tokens()}
         # Status hues: saved nahi hain to mode defaults seed karo —
         # warna swatches black dikhte hain aur save pe bhi nahi aate.
-        for _k, _v in theme.status_base_defaults(
+        for _k, _v in status_base_defaults(
                 self._start.get("mode", "light")).items():
             self._start.setdefault(_k, _v)
         self._tokens = dict(self._start)
@@ -390,7 +390,7 @@ class AppearanceDialog(QDialog):
         return QApplication.instance()
 
     def _sync_ui(self):
-        sdefs = theme.status_base_defaults(
+        sdefs = status_base_defaults(
             self._tokens.get("mode", "light"))
         for key, sw in self._swatches.items():
             # status hues: token nahi to mode-default dikhao (black nahi)
@@ -414,7 +414,7 @@ class AppearanceDialog(QDialog):
         tabhi mode switch par naya mode-default derive hota hai.
         """
         mode = tokens.get("mode", "light")
-        for k, dv in theme.status_base_defaults(mode).items():
+        for k, dv in status_base_defaults(mode).items():
             if tokens.get(k) == dv:
                 tokens.pop(k, None)
         return tokens

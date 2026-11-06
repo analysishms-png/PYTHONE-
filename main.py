@@ -13,7 +13,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from HMS_py.ui import shell
+from HMS_py.ui.shell import run_flow
 
 
 def configure_qt_headless() -> None:
@@ -54,7 +54,7 @@ def main() -> int:
         _db.ensure_paths()
     except Exception:
         pass
-    return shell.run_flow()
+    return run_flow()
 
 
 if __name__ == "__main__":

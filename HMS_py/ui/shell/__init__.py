@@ -4,6 +4,20 @@ The shell.py module contains the app entry flow (Login -> Company select -> Main
 This __init__.py makes HMS_py.ui.shell importable both as a module and package.
 """
 
-from HMS_py.ui.shell.shell import run_flow, main
+from HMS_py.ui.shell.shell import (
+    run_flow,
+    main,
+    _form_registry,
+    MainSetupWorkbench,
+    MainWindow,
+)
+from PyQt6.QtWidgets import QMessageBox
 
-__all__ = ["run_flow", "main"]
+__all__ = [
+    "run_flow",
+    "main",
+    "_form_registry",
+    "MainSetupWorkbench",
+    "MainWindow",
+    "QMessageBox",
+]

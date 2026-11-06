@@ -269,10 +269,13 @@ def hk_room_op_stock_create(rec: dict, cn=None, commit: bool = True,
 # ──────────────────────────────────────────────────────────────────────
 
 def hk_iss_rec_list(cn=None, site: str = SITE_CODE) -> list[dict]:
-    """List HK Issue/Receive entries."""
+    """List HK Issue/Receive entries (transfers between outlets)."""
     rows = db.query(
         "SELECT DocId, SNo, Vtype, VNo, Vdate, VTime, RestCode, "
-        "ItemCode, ItemName, Unit, Qty, Rate, Amount, FromRestCode, ToRestCode "
+        "ItemCode, ItemName, Unit, Qty, Rate, Amount, RestCode, "
+        "BillAmount, ContraDocID, TaxPer, OnAmt, Split, Bill_No, "
+        "SettleDate, BatchNo, Remarks, RefNo, PlanCode, SeqNo, "
+        "RefDocId, LogSite_Code, AU_Name, AU_EntDt, AU_AE "
         "FROM STOCK WHERE Site_Code = ? AND Vtype IN ('HKIN', 'HKOUT', 'HKTRN') "
         "AND (FromRestCode IS NOT NULL OR ToRestCode IS NOT NULL) "
         "ORDER BY Vdate DESC, DocId DESC", (SITE_CODE,), cn=cn)
@@ -281,8 +284,75 @@ def hk_iss_rec_list(cn=None, site: str = SITE_CODE) -> list[dict]:
 
 def hk_iss_rec_create(rec: dict, cn=None, commit: bool = True,
                       site: str = SITE_CODE, user: str = USER) -> dict:
-    """Create HK Issue/Receive entry (transfer between outlets)."""
-    pass  # TODO: Implement
+    """Create HK Issue/Receive entry (transfer between outlets).
+    
+    rec should contain:
+    - vtype: 'HKIN' (Issue), 'HKOUT' (Receive), 'HKTRN' (Transfer)
+    - from_restcode: Source department (for Issue/Transfer)
+    - to_restcode: Destination department (for Receive/Transfer)
+    - itemcode, itemname, unit, qty, rate, amount
+    - restcode: Main department
+    - comments, remarks
+    """
+    _validate_hk_stock(rec)
+    vtype = rec.get("vtype", "HKTRN")
+    vno_rows = db.query(
+        "SELECT MAX(VNo) FROM STOCK WHERE Site_Code = ? AND Vtype = ?",
+        (SITE_CODE, vtype), cn=cn)
+    vno = (vno_rows[0][0] or 0) + 1 if vno_rows and vno_rows[0][0] else 1
+    docid = f"D{SITE_CODE}{vtype.ljust(6)}{datetime.date.today().year}{str(vno).rjust(8)}"
+    
+    own = cn is None
+    cn = cn or db.connect()
+    try:
+        db.execute(
+            "INSERT INTO STOCK (DocId, SNo, Vtype, VNo, Vdate, VTime, Site_Code, "
+            "Vprefix, RestCode, GuestProf, EmpCode, CompCode, Comments, "
+            "ItemCode, ItemName, Unit, Qty, Rate, Amount, RestCode, BillAmount, "
+            "ContraDocID, TaxPer, OnAmt, Split, Bill_No, SettleDate, BatchNo, "
+            "Remarks, RefNo, PlanCode, SeqNo, RefDocId, LogSite_Code, "
+            "FromRestCode, ToRestCode, U_Name, U_EntDt, U_AE) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
+            "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (docid, 1, vtype, vno, datetime.date.today(), datetime.datetime.now().strftime("%H:%M"),
+             SITE_CODE, "2026", rec.get("restcode", ""), rec.get("guestprof", ""),
+             USER, "", "", rec.get("itemcode", ""), rec.get("itemname", ""),
+             rec.get("unit", ""), rec.get("qty", 0), rec.get("rate", 0),
+             rec.get("amount", 0), rec.get("restcode", ""), rec.get("amount", 0),
+             "", 0.0, 0.0, "", 0, "", datetime.datetime.now(), 0, "",
+             rec.get("from_restcode", ""), rec.get("to_restcode", ""),
+             datetime.datetime.now(), "A", SITE_CODE),
+            cn=cn, commit=False)
+        if commit:
+            cn.commit()
+        return {"docid": docid, "vno": vno}
+    except Exception:
+        try:
+            cn.rollback()
+        except Exception:
+            pass
+        raise
+    finally:
+        if own:
+            cn.close()
+
+
+def get_hk_issue_departments(cn=None, site: str = SITE_CODE) -> list[dict]:
+    """Get departments for Issue (prefixed with 'I')."""
+    rows = db.query(
+        "SELECT RTRIM(Code), RTRIM(Name) FROM Depart "
+        "WHERE RTRIM(RestType) = 'House Keeping' ORDER BY Code",
+        cn=cn)
+    return [{"code": r[0] or "", "name": f"I{r[1] or ''}"} for r in rows]
+
+
+def get_hk_receive_departments(cn=None, site: str = SITE_CODE) -> list[dict]:
+    """Get departments for Receive (prefixed with 'R')."""
+    rows = db.query(
+        "SELECT RTRIM(Code), RTRIM(Name) FROM Depart "
+        "WHERE RTRIM(RestType) = 'House Keeping' ORDER BY Code",
+        cn=cn)
+    return [{"code": r[0] or "", "name": f"R{r[1] or ''}"} for r in rows]
 
 
 # ──────────────────────────────────────────────────────────────────────

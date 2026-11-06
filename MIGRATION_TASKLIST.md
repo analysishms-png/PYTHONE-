@@ -83,15 +83,17 @@
   - Shell: Wire "House Keeping Op.Stock Entry" ✅
   - Tests: (TODO - add tests)
 
-- [ ] **HK Room Operation Stock** (`HKRoomOpStk.frm` 101KB)
-  - Core: `core/housekeeping/linen.py:room_op_stock()`
-  - UI: `ui/housekeeping/block_master_ui.py:RoomOpStockDialog`
-  - Shell: Wire "Room Op Stock Entry"
+- [x] **HK Room Operation Stock** (`HKRoomOpStk.frm` 101KB) ✅ **DONE**
+  - Core: `core/housekeeping/linen.py:hk_room_op_stock_list()` ✅
+  - UI: `ui/housekeeping/hk_room_op_stock_ui.py:HKRoomOpStockBrowser` ✅
+  - Shell: Wire "HK Room Op Stock Entry" ✅
+  - Tests: (TODO - add tests)
 
-- [ ] **HK Issue/Receive** (`HKIssRec.frm` 115KB)
-  - Core: `core/housekeeping/linen.py:issue_receive()`
-  - UI: `ui/housekeeping/block_master_ui.py:IssueReceiveDialog`
-  - Shell: Wire "Issue/Recd. Entry"
+- [x] **HK Issue/Receive** (`HKIssRec.frm` 115KB) ✅ **DONE**
+  - Core: `core/housekeeping/linen.py:hk_iss_rec_list()`, `hk_iss_rec_create()` ✅
+  - UI: `ui/housekeeping/hk_iss_rec_ui.py:HKIssueReceiveBrowser` ✅
+  - Shell: Wire "HK Issue/Receive Entry" ✅
+  - Tests: (TODO - add tests)
 
 ### 4. SYSTEM - Job Scheduler & Upload
 - [ ] **Job Scheduler** (`FrmJobScheduler.frm` 81KB)
